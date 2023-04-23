@@ -72,7 +72,7 @@ final class BatchJsonRpcExecutor implements JsonRpcExecutor {
         LOG.entering(BatchJsonRpcExecutor.class.getName(), "asExecutor");
         final JsonRpcExecutor result;
         if (value.getValueType() == JsonValue.ValueType.OBJECT) {
-            result = new SingleMethodJsonRpcExecutor(context, value.asJsonObject());
+            result = new MethodJsonRpcExecutor(context, value.asJsonObject());
         } else {
             result = ErrorJsonRpcExecutor.invalidRequest();
         }

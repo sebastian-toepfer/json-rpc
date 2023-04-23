@@ -35,7 +35,7 @@ import jakarta.json.JsonValue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class SingleMethodJsonRpcExecutorTest {
+class MethodJsonRpcExecutorTest {
 
     private JsonRpcExecutionContext context;
 
@@ -49,7 +49,7 @@ class SingleMethodJsonRpcExecutorTest {
     void should_call_method_with_positional_parameters() {
         assertThat(
             new JsonRpcExecutorJsonAdapter(
-                new SingleMethodJsonRpcExecutor(
+                new MethodJsonRpcExecutor(
                     context,
                     Json
                         .createObjectBuilder()
@@ -69,7 +69,7 @@ class SingleMethodJsonRpcExecutorTest {
     void should_call_method_with_named_parameters() {
         assertThat(
             new JsonRpcExecutorJsonAdapter(
-                new SingleMethodJsonRpcExecutor(
+                new MethodJsonRpcExecutor(
                     context,
                     Json
                         .createObjectBuilder()
@@ -89,7 +89,7 @@ class SingleMethodJsonRpcExecutorTest {
     void should_return_nothing_for_notification() {
         assertThat(
             new JsonRpcExecutorJsonAdapter(
-                new SingleMethodJsonRpcExecutor(
+                new MethodJsonRpcExecutor(
                     context,
                     Json
                         .createObjectBuilder()
@@ -108,7 +108,7 @@ class SingleMethodJsonRpcExecutorTest {
     void should_return_error_for_nonexistent_method() {
         assertThat(
             new JsonRpcExecutorJsonAdapter(
-                new SingleMethodJsonRpcExecutor(
+                new MethodJsonRpcExecutor(
                     context,
                     Json.createObjectBuilder().add("jsonrpc", "2.0").add("method", "foobar").add("id", 5).build()
                 )
@@ -129,7 +129,7 @@ class SingleMethodJsonRpcExecutorTest {
     void should_return_error_for_exception() {
         assertThat(
             new JsonRpcExecutorJsonAdapter(
-                new SingleMethodJsonRpcExecutor(
+                new MethodJsonRpcExecutor(
                     context,
                     Json
                         .createObjectBuilder()
@@ -156,7 +156,7 @@ class SingleMethodJsonRpcExecutorTest {
     void should_return_error_for_runtimeexception() {
         assertThat(
             new JsonRpcExecutorJsonAdapter(
-                new SingleMethodJsonRpcExecutor(
+                new MethodJsonRpcExecutor(
                     context,
                     Json
                         .createObjectBuilder()

@@ -111,7 +111,7 @@ class BatchJsonRpcExecutorTest {
     }
 
     @Test
-    void should_retrun_batch_result() {
+    void should_return_batch_result() {
         assertThat(
             new JsonRpcExecutorJsonAdapter(
                 new BatchJsonRpcExecutor(
@@ -156,7 +156,7 @@ class BatchJsonRpcExecutorTest {
     }
 
     @Test
-    void should_retrun_nothing_if_all_methods_are_notifications() {
+    void should_return_nothing_if_all_methods_are_notifications() {
         assertThat(
             new JsonRpcExecutorJsonAdapter(
                 new BatchJsonRpcExecutor(
@@ -189,6 +189,79 @@ class BatchJsonRpcExecutorTest {
             )
                 .execute(),
             is(JsonValue.NULL)
+        );
+    }
+
+    @Test
+    void should_return_batch_result_and_errors() {
+        assertThat(
+            new JsonRpcExecutorJsonAdapter(
+                new BatchJsonRpcExecutor(
+                    context,
+                    Json
+                        .createArrayBuilder()
+                        .add(
+                            Json
+                                .createObjectBuilder()
+                                .add("jsonrpc", "2.0")
+                                .add("method", "subtract")
+                                .add("params", Json.createObjectBuilder().add("subtrahend", 23).add("minuend", 42))
+                                .add("id", 1)
+                        )
+                        .add(
+                            Json
+                                .createObjectBuilder()
+                                .add("jsonrpc", "2.0")
+                                .add("method", "subtract")
+                                .add("params", "value")
+                                .add("id", 2)
+                        )
+                        .add(
+                            Json
+                                .createObjectBuilder()
+                                .add("jsonrpc", "2.0")
+                                .add("params", Json.createObjectBuilder().add("subtrahend", 1).add("minuend", 3))
+                                .add("id", 3)
+                        )
+                        .add(
+                            Json
+                                .createObjectBuilder()
+                                .add("jsonrpc", "2.0")
+                                .add("method", "subtract")
+                                .add("params", Json.createObjectBuilder().add("subtrahend", 1).add("minuend", 3))
+                                .add("id", 4)
+                        )
+                        .build()
+                )
+            )
+                .execute(),
+            is(
+                Json
+                    .createArrayBuilder()
+                    .add(Json.createObjectBuilder().add("jsonrpc", "2.0").add("result", 19).add("id", 1))
+                    .add(
+                        Json
+                            .createObjectBuilder()
+                            .add("jsonrpc", "2.0")
+                            .add(
+                                "error",
+                                Json.createObjectBuilder().add("code", -32600).add("message", "Invalid Request")
+                            )
+                            .addNull("id")
+                    )
+                    .add(
+                        Json
+                            .createObjectBuilder()
+                            .add("jsonrpc", "2.0")
+                            .add(
+                                "error",
+                                Json.createObjectBuilder().add("code", -32600).add("message", "Invalid Request")
+                            )
+                            .addNull("id")
+                    )
+                    .add(Json.createObjectBuilder().add("jsonrpc", "2.0").add("result", 2).add("id", 4))
+                    .build()
+            )
         );
     }
 }

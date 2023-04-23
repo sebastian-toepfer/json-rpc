@@ -44,6 +44,11 @@ public class JsonPropertyValidation implements Rule {
         this.rules.addAll(Arrays.asList(rules));
     }
 
+    @Override
+    public boolean isValid(final JsonValue value) {
+        return value.getValueType() == JsonValue.ValueType.OBJECT && isValid(value.asJsonObject());
+    }
+
     public boolean isValid(final JsonObject json) {
         final JsonValue value;
         if (pointer.containsValue(json)) {
@@ -51,11 +56,10 @@ public class JsonPropertyValidation implements Rule {
         } else {
             value = JsonValue.NULL;
         }
-        return isValid(value);
+        return isValueValid(value);
     }
 
-    @Override
-    public boolean isValid(final JsonValue value) {
+    private boolean isValueValid(final JsonValue value) {
         return rules.stream().allMatch(rule -> rule.isValid(value));
     }
 }

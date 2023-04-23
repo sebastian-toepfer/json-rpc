@@ -23,21 +23,26 @@
  */
 package io.github.sebastiantoepfer.json.rpc.runtime;
 
+import io.github.sebastiantoepfer.json.rpc.runtime.validation.AllOf;
 import io.github.sebastiantoepfer.json.rpc.runtime.validation.AnyOf;
 import io.github.sebastiantoepfer.json.rpc.runtime.validation.JsonPropertyValidation;
 import io.github.sebastiantoepfer.json.rpc.runtime.validation.OfType;
+import io.github.sebastiantoepfer.json.rpc.runtime.validation.Rule;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
 
 class JsonRpcMethodValidation {
 
-    private static final JsonPropertyValidation VALIDATION = new JsonPropertyValidation(
-        Json.createPointer("/params"),
-        new AnyOf(
-            new OfType(JsonValue.ValueType.OBJECT),
-            new OfType(JsonValue.ValueType.ARRAY),
-            new OfType(JsonValue.ValueType.NULL)
+    private static final Rule VALIDATION = new AllOf(
+        new JsonPropertyValidation(Json.createPointer("/method"), new OfType(JsonValue.ValueType.STRING)),
+        new JsonPropertyValidation(
+            Json.createPointer("/params"),
+            new AnyOf(
+                new OfType(JsonValue.ValueType.OBJECT),
+                new OfType(JsonValue.ValueType.ARRAY),
+                new OfType(JsonValue.ValueType.NULL)
+            )
         )
     );
     private final JsonObject json;

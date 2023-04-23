@@ -21,8 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.runtime;
+package io.github.sebastiantoepfer.json.rpc.runtime.validation;
 
-public interface JsonRpcRuntime {
-    JsonRpcExecutor createExecutorFor(String json);
+import static java.util.Arrays.asList;
+
+import jakarta.json.JsonValue;
+import java.util.Collection;
+
+public class AllOf implements Rule {
+
+    private final Collection<Rule> rules;
+
+    public AllOf(final Rule... rules) {
+        this.rules = asList(rules);
+    }
+
+    @Override
+    public boolean isValid(final JsonValue value) {
+        return rules.stream().allMatch(rule -> rule.isValid(value));
+    }
 }

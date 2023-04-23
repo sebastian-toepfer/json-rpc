@@ -33,14 +33,14 @@ import jakarta.json.JsonValue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class JsonRpcRuntimeTest {
+class DefaultJsonRpcRuntimeTest {
 
     private JsonRpcRuntimeExecutor jsonRpcRuntimeExecutor;
 
     @BeforeEach
     void createExecutor() {
         this.jsonRpcRuntimeExecutor =
-            new JsonRpcRuntimeExecutor(new JsonRpcRuntime(new JsonRpcExecutionContext().withMethod(subtract())));
+            new JsonRpcRuntimeExecutor(new DefaultJsonRpcRuntime(new JsonRpcExecutionContext().withMethod(subtract())));
     }
 
     @Test
@@ -124,6 +124,21 @@ class JsonRpcRuntimeTest {
                 Json
                     .createArrayBuilder()
                     .add(Json.createObjectBuilder().add("jsonrpc", "2.0").add("result", 19).add("id", 1))
+                    .build()
+            )
+        );
+    }
+
+    @Test
+    void should_return_invalid_request_if_method_is_mission() {
+        assertThat(
+            executeJsonRequest("{\"jsonrpc\": \"2.0\", \"params\": [42, 23], \"id\": 1}"),
+            is(
+                Json
+                    .createObjectBuilder()
+                    .add("jsonrpc", "2.0")
+                    .add("error", Json.createObjectBuilder().add("code", -32600).add("message", "Invalid Request"))
+                    .addNull("id")
                     .build()
             )
         );

@@ -23,15 +23,15 @@
  */
 package io.github.sebastiantoepfer.json.rpc.runtime.test;
 
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcRuntime;
+import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcRuntime;
 import jakarta.json.JsonValue;
 import java.util.Objects;
 
 public class JsonRpcRuntimeExecutor {
 
-    private final JsonRpcRuntime runtime;
+    private final DefaultJsonRpcRuntime runtime;
 
-    public JsonRpcRuntimeExecutor(final JsonRpcRuntime runtime) {
+    public JsonRpcRuntimeExecutor(final DefaultJsonRpcRuntime runtime) {
         this.runtime = Objects.requireNonNull(runtime);
     }
 
