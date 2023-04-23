@@ -26,7 +26,7 @@ package io.github.sebastiantoepfer.json.rpc.core;
 
 import java.util.stream.IntStream;
 
-public class Math {
+public final class Math {
 
     public static int subtract(final int minuend, final int subtrahend) {
         return minuend - subtrahend;
@@ -35,4 +35,6 @@ public class Math {
     public static int sum(final int... values) {
         return IntStream.of(values).sum();
     }
+
+    private Math() {}
 }

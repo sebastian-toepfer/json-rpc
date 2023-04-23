@@ -30,7 +30,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.StreamingOutput;
-import java.io.OutputStream;
 
 @Path("/rpc")
 public class RpcResource {
@@ -49,7 +48,7 @@ public class RpcResource {
             .type(MediaType.APPLICATION_JSON)
             .encoding("UTF-8")
             .entity(
-                (StreamingOutput) (final OutputStream out) -> {
+                (StreamingOutput) out -> {
                     runtime.createExecutorFor(request).execute().writeTo(out);
                 }
             )

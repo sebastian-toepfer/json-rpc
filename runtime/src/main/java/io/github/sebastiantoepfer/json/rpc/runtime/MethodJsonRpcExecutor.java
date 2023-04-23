@@ -25,7 +25,6 @@ package io.github.sebastiantoepfer.json.rpc.runtime;
 
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
-import jakarta.json.stream.JsonGenerator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -100,7 +99,7 @@ final class MethodJsonRpcExecutor implements JsonRpcExecutor {
                 result = new NotificationResponse();
             } else {
                 result =
-                    (final JsonGenerator generator) -> {
+                    generator -> {
                         generator
                             .writeStartObject()
                             .write("jsonrpc", json.get("jsonrpc"))
