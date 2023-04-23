@@ -47,11 +47,13 @@ public abstract class JsonRpcMethod {
         return this.name.equals(name);
     }
 
-    public final JsonValue execute(final JsonValue params) throws JsonRpcExecutionExecption {
+    final JsonValue execute(final JsonValue params) throws JsonRpcExecutionExecption {
         LOG.entering(JsonRpcMethod.class.getName(), "execute", params);
         final JsonValue result;
         try {
-            if (params.getValueType() == JsonValue.ValueType.ARRAY) {
+            if (params == null || params.getValueType() == JsonValue.ValueType.NULL) {
+                result = execute(JsonValue.EMPTY_JSON_OBJECT);
+            } else if (params.getValueType() == JsonValue.ValueType.ARRAY) {
                 result = execute(createNamedParameters(params.asJsonArray()));
             } else {
                 result = execute(params.asJsonObject());

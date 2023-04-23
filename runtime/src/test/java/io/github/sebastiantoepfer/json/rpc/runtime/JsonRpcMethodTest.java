@@ -23,6 +23,13 @@
  */
 package io.github.sebastiantoepfer.json.rpc.runtime;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
+import java.util.List;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
@@ -31,5 +38,33 @@ class JsonRpcMethodTest {
     @Test
     void equalsContract() {
         EqualsVerifier.simple().forClass(JsonRpcMethod.class).withIgnoredFields("parameterNames").verify();
+    }
+
+    @Test
+    void should_be_callable_with_null_as_params() throws Exception {
+        assertThat(
+            new JsonRpcMethod("test", List.of()) {
+                @Override
+                protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
+                    return Json.createValue("hello");
+                }
+            }
+                .execute((JsonValue) null),
+            is(Json.createValue("hello"))
+        );
+    }
+
+    @Test
+    void should_be_callable_without_params() throws Exception {
+        assertThat(
+            new JsonRpcMethod("test", List.of()) {
+                @Override
+                protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
+                    return Json.createValue("hello");
+                }
+            }
+                .execute(JsonValue.NULL),
+            is(Json.createValue("hello"))
+        );
     }
 }
