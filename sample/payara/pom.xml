@@ -16,7 +16,7 @@
     <packaging>war</packaging>
 
     <properties>
-        <payara.version>6.2023.3</payara.version>
+        <payara.version>6.2023.4</payara.version>
     </properties>
 
     <dependencies>
