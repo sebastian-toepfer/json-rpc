@@ -27,9 +27,11 @@ import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcRuntime;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.StreamingOutput;
+import java.io.InputStream;
 
 @Path("/rpc")
 public class RpcResource {
@@ -42,7 +44,8 @@ public class RpcResource {
     }
 
     @POST
-    public Response execute(final String request) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response execute(final InputStream request) {
         return Response
             .ok()
             .type(MediaType.APPLICATION_JSON)

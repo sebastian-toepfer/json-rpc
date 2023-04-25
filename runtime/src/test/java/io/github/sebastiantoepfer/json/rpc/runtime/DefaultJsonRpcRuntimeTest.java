@@ -30,6 +30,8 @@ import static org.hamcrest.Matchers.is;
 import io.github.sebastiantoepfer.json.rpc.runtime.test.JsonRpcRuntimeExecutor;
 import jakarta.json.Json;
 import jakarta.json.JsonValue;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -144,7 +146,28 @@ class DefaultJsonRpcRuntimeTest {
         );
     }
 
+    @Test
+    void should_work_also_with_inputstream_as_input() {
+        assertThat(
+            executeJsonRequest(
+                new ByteArrayInputStream("{\"jsonrpc\": \"2.0\", \"params\": [42, 23], \"id\": 1}".getBytes())
+            ),
+            is(
+                Json
+                    .createObjectBuilder()
+                    .add("jsonrpc", "2.0")
+                    .add("error", Json.createObjectBuilder().add("code", -32600).add("message", "Invalid Request"))
+                    .addNull("id")
+                    .build()
+            )
+        );
+    }
+
     private JsonValue executeJsonRequest(final String json) {
+        return jsonRpcRuntimeExecutor.execute(json);
+    }
+
+    private JsonValue executeJsonRequest(final InputStream json) {
         return jsonRpcRuntimeExecutor.execute(json);
     }
 }

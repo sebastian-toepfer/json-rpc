@@ -23,12 +23,12 @@
  */
 package io.github.sebastiantoepfer.json.rpc.runtime;
 
-import io.github.sebastiantoepfer.json.rpc.runtime.json.JsonObjectString;
+import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
-import jakarta.json.JsonStructure;
-import jakarta.json.JsonValue;
+import jakarta.json.stream.JsonParser;
 import jakarta.json.stream.JsonParsingException;
+import java.io.Reader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,11 +42,11 @@ public final class DefaultJsonRpcRuntime implements JsonRpcRuntime {
     }
 
     @Override
-    public JsonRpcExecutor createExecutorFor(final String json) {
+    public JsonRpcExecutor createExecutorFor(final Reader json) {
         LOG.entering(DefaultJsonRpcRuntime.class.getName(), "createExecutorFor", json);
         JsonRpcExecutor result;
         try {
-            result = createExecutorFor(new JsonObjectString(json));
+            result = createExecutorFor(Json.createParser(json));
         } catch (JsonParsingException ex) {
             LOG.log(Level.INFO, "Invalid JSON received.", ex);
             result = ErrorJsonRpcExecutor.parseError();
@@ -55,21 +55,15 @@ public final class DefaultJsonRpcRuntime implements JsonRpcRuntime {
         return result;
     }
 
-    private JsonRpcExecutor createExecutorFor(final JsonObjectString json) {
-        LOG.entering(DefaultJsonRpcRuntime.class.getName(), "createExecutorFor", json);
-        JsonRpcExecutor result = createExecutorFor(json.asJsonStructure());
-        LOG.exiting(DefaultJsonRpcRuntime.class.getName(), "createExecutorFor", result);
-        return result;
-    }
-
-    private JsonRpcExecutor createExecutorFor(final JsonStructure json) {
-        LOG.entering(DefaultJsonRpcRuntime.class.getName(), "createExecutorFor", json);
-        final JsonRpcExecutor result;
-        if (json.getValueType() == JsonValue.ValueType.ARRAY) {
-            result = createBatchJsonRpcExecutor(json.asJsonArray());
-        } else {
-            result = createMethodJsonJsonRpcExecutor(json.asJsonObject());
-        }
+    private JsonRpcExecutor createExecutorFor(final JsonParser parser) {
+        LOG.entering(DefaultJsonRpcRuntime.class.getName(), "createExecutorFor", parser);
+        final JsonParser.Event event = parser.next();
+        final JsonRpcExecutor result =
+            switch (event) {
+                case START_ARRAY -> createBatchJsonRpcExecutor(parser.getArray());
+                case START_OBJECT -> createMethodJsonJsonRpcExecutor(parser.getObject());
+                default -> ErrorJsonRpcExecutor.invalidRequest();
+            };
         LOG.exiting(DefaultJsonRpcRuntime.class.getName(), "createExecutorFor", result);
         return result;
     }

@@ -25,6 +25,7 @@ package io.github.sebastiantoepfer.json.rpc.runtime.test;
 
 import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcRuntime;
 import jakarta.json.JsonValue;
+import java.io.InputStream;
 import java.util.Objects;
 
 public class JsonRpcRuntimeExecutor {
@@ -36,6 +37,10 @@ public class JsonRpcRuntimeExecutor {
     }
 
     public JsonValue execute(final String json) {
+        return new JsonRpcExecutorJsonAdapter(runtime.createExecutorFor(json)).execute();
+    }
+
+    public JsonValue execute(final InputStream json) {
         return new JsonRpcExecutorJsonAdapter(runtime.createExecutorFor(json)).execute();
     }
 }

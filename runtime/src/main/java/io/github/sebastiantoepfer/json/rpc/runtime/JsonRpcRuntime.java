@@ -23,6 +23,20 @@
  */
 package io.github.sebastiantoepfer.json.rpc.runtime;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
+
 public interface JsonRpcRuntime {
-    JsonRpcExecutor createExecutorFor(String json);
+    default JsonRpcExecutor createExecutorFor(String string) {
+        return createExecutorFor(new StringReader(string));
+    }
+
+    default JsonRpcExecutor createExecutorFor(InputStream stream) {
+        return createExecutorFor(new InputStreamReader(stream, StandardCharsets.UTF_8));
+    }
+
+    JsonRpcExecutor createExecutorFor(Reader reader);
 }
