@@ -1,0 +1,15 @@
+---
+name: release
+on:
+  push:
+    milestone:
+      types:
+        - closed
+
+jobs:
+  release:
+    uses: sebastian-toepfer/gh-common/.github/workflows/release.yml@main
+    with:
+      version: ${{ github.event.milestone.title }}
+    secrets: inherit
+
