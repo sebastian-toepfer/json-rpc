@@ -11,20 +11,14 @@
         <version>0.1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>json-rpc-sample-payara</artifactId>
-    <name>JSON RPC :: sample :: payara</name>
-    <packaging>war</packaging>
-
+    <artifactId>json-rpc-sample-spring-boot</artifactId>
+    <name>JSON RPC :: sample :: spring-boot</name>
+    
     <properties>
-        <payara.version>6.2023.4</payara.version>
+        <spring.boot.version>3.0.6</spring.boot.version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>json-rpc-boundary</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>json-rpc-sample-json-rpc-adapter</artifactId>
@@ -33,27 +27,25 @@
 
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>json-rpc-spring-integration-starter</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>json-rpc-tck</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>jakarta.ws.rs</groupId>
-            <artifactId>jakarta.ws.rs-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.enterprise</groupId>
-            <artifactId>jakarta.enterprise.cdi-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>fish.payara.extras</groupId>
-            <artifactId>payara-micro</artifactId>
-            <version>${payara.version}</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -63,20 +55,11 @@
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
                 <configuration>
-                    <!-- only server configurations, will take too long -->
+                    <!-- only sping-boot configurations, will take too long -->
                     <skip>true</skip>
                 </configuration>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.3.2</version>
-                <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                </configuration>
-            </plugin>
-            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
@@ -88,41 +71,33 @@
             </plugin>
 
             <plugin>
-                <groupId>fish.payara.maven.plugins</groupId>
-                <artifactId>payara-micro-maven-plugin</artifactId>
-                <version>2.0</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring.boot.version}</version>
                 <executions>
                     <execution>
-                        <phase>package</phase>
+                        <id>repackage</id>
                         <goals>
-                            <goal>bundle</goal>
+                            <goal>repackage</goal>
                         </goals>
                     </execution>
 
                     <execution>
                         <id>start</id>
-                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>start</goal>
                         </goals>
-                        <configuration>
-                            <daemon>true</daemon>
-                        </configuration>
+                        <phase>pre-integration-test</phase>
                     </execution>
 
                     <execution>
                         <id>stop</id>
-                        <phase>post-integration-test</phase>
                         <goals>
                             <goal>stop</goal>
                         </goals>
+                        <phase>post-integration-test</phase>
                     </execution>
                 </executions>
-                <configuration>
-                    <useUberJar>true</useUberJar>
-                    <payaraVersion>${payara.version}</payaraVersion>
-                    <startClass>io.github.sebastiantoepfer.json.rpc.sample.payara.EmbeddedPayara</startClass>
-                </configuration>
             </plugin>
         </plugins>
     </build>
