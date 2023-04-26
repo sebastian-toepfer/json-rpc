@@ -19,5 +19,6 @@
         <module>core</module>
         <module>json-rpc-adapter</module>
         <module>payara</module>
+        <module>spring-boot</module>
     </modules>
 </project>
