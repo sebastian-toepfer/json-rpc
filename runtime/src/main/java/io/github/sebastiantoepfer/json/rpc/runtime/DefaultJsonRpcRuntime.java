@@ -45,8 +45,8 @@ public final class DefaultJsonRpcRuntime implements JsonRpcRuntime {
     public JsonRpcExecutor createExecutorFor(final Reader json) {
         LOG.entering(DefaultJsonRpcRuntime.class.getName(), "createExecutorFor", json);
         JsonRpcExecutor result;
-        try {
-            result = createExecutorFor(Json.createParser(json));
+        try (final JsonParser parser = Json.createParser(json)) {
+            result = createExecutorFor(parser);
         } catch (JsonParsingException ex) {
             LOG.log(Level.INFO, "Invalid JSON received.", ex);
             result = ErrorJsonRpcExecutor.parseError();
