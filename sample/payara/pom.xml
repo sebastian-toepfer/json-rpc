@@ -8,7 +8,7 @@
     <parent>
         <groupId>io.github.sebastian-toepfer.json.rpc</groupId>
         <artifactId>json-rpc-sample</artifactId>
-        <version>0.2.0-SNAPSHOT</version>
+        <version>0.2.0</version>
     </parent>
 
     <artifactId>json-rpc-sample-payara</artifactId>
