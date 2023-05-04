@@ -15,10 +15,6 @@
     <name>JSON RPC :: sample :: payara</name>
     <packaging>war</packaging>
 
-    <properties>
-        <payara.version>6.2023.4</payara.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -52,7 +48,6 @@
         <dependency>
             <groupId>fish.payara.extras</groupId>
             <artifactId>payara-micro</artifactId>
-            <version>${payara.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -63,7 +58,7 @@
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
                 <configuration>
-                    <!-- only server configurations, will take too long -->
+                    <!-- only server configurations, makes no sense -->
                     <skip>true</skip>
                 </configuration>
             </plugin>
@@ -71,10 +66,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>3.3.2</version>
-                <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                </configuration>
             </plugin>
             
             <plugin>
@@ -90,39 +81,6 @@
             <plugin>
                 <groupId>fish.payara.maven.plugins</groupId>
                 <artifactId>payara-micro-maven-plugin</artifactId>
-                <version>2.0</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>bundle</goal>
-                        </goals>
-                    </execution>
-
-                    <execution>
-                        <id>start</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>start</goal>
-                        </goals>
-                        <configuration>
-                            <daemon>true</daemon>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>stop</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>stop</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <useUberJar>true</useUberJar>
-                    <payaraVersion>${payara.version}</payaraVersion>
-                    <startClass>io.github.sebastiantoepfer.json.rpc.sample.payara.EmbeddedPayara</startClass>
-                </configuration>
             </plugin>
         </plugins>
     </build>

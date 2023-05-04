@@ -21,9 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.spring.integration;
+package io.github.sebastiantoepfer.json.rpc.sample.spring.boot;
 
-import org.springframework.context.annotation.Import;
+import io.github.sebastiantoepfer.json.rpc.boundary.RpcResource;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.springframework.stereotype.Component;
 
-@Import({ JsonRpcConfiguration.class })
-public class JsonRpcAutoConfiguration {}
+@Component
+public class JerseyConfig extends ResourceConfig {
+
+    public JerseyConfig() {
+        register(RpcResource.class);
+    }
+}
