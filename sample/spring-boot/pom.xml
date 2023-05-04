@@ -24,7 +24,6 @@
             <artifactId>json-rpc-sample-json-rpc-adapter</artifactId>
             <version>${project.version}</version>
         </dependency>
-
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>json-rpc-spring-integration-starter</artifactId>
