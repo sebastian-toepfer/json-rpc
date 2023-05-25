@@ -61,9 +61,7 @@
     <modules>
         <module>runtime</module>
         <module>boundary</module>
-        <module>tck</module>
         <module>spring-integration-starter</module>
-        <module>sample</module>
     </modules>
 
     <dependencyManagement>
@@ -577,12 +575,28 @@
 
     <profiles>
         <profile>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
+            <modules>
+                <module>tck</module>
+                <module>sample</module>
+            </modules>
+        </profile>
+
+        <profile>
             <id>ci</id>
             <activation>
                 <property>
                     <name>env.CI</name>
                 </property>
             </activation>
+
+            <modules>
+                <module>tck</module>
+                <module>sample</module>
+            </modules>
 
             <properties>
                 <prettier.goal>check</prettier.goal>
@@ -617,6 +631,11 @@
         <profile>
             <id>bump-patch</id>
 
+            <modules>
+                <module>tck</module>
+                <module>sample</module>
+            </modules>
+
             <build>
                 <plugins>
                     <plugin>
@@ -647,6 +666,11 @@
         <profile>
             <id>bump-minor</id>
 
+            <modules>
+                <module>tck</module>
+                <module>sample</module>
+            </modules>
+
             <build>
                 <plugins>
                     <plugin>
@@ -676,6 +700,11 @@
 
         <profile>
             <id>bump-major</id>
+
+            <modules>
+                <module>tck</module>
+                <module>sample</module>
+            </modules>
 
             <build>
                 <plugins>
