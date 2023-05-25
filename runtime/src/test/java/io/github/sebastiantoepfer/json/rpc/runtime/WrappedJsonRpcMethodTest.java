@@ -21,40 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.runtime.test;
+package io.github.sebastiantoepfer.json.rpc.runtime;
 
-import io.github.sebastiantoepfer.json.rpc.runtime.BaseJsonRpcMethod;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
-import jakarta.json.Json;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
+import io.github.sebastiantoepfer.ddd.media.core.HashMapMedia;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
 import java.util.List;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
 
-public final class JsonRpcMethods {
+class WrappedJsonRpcMethodTest {
 
-    public static BaseJsonRpcMethod subtract() {
-        return new BaseJsonRpcMethod("subtract", List.of("minuend", "subtrahend")) {
-            @Override
-            protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
-                return Json.createValue(params.getInt("minuend") - params.getInt("subtrahend"));
-            }
-        };
+    @Test
+    void should_return_false_when_delegate_has_different_name() {
+        assertThat(new WrappedJsonRpcMethod(createMethodWithName("test")).hasName("list"), is(false));
     }
 
-    public static BaseJsonRpcMethod exception() {
-        return new BaseJsonRpcMethod("exception", List.of("code", "message")) {
-            @Override
-            protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
-                throw new JsonRpcExecutionExecption(params.getInt("code"), params.getString("message"));
-            }
-        };
+    @Test
+    void should_return_true_when_delegate_has_different_name() {
+        assertThat(new WrappedJsonRpcMethod(createMethodWithName("test")).hasName("test"), is(true));
     }
 
-    public static BaseJsonRpcMethod runtimeexception() {
-        return new BaseJsonRpcMethod("runtimeexception", List.of("code", "message")) {
+    @Test
+    void should_print_name() {
+        assertThat(
+            new WrappedJsonRpcMethod(createMethodWithName("test")).printOn(new HashMapMedia()),
+            Matchers.hasEntry("name", "test")
+        );
+    }
+
+    private static BaseJsonRpcMethod createMethodWithName(final String name) {
+        return new BaseJsonRpcMethod(name, List.of()) {
             @Override
             protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
-                throw new NullPointerException();
+                throw new UnsupportedOperationException("Not supported yet.");
             }
         };
     }

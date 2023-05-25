@@ -21,50 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.runtime;
+package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.hasEntry;
 
+import io.github.sebastiantoepfer.ddd.media.core.HashMapMedia;
 import jakarta.json.Json;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonValue;
-import java.util.List;
-import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
-class JsonRpcMethodTest {
+class SchemaTest {
 
     @Test
-    void equalsContract() {
-        EqualsVerifier.simple().forClass(JsonRpcMethod.class).withIgnoredFields("parameterNames").verify();
+    void should_type_name() {
+        assertThat(new Schema().withType("integer").printOn(new HashMapMedia()), hasEntry("type", "integer"));
     }
 
     @Test
-    void should_be_callable_with_null_as_params() throws Exception {
+    void should_print_json() {
         assertThat(
-            new JsonRpcMethod("test", List.of()) {
-                @Override
-                protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
-                    return Json.createValue("hello");
-                }
-            }
-                .execute((JsonValue) null),
-            is(Json.createValue("hello"))
-        );
-    }
-
-    @Test
-    void should_be_callable_without_params() throws Exception {
-        assertThat(
-            new JsonRpcMethod("test", List.of()) {
-                @Override
-                protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
-                    return Json.createValue("hello");
-                }
-            }
-                .execute(JsonValue.NULL),
-            is(Json.createValue("hello"))
+            new Schema(Json.createObjectBuilder().add("type", "integer").build()).printOn(new HashMapMedia()),
+            hasEntry("type", "integer")
         );
     }
 }

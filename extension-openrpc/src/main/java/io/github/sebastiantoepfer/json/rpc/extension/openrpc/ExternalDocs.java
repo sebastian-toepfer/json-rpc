@@ -21,18 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.runtime;
+package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
-import java.util.Optional;
-import java.util.stream.Stream;
+import java.net.URL;
 
-public abstract class JsonRpcExecutionContext<T extends JsonRpcMethod> {
+public final class ExternalDocs extends BaseOpenRpc {
 
-    public abstract JsonRpcExecutionContext withMethod(final T method);
-
-    final Optional<T> findMethodWithName(final String name) {
-        return methods().filter(m -> m.hasName(name)).findFirst();
+    public ExternalDocs(final URL url) {
+        this(new CompositePrintable().withPrintable(new NamedStringPrintable("url", url.toExternalForm())));
     }
 
-    protected abstract Stream<T> methods();
+    private ExternalDocs(final CompositePrintable values) {
+        super(values);
+    }
+
+    public ExternalDocs withDescription(final String description) {
+        return new ExternalDocs(values().withPrintable(new NamedStringPrintable("description", description)));
+    }
 }

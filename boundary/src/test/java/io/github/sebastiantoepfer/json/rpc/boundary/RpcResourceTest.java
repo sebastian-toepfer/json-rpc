@@ -26,8 +26,8 @@ package io.github.sebastiantoepfer.json.rpc.boundary;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcExecutionContext;
 import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcRuntime;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionContext;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcRuntime;
 import jakarta.json.Json;
 import jakarta.json.JsonStructure;
@@ -48,7 +48,7 @@ class RpcResourceTest extends JerseyTest {
                 new AbstractBinder() {
                     @Override
                     protected void configure() {
-                        bind(new DefaultJsonRpcRuntime(new JsonRpcExecutionContext())).to(JsonRpcRuntime.class);
+                        bind(new DefaultJsonRpcRuntime(new DefaultJsonRpcExecutionContext())).to(JsonRpcRuntime.class);
                     }
                 }
             );

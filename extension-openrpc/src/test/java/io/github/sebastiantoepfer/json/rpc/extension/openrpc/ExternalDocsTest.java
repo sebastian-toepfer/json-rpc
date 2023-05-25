@@ -21,18 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.runtime;
+package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
-import java.util.Optional;
-import java.util.stream.Stream;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.hasEntry;
 
-public abstract class JsonRpcExecutionContext<T extends JsonRpcMethod> {
+import io.github.sebastiantoepfer.ddd.media.core.HashMapMedia;
+import java.net.URI;
+import org.junit.jupiter.api.Test;
 
-    public abstract JsonRpcExecutionContext withMethod(final T method);
+class ExternalDocsTest {
 
-    final Optional<T> findMethodWithName(final String name) {
-        return methods().filter(m -> m.hasName(name)).findFirst();
+    @Test
+    void should_print_description() throws Exception {
+        assertThat(
+            new ExternalDocs(URI.create("http://localhost:8080").toURL())
+                .withDescription("A verbose explanation of the target documentation.")
+                .printOn(new HashMapMedia()),
+            allOf(
+                hasEntry("url", "http://localhost:8080"),
+                hasEntry("description", "A verbose explanation of the target documentation.")
+            )
+        );
     }
-
-    protected abstract Stream<T> methods();
 }

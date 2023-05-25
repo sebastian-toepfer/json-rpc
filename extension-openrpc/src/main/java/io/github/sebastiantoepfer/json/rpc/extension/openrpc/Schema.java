@@ -21,18 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.runtime;
+package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
-import java.util.Optional;
-import java.util.stream.Stream;
+import io.github.sebastiantoepfer.ddd.media.json.JsonObjectPrintable;
+import jakarta.json.JsonObject;
 
-public abstract class JsonRpcExecutionContext<T extends JsonRpcMethod> {
+/**
+ * not a real schema, only type is supported.
+ */
+public final class Schema extends BaseOpenRpc {
 
-    public abstract JsonRpcExecutionContext withMethod(final T method);
-
-    final Optional<T> findMethodWithName(final String name) {
-        return methods().filter(m -> m.hasName(name)).findFirst();
+    public Schema(final JsonObject json) {
+        this(new CompositePrintable().withPrintable(new JsonObjectPrintable(json)));
     }
 
-    protected abstract Stream<T> methods();
+    public Schema() {
+        this(new CompositePrintable());
+    }
+
+    private Schema(final CompositePrintable values) {
+        super(values);
+    }
+
+    Schema withType(final String type) {
+        return new Schema(values().withPrintable(new NamedStringPrintable("type", type)));
+    }
 }

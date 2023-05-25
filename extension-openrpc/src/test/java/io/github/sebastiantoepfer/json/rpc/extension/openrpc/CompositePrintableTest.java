@@ -21,18 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.runtime;
+package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
-import java.util.Optional;
-import java.util.stream.Stream;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 
-public abstract class JsonRpcExecutionContext<T extends JsonRpcMethod> {
+import io.github.sebastiantoepfer.ddd.media.core.HashMapMedia;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
 
-    public abstract JsonRpcExecutionContext withMethod(final T method);
+class CompositePrintableTest {
 
-    final Optional<T> findMethodWithName(final String name) {
-        return methods().filter(m -> m.hasName(name)).findFirst();
+    @Test
+    void make_pitest_happy() {
+        assertThat(new CompositePrintable().printOn(new HashMapMedia()), Matchers.is(not(nullValue())));
     }
-
-    protected abstract Stream<T> methods();
 }
