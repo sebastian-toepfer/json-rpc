@@ -42,7 +42,10 @@ class MethodJsonRpcExecutorTest {
     @BeforeEach
     void createExecutionContext() {
         context =
-            new JsonRpcExecutionContext().withMethod(subtract()).withMethod(exception()).withMethod(runtimeexception());
+            new DefaultJsonRpcExecutionContext()
+                .withMethod(subtract())
+                .withMethod(exception())
+                .withMethod(runtimeexception());
     }
 
     @Test

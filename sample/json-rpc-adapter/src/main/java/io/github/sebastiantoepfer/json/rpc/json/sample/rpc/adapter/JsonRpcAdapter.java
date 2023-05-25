@@ -24,10 +24,10 @@
 
 package io.github.sebastiantoepfer.json.rpc.json.sample.rpc.adapter;
 
+import io.github.sebastiantoepfer.json.rpc.runtime.BaseJsonRpcMethod;
+import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcExecutionContext;
 import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcRuntime;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionContext;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcRuntime;
 import io.github.sebastiantoepfer.json.rpc.sample.core.Notify;
 import jakarta.json.Json;
@@ -45,7 +45,7 @@ public final class JsonRpcAdapter {
 
     public JsonRpcRuntime createJsonRpcRuntime() {
         return new DefaultJsonRpcRuntime(
-            new JsonRpcExecutionContext()
+            new DefaultJsonRpcExecutionContext()
                 .withMethod(sum())
                 .withMethod(notifyHello())
                 .withMethod(subtract())
@@ -54,8 +54,8 @@ public final class JsonRpcAdapter {
         );
     }
 
-    private static JsonRpcMethod sum() {
-        return new JsonRpcMethod("sum", List.of("first", "second", "third")) {
+    private static BaseJsonRpcMethod sum() {
+        return new BaseJsonRpcMethod("sum", List.of("first", "second", "third")) {
             @Override
             protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
                 return Json.createValue(
@@ -69,8 +69,8 @@ public final class JsonRpcAdapter {
         };
     }
 
-    private JsonRpcMethod notifyHello() {
-        return new JsonRpcMethod("notify_hello", List.of("value")) {
+    private BaseJsonRpcMethod notifyHello() {
+        return new BaseJsonRpcMethod("notify_hello", List.of("value")) {
             @Override
             protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
                 notify.hello(params.getInt("value"));
@@ -79,8 +79,8 @@ public final class JsonRpcAdapter {
         };
     }
 
-    private static JsonRpcMethod subtract() {
-        return new JsonRpcMethod("subtract", List.of("minuend", "subtrahend")) {
+    private static BaseJsonRpcMethod subtract() {
+        return new BaseJsonRpcMethod("subtract", List.of("minuend", "subtrahend")) {
             @Override
             protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
                 return Json.createValue(
@@ -93,8 +93,8 @@ public final class JsonRpcAdapter {
         };
     }
 
-    private JsonRpcMethod getData() {
-        return new JsonRpcMethod("get_data", List.of()) {
+    private BaseJsonRpcMethod getData() {
+        return new BaseJsonRpcMethod("get_data", List.of()) {
             @Override
             protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
                 return Json.createArrayBuilder().add(notify.name()).add(notify.currentValue()).build();
@@ -102,8 +102,8 @@ public final class JsonRpcAdapter {
         };
     }
 
-    private JsonRpcMethod notifySum() {
-        return new JsonRpcMethod("notify_sum", List.of("first", "second", "third")) {
+    private BaseJsonRpcMethod notifySum() {
+        return new BaseJsonRpcMethod("notify_sum", List.of("first", "second", "third")) {
             @Override
             protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
                 notify.hello(

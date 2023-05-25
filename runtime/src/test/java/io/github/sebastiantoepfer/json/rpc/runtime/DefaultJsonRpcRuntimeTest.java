@@ -42,7 +42,9 @@ class DefaultJsonRpcRuntimeTest {
     @BeforeEach
     void createExecutor() {
         this.jsonRpcRuntimeExecutor =
-            new JsonRpcRuntimeExecutor(new DefaultJsonRpcRuntime(new JsonRpcExecutionContext().withMethod(subtract())));
+            new JsonRpcRuntimeExecutor(
+                new DefaultJsonRpcRuntime(new DefaultJsonRpcExecutionContext().withMethod(subtract()))
+            );
     }
 
     @Test

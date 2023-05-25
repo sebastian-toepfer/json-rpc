@@ -39,7 +39,7 @@ class BatchJsonRpcExecutorTest {
 
     @BeforeEach
     void createExecutionContext() {
-        context = new JsonRpcExecutionContext().withMethod(subtract());
+        context = new DefaultJsonRpcExecutionContext().withMethod(subtract());
     }
 
     @Test

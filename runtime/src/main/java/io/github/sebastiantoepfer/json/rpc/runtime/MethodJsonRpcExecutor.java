@@ -60,10 +60,13 @@ final class MethodJsonRpcExecutor implements JsonRpcExecutor {
     private static final class SingleMethodJsonRpcExecutor implements JsonRpcExecutor {
 
         private static final Logger LOG = Logger.getLogger(SingleMethodJsonRpcExecutor.class.getName());
-        private final JsonRpcExecutionContext context;
+        private final JsonRpcExecutionContext<? extends JsonRpcMethod> context;
         private final JsonObject json;
 
-        public SingleMethodJsonRpcExecutor(final JsonRpcExecutionContext context, final JsonObject json) {
+        public SingleMethodJsonRpcExecutor(
+            final JsonRpcExecutionContext<? extends JsonRpcMethod> context,
+            final JsonObject json
+        ) {
             this.context = context;
             this.json = json;
         }
@@ -73,6 +76,7 @@ final class MethodJsonRpcExecutor implements JsonRpcExecutor {
             LOG.entering(SingleMethodJsonRpcExecutor.class.getName(), "execute");
             final JsonRpcResponse result = context
                 .findMethodWithName(methodName())
+                .map(WrappedJsonRpcMethod::new)
                 .map(this::execute)
                 .orElseGet(() -> ErrorJsonRpcExecutor.ErrorResponse.nonExistingMethod(id()));
             LOG.exiting(SingleMethodJsonRpcExecutor.class.getName(), "execute", result);

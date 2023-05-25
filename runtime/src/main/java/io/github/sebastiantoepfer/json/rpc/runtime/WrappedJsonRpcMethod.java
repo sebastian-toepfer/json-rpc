@@ -24,9 +24,34 @@
 package io.github.sebastiantoepfer.json.rpc.runtime;
 
 import jakarta.json.JsonValue;
+import java.util.logging.Logger;
 
-public interface JsonRpcMethod {
-    boolean hasName(String name);
+final class WrappedJsonRpcMethod implements JsonRpcMethod {
 
-    JsonValue execute(JsonValue params) throws JsonRpcExecutionExecption;
+    private static final Logger LOG = Logger.getLogger(WrappedJsonRpcMethod.class.getName());
+    private final JsonRpcMethod delegate;
+
+    public WrappedJsonRpcMethod(final JsonRpcMethod delegate) {
+        this.delegate = delegate;
+    }
+
+    @Override
+    public boolean hasName(final String name) {
+        return delegate.hasName(name);
+    }
+
+    @Override
+    public JsonValue execute(final JsonValue params) throws JsonRpcExecutionExecption {
+        LOG.entering(BaseJsonRpcMethod.class.getName(), "execute", params);
+        final JsonValue result;
+        try {
+            result = delegate.execute(params);
+        } catch (RuntimeException ex) {
+            final JsonRpcExecutionExecption thrown = new JsonRpcExecutionExecption(-1, ex);
+            LOG.throwing(BaseJsonRpcMethod.class.getName(), "execute", thrown);
+            throw thrown;
+        }
+        LOG.exiting(BaseJsonRpcMethod.class.getName(), "execute", result);
+        return result;
+    }
 }

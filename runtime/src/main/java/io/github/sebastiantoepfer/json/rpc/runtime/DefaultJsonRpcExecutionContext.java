@@ -23,10 +23,32 @@
  */
 package io.github.sebastiantoepfer.json.rpc.runtime;
 
-import jakarta.json.JsonValue;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Stream;
 
-public interface JsonRpcMethod {
-    boolean hasName(String name);
+public final class DefaultJsonRpcExecutionContext extends JsonRpcExecutionContext<BaseJsonRpcMethod> {
 
-    JsonValue execute(JsonValue params) throws JsonRpcExecutionExecption;
+    private final Collection<BaseJsonRpcMethod> methods;
+
+    public DefaultJsonRpcExecutionContext() {
+        this(Set.of());
+    }
+
+    public DefaultJsonRpcExecutionContext(final Collection<BaseJsonRpcMethod> methods) {
+        this.methods = Set.copyOf(methods);
+    }
+
+    @Override
+    public JsonRpcExecutionContext withMethod(final BaseJsonRpcMethod method) {
+        final Set<BaseJsonRpcMethod> newMethods = new HashSet<>(this.methods);
+        newMethods.add(method);
+        return new DefaultJsonRpcExecutionContext(newMethods);
+    }
+
+    @Override
+    protected Stream<BaseJsonRpcMethod> methods() {
+        return methods.stream();
+    }
 }

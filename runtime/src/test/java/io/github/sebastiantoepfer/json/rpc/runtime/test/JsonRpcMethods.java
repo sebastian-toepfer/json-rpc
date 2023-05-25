@@ -23,8 +23,8 @@
  */
 package io.github.sebastiantoepfer.json.rpc.runtime.test;
 
+import io.github.sebastiantoepfer.json.rpc.runtime.BaseJsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethod;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
@@ -32,8 +32,8 @@ import java.util.List;
 
 public final class JsonRpcMethods {
 
-    public static JsonRpcMethod subtract() {
-        return new JsonRpcMethod("subtract", List.of("minuend", "subtrahend")) {
+    public static BaseJsonRpcMethod subtract() {
+        return new BaseJsonRpcMethod("subtract", List.of("minuend", "subtrahend")) {
             @Override
             protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
                 return Json.createValue(params.getInt("minuend") - params.getInt("subtrahend"));
@@ -41,8 +41,8 @@ public final class JsonRpcMethods {
         };
     }
 
-    public static JsonRpcMethod exception() {
-        return new JsonRpcMethod("exception", List.of("code", "message")) {
+    public static BaseJsonRpcMethod exception() {
+        return new BaseJsonRpcMethod("exception", List.of("code", "message")) {
             @Override
             protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
                 throw new JsonRpcExecutionExecption(params.getInt("code"), params.getString("message"));
@@ -50,8 +50,8 @@ public final class JsonRpcMethods {
         };
     }
 
-    public static JsonRpcMethod runtimeexception() {
-        return new JsonRpcMethod("runtimeexception", List.of("code", "message")) {
+    public static BaseJsonRpcMethod runtimeexception() {
+        return new BaseJsonRpcMethod("runtimeexception", List.of("code", "message")) {
             @Override
             protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
                 throw new NullPointerException();
