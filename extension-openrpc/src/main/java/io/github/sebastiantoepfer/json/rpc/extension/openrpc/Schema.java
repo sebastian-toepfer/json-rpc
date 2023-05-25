@@ -21,13 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.runtime;
+package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
-import io.github.sebastiantoepfer.ddd.common.Printable;
-import jakarta.json.JsonValue;
+/**
+ * not a real schema, only type is supported.
+ */
+public final class Schema extends BaseOpenRpc {
 
-public interface JsonRpcMethod extends Printable {
-    boolean hasName(String name);
+    public Schema() {
+        this(new CompositePrintable());
+    }
 
-    JsonValue execute(JsonValue params) throws JsonRpcExecutionExecption;
+    private Schema(final CompositePrintable values) {
+        super(values);
+    }
+
+    Schema withType(final String type) {
+        return new Schema(values().withPrintable(new NamedStringPrintable("type", type)));
+    }
 }

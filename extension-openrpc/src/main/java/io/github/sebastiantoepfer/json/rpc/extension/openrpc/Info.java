@@ -21,13 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.runtime;
+package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
+import io.github.sebastiantoepfer.ddd.common.Media;
 import io.github.sebastiantoepfer.ddd.common.Printable;
-import jakarta.json.JsonValue;
+import java.util.Objects;
 
-public interface JsonRpcMethod extends Printable {
-    boolean hasName(String name);
+public class Info implements Printable {
 
-    JsonValue execute(JsonValue params) throws JsonRpcExecutionExecption;
+    private final String title;
+    private final String version;
+
+    public Info(final String title, final String version) {
+        this.title = Objects.requireNonNull(title);
+        this.version = Objects.requireNonNull(version);
+    }
+
+    @Override
+    public final <T extends Media<T>> T printOn(final T media) {
+        return media.withValue("title", title).withValue("version", version);
+    }
 }

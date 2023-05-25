@@ -23,6 +23,7 @@
  */
 package io.github.sebastiantoepfer.json.rpc.runtime;
 
+import io.github.sebastiantoepfer.ddd.common.Media;
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
@@ -72,6 +73,11 @@ public abstract class BaseJsonRpcMethod implements JsonRpcMethod {
         final JsonObject result = builder.build();
         LOG.exiting(BaseJsonRpcMethod.class.getName(), "createNamedParameters", result);
         return result;
+    }
+
+    @Override
+    public final <T extends Media<T>> T printOn(final T media) {
+        return media.withValue("name", name).withValue("params", parameterNames);
     }
 
     protected abstract JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption;

@@ -21,13 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.runtime;
+package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
-import io.github.sebastiantoepfer.ddd.common.Printable;
-import jakarta.json.JsonValue;
+import java.net.URL;
 
-public interface JsonRpcMethod extends Printable {
-    boolean hasName(String name);
+public final class ExternalDocs extends BaseOpenRpc {
 
-    JsonValue execute(JsonValue params) throws JsonRpcExecutionExecption;
+    public ExternalDocs(final URL url) {
+        this(new CompositePrintable().withPrintable(new NamedStringPrintable("url", url.toExternalForm())));
+    }
+
+    private ExternalDocs(final CompositePrintable values) {
+        super(values);
+    }
+
+    public ExternalDocs withDescription(final String description) {
+        return new ExternalDocs(values().withPrintable(new NamedStringPrintable("description", description)));
+    }
 }

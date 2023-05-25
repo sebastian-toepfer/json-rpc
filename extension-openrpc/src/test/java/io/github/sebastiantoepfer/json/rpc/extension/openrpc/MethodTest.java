@@ -21,69 +21,67 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.runtime;
+package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.is;
 
 import io.github.sebastiantoepfer.ddd.media.core.HashMapMedia;
+import io.github.sebastiantoepfer.json.rpc.runtime.BaseJsonRpcMethod;
+import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
+import java.net.URI;
 import java.util.List;
-import nl.jqno.equalsverifier.EqualsVerifier;
 import org.hamcrest.Matcher;
 import org.junit.jupiter.api.Test;
 
-class BaseJsonRpcMethodTest {
+class MethodTest {
 
     @Test
-    void equalsContract() {
-        EqualsVerifier.simple().forClass(BaseJsonRpcMethod.class).withIgnoredFields("parameterNames").verify();
-    }
-
-    @Test
-    void should_be_callable_with_null_as_params() throws Exception {
+    void should_print_external_docs() throws Exception {
         assertThat(
-            new BaseJsonRpcMethod("test", List.of()) {
-                @Override
-                protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
-                    return Json.createValue("hello");
-                }
-            }
-                .execute((JsonValue) null),
-            is(Json.createValue("hello"))
-        );
-    }
-
-    @Test
-    void should_be_callable_without_params() throws Exception {
-        assertThat(
-            new BaseJsonRpcMethod("test", List.of()) {
-                @Override
-                protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
-                    return Json.createValue("hello");
-                }
-            }
-                .execute(JsonValue.NULL),
-            is(Json.createValue("hello"))
-        );
-    }
-
-    @Test
-    void should_print_name_and_parametersnames() {
-        assertThat(
-            new BaseJsonRpcMethod("test", List.of()) {
-                @Override
-                protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
-                    return Json.createValue("hello");
-                }
-            }
+            method()
+                .withExternalDocs(new ExternalDocs(URI.create("http://localhost/test").toURL()))
                 .printOn(new HashMapMedia()),
-            allOf(hasEntry(is("name"), (Matcher) is("test")), hasEntry(is("params"), empty()))
+            hasEntry(is("externalDocs"), (Matcher) hasEntry("url", "http://localhost/test"))
+        );
+    }
+
+    @Test
+    void should_print_tags() throws Exception {
+        assertThat(
+            method().withTags(new Tag[] { new Tag("pets") }).printOn(new HashMapMedia()),
+            hasEntry(is("tags"), (Matcher) contains(hasEntry("name", "pets")))
+        );
+    }
+
+    @Test
+    void should_print_reference_tags() throws Exception {
+        assertThat(
+            method().withTags(new Reference[] { new Reference("#/test") }).printOn(new HashMapMedia()),
+            hasEntry(is("tags"), (Matcher) contains(hasEntry("$ref", "#/test")))
+        );
+    }
+
+    @Test
+    void make_pitest_happy() throws Exception {
+        //or unsure ... how to find a good place to verify this functionality
+        assertThat(method().hasName("list_pets"), is(true));
+        assertThat(method().hasName("get_pet_by_id"), is(false));
+    }
+
+    private Method method() {
+        return new Method(
+            new BaseJsonRpcMethod("list_pets", List.of("limit")) {
+                @Override
+                protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
+                    return Json.createArrayBuilder().add("bunnies").add("cats").build();
+                }
+            }
         );
     }
 }

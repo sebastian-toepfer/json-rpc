@@ -21,44 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.runtime;
+package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 
 import io.github.sebastiantoepfer.ddd.media.core.HashMapMedia;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonValue;
-import java.util.List;
-import org.hamcrest.Matchers;
+import java.net.URI;
 import org.junit.jupiter.api.Test;
 
-class WrappedJsonRpcMethodTest {
+class TagTest {
 
     @Test
-    void should_return_false_when_delegate_has_different_name() {
-        assertThat(new WrappedJsonRpcMethod(createMethodWithName("test")).hasName("list"), is(false));
-    }
-
-    @Test
-    void should_return_true_when_delegate_has_different_name() {
-        assertThat(new WrappedJsonRpcMethod(createMethodWithName("test")).hasName("test"), is(true));
-    }
-
-    @Test
-    void should_print_name() {
+    void should_print_summary() {
         assertThat(
-            new WrappedJsonRpcMethod(createMethodWithName("test")).printOn(new HashMapMedia()),
-            Matchers.hasEntry("name", "test")
+            new Tag("with_summary").withSummary("A short summary of the tag.").printOn(new HashMapMedia()),
+            allOf(hasEntry("name", "with_summary"), hasEntry("summary", "A short summary of the tag."))
         );
     }
 
-    private static BaseJsonRpcMethod createMethodWithName(final String name) {
-        return new BaseJsonRpcMethod(name, List.of()) {
-            @Override
-            protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-        };
+    @Test
+    void should_print_description() {
+        assertThat(
+            new Tag("with_description")
+                .withDescription("A verbose explanation for the tag.")
+                .printOn(new HashMapMedia()),
+            allOf(hasEntry("name", "with_description"), hasEntry("description", "A verbose explanation for the tag."))
+        );
+    }
+
+    @Test
+    void should_print_externalDocs() throws Exception {
+        assertThat(
+            new Tag("with_externalDocs")
+                .withExternalDocs(new ExternalDocs(URI.create("http://localhost/rpc").toURL()))
+                .printOn(new HashMapMedia()),
+            allOf(hasEntry("name", "with_externalDocs"), hasEntry(is("externalDocs"), is(not(nullValue()))))
+        );
     }
 }

@@ -21,13 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.runtime;
+package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
-import io.github.sebastiantoepfer.ddd.common.Printable;
-import jakarta.json.JsonValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasEntry;
 
-public interface JsonRpcMethod extends Printable {
-    boolean hasName(String name);
+import io.github.sebastiantoepfer.ddd.media.core.HashMapMedia;
+import org.junit.jupiter.api.Test;
 
-    JsonValue execute(JsonValue params) throws JsonRpcExecutionExecption;
+class SchemaTest {
+
+    @Test
+    void should_type_name() {
+        assertThat(new Schema().withType("integer").printOn(new HashMapMedia()), hasEntry("type", "integer"));
+    }
 }

@@ -23,6 +23,7 @@
  */
 package io.github.sebastiantoepfer.json.rpc.runtime;
 
+import io.github.sebastiantoepfer.ddd.common.Media;
 import jakarta.json.JsonValue;
 import java.util.logging.Logger;
 
@@ -53,5 +54,10 @@ final class WrappedJsonRpcMethod implements JsonRpcMethod {
         }
         LOG.exiting(BaseJsonRpcMethod.class.getName(), "execute", result);
         return result;
+    }
+
+    @Override
+    public <T extends Media<T>> T printOn(final T media) {
+        return delegate.printOn(media);
     }
 }
