@@ -27,6 +27,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasEntry;
 
 import io.github.sebastiantoepfer.ddd.media.core.HashMapMedia;
+import jakarta.json.Json;
 import org.junit.jupiter.api.Test;
 
 class SchemaTest {
@@ -34,5 +35,13 @@ class SchemaTest {
     @Test
     void should_type_name() {
         assertThat(new Schema().withType("integer").printOn(new HashMapMedia()), hasEntry("type", "integer"));
+    }
+
+    @Test
+    void should_print_json() {
+        assertThat(
+            new Schema(Json.createObjectBuilder().add("type", "integer").build()).printOn(new HashMapMedia()),
+            hasEntry("type", "integer")
+        );
     }
 }

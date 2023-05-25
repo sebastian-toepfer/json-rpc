@@ -23,10 +23,17 @@
  */
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
+import io.github.sebastiantoepfer.ddd.media.json.JsonObjectPrintable;
+import jakarta.json.JsonObject;
+
 /**
  * not a real schema, only type is supported.
  */
 public final class Schema extends BaseOpenRpc {
+
+    public Schema(final JsonObject json) {
+        this(new CompositePrintable().withPrintable(new JsonObjectPrintable(json)));
+    }
 
     public Schema() {
         this(new CompositePrintable());
