@@ -32,9 +32,7 @@ import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.Method;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.Reference;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.Schema;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.Tag;
-import io.github.sebastiantoepfer.json.rpc.runtime.BaseJsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcRuntime;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
@@ -106,13 +104,6 @@ class OpenRpcServiceDiscoveryJsonRpcExecutionContextTest {
                         new OpenRpcServiceDiscoveryJsonRpcExecutionContext(new Info("test app", "1.0.0"))
                             .withMethod(
                                 new DescribeableJsonRpcMethod(
-                                    new BaseJsonRpcMethod("list_pets", List.of("limit")) {
-                                        @Override
-                                        protected JsonValue execute(final JsonObject params)
-                                            throws JsonRpcExecutionExecption {
-                                            return Json.createArrayBuilder().add("bunnies").add("cats").build();
-                                        }
-                                    },
                                     new Method(
                                         "list_pets",
                                         List.of(
@@ -126,7 +117,8 @@ class OpenRpcServiceDiscoveryJsonRpcExecutionContextTest {
                                         .withResultDescription(
                                             new ContentDescriptor("pets", new Reference("#/components/schemas/Pets"))
                                                 .withDescription("A paged array of pets")
-                                        )
+                                        ),
+                                    params -> Json.createArrayBuilder().add("bunnies").add("cats").build()
                                 )
                             )
                     )

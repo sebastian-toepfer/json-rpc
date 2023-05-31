@@ -23,31 +23,10 @@
  */
 package io.github.sebastiantoepfer.json.rpc.runtime;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
 
-import java.util.List;
-import org.junit.jupiter.api.Test;
-
-class WrappedJsonRpcMethodTest {
-
-    @Test
-    void should_return_false_when_delegate_has_different_name() {
-        assertThat(new WrappedJsonRpcMethod(createMethodWithName("test")).hasName("list"), is(false));
-    }
-
-    @Test
-    void should_return_true_when_delegate_has_different_name() {
-        assertThat(new WrappedJsonRpcMethod(createMethodWithName("test")).hasName("test"), is(true));
-    }
-
-    private static DefaultJsonRpcMethod createMethodWithName(final String name) {
-        return new DefaultJsonRpcMethod(
-            name,
-            List.of(),
-            params -> {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-        );
-    }
+@FunctionalInterface
+public interface JsonRpcMethodFunction {
+    JsonValue apply(final JsonObject params) throws JsonRpcExecutionExecption;
 }

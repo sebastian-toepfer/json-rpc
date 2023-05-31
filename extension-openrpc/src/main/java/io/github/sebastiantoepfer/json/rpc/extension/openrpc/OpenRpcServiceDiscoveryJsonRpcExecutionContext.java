@@ -28,11 +28,7 @@ import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescrip
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.Info;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.Method;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.Reference;
-import io.github.sebastiantoepfer.json.rpc.runtime.BaseJsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionContext;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonValue;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -67,15 +63,6 @@ public final class OpenRpcServiceDiscoveryJsonRpcExecutionContext
 
     public DescribeableJsonRpcMethod asMethod() {
         return new DescribeableJsonRpcMethod(
-            new BaseJsonRpcMethod("rpc.discover", List.of()) {
-                @Override
-                protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
-                    return new JsonObjectMedia()
-                        .withValue("info", info)
-                        .withValue("methods", methods().toList())
-                        .withValue("openrpc", "2.0.0");
-                }
-            },
             new Method("rpc.discover", List.of())
                 .withDescription("Returns an OpenRPC schema as a description of this service")
                 .withResultDescription(
@@ -83,7 +70,12 @@ public final class OpenRpcServiceDiscoveryJsonRpcExecutionContext
                         "OpenRPC Schema",
                         new Reference("https://raw.githubusercontent.com/open-rpc/meta-schema/master/schema.json")
                     )
-                )
+                ),
+            params ->
+                new JsonObjectMedia()
+                    .withValue("info", info)
+                    .withValue("methods", methods().toList())
+                    .withValue("openrpc", "2.0.0")
         );
     }
 }

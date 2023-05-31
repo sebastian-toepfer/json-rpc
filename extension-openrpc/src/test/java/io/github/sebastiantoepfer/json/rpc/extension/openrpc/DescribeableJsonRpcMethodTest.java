@@ -25,45 +25,44 @@ package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescriptor;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.Method;
-import io.github.sebastiantoepfer.json.rpc.runtime.BaseJsonRpcMethod;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.Schema;
+import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethod;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonValue;
+import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethodFunction;
+import jakarta.json.Json;
+import jakarta.json.JsonArray;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class DescribeableJsonRpcMethodTest {
 
     @Test
-    void should_not_creatable_with_different_names() {
-        final JsonRpcMethod jsonRpcMethod = new BaseJsonRpcMethod("list_pets", List.of()) {
-            @Override
-            protected JsonValue execute(JsonObject params) throws JsonRpcExecutionExecption {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-        };
-        final Method desc = new Method("get_pet", List.of());
-
-        assertThrows(IllegalArgumentException.class, () -> new DescribeableJsonRpcMethod(jsonRpcMethod, desc));
-    }
-
-    @Test
     void should_delegate_has_names() {
         final JsonRpcMethod jsonRpcMethod = new DescribeableJsonRpcMethod(
-            new BaseJsonRpcMethod("list_pets", List.of()) {
-                @Override
-                protected JsonValue execute(JsonObject params) throws JsonRpcExecutionExecption {
-                    throw new UnsupportedOperationException("Not supported yet.");
-                }
-            },
-            new Method("list_pets", List.of())
+            new Method("list_pets", List.of()),
+            params -> {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
         );
         //pitest :(
         assertThat(jsonRpcMethod.hasName("get_pet"), is(false));
         assertThat(jsonRpcMethod.hasName("list_pets"), is(true));
+    }
+
+    @Test
+    void should_call_method_with_parameters() throws Exception {
+        final JsonArray parameters = Json.createArrayBuilder().add(2).build();
+        final JsonRpcMethodFunction function = params -> params;
+        assertThat(
+            new DescribeableJsonRpcMethod(
+                new Method("list_pets", List.of(new ContentDescriptor("limit", new Schema()))),
+                function
+            )
+                .execute(parameters),
+            is(new DefaultJsonRpcMethod("list_pets", List.of("limit"), function).execute(parameters))
+        );
     }
 }

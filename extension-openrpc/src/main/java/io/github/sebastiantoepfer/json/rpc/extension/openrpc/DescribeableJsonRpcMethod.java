@@ -24,24 +24,35 @@
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
 import io.github.sebastiantoepfer.ddd.common.Media;
+import io.github.sebastiantoepfer.ddd.common.Printable;
 import io.github.sebastiantoepfer.ddd.media.core.HashMapMedia;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.Method;
+import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethod;
+import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethodFunction;
 import jakarta.json.JsonValue;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
-public final class DescribeableJsonRpcMethod implements JsonRpcMethod {
+public final class DescribeableJsonRpcMethod implements JsonRpcMethod, Printable {
 
     private final JsonRpcMethod method;
     private final Method description;
 
-    public DescribeableJsonRpcMethod(final JsonRpcMethod method, final Method description) {
-        if (!method.hasName(String.valueOf(description.printOn(new HashMapMedia()).get("name")))) {
-            throw new IllegalArgumentException("Description and method with different names are not allowed!");
-        }
-        this.method = Objects.requireNonNull(method);
+    public DescribeableJsonRpcMethod(final Method description, final JsonRpcMethodFunction function) {
         this.description = Objects.requireNonNull(description);
+        final Map<String, Object> desc = description.printOn(new HashMapMedia());
+        this.method =
+            new DefaultJsonRpcMethod(
+                String.valueOf(desc.get("name")),
+                ((List<Map<String, Object>>) desc.getOrDefault("params", Map.of())).stream()
+                    .map(m -> m.get("name"))
+                    .map(String::valueOf)
+                    .toList(),
+                function
+            );
     }
 
     @Override

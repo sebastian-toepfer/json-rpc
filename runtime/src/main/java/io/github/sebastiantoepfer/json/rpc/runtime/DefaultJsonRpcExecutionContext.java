@@ -28,27 +28,27 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public final class DefaultJsonRpcExecutionContext extends JsonRpcExecutionContext<BaseJsonRpcMethod> {
+public final class DefaultJsonRpcExecutionContext extends JsonRpcExecutionContext<DefaultJsonRpcMethod> {
 
-    private final Collection<BaseJsonRpcMethod> methods;
+    private final Collection<DefaultJsonRpcMethod> methods;
 
     public DefaultJsonRpcExecutionContext() {
         this(Set.of());
     }
 
-    public DefaultJsonRpcExecutionContext(final Collection<BaseJsonRpcMethod> methods) {
+    public DefaultJsonRpcExecutionContext(final Collection<DefaultJsonRpcMethod> methods) {
         this.methods = Set.copyOf(methods);
     }
 
     @Override
-    public JsonRpcExecutionContext withMethod(final BaseJsonRpcMethod method) {
-        final Set<BaseJsonRpcMethod> newMethods = new HashSet<>(this.methods);
+    public JsonRpcExecutionContext withMethod(final DefaultJsonRpcMethod method) {
+        final Set<DefaultJsonRpcMethod> newMethods = new HashSet<>(this.methods);
         newMethods.add(method);
         return new DefaultJsonRpcExecutionContext(newMethods);
     }
 
     @Override
-    protected Stream<BaseJsonRpcMethod> methods() {
+    protected Stream<DefaultJsonRpcMethod> methods() {
         return methods.stream();
     }
 }
