@@ -21,34 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
+package io.github.sebastiantoepfer.json.rpc.extension.openrpc.printable;
 
 import io.github.sebastiantoepfer.ddd.common.Media;
 import io.github.sebastiantoepfer.ddd.common.Printable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
-final class CompositePrintable implements Printable {
+public final class NamedPrintable implements Printable {
 
-    private final List<Printable> values;
+    private final String name;
+    private final Printable printable;
 
-    public CompositePrintable() {
-        this(List.of());
-    }
-
-    private CompositePrintable(final List<Printable> values) {
-        this.values = List.copyOf(values);
-    }
-
-    public CompositePrintable withPrintable(final Printable value) {
-        final List<Printable> newValues = new ArrayList<>(values);
-        newValues.add(Objects.requireNonNull(value));
-        return new CompositePrintable(newValues);
+    public NamedPrintable(final String name, final Printable printable) {
+        this.name = Objects.requireNonNull(name);
+        this.printable = Objects.requireNonNull(printable);
     }
 
     @Override
     public <T extends Media<T>> T printOn(final T media) {
-        return values.stream().reduce(media, (m, p) -> p.printOn(m), (l, r) -> null);
+        return media.withValue(name, printable);
     }
 }

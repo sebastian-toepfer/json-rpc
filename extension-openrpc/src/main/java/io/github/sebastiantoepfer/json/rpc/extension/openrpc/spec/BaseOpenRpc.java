@@ -21,27 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
+package io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasEntry;
+import io.github.sebastiantoepfer.ddd.common.Media;
+import io.github.sebastiantoepfer.ddd.common.Printable;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.printable.CompositePrintable;
+import java.util.Objects;
 
-import io.github.sebastiantoepfer.ddd.media.core.HashMapMedia;
-import jakarta.json.Json;
-import org.junit.jupiter.api.Test;
+class BaseOpenRpc implements Printable {
 
-class SchemaTest {
+    private final CompositePrintable values;
 
-    @Test
-    void should_type_name() {
-        assertThat(new Schema().withType("integer").printOn(new HashMapMedia()), hasEntry("type", "integer"));
+    public BaseOpenRpc(final CompositePrintable values) {
+        this.values = Objects.requireNonNull(values);
     }
 
-    @Test
-    void should_print_json() {
-        assertThat(
-            new Schema(Json.createObjectBuilder().add("type", "integer").build()).printOn(new HashMapMedia()),
-            hasEntry("type", "integer")
-        );
+    protected CompositePrintable values() {
+        return values;
+    }
+
+    @Override
+    public <T extends Media<T>> T printOn(final T media) {
+        return values.printOn(media);
     }
 }

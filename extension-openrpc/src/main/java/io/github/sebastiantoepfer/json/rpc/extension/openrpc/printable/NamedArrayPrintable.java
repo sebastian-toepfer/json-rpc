@@ -21,24 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
+package io.github.sebastiantoepfer.json.rpc.extension.openrpc.printable;
 
 import io.github.sebastiantoepfer.ddd.common.Media;
 import io.github.sebastiantoepfer.ddd.common.Printable;
+import java.util.List;
 import java.util.Objects;
 
-final class NamedStringPrintable implements Printable {
+public final class NamedArrayPrintable implements Printable {
 
     private final String name;
-    private final String value;
+    private final List<? extends Printable> values;
 
-    public NamedStringPrintable(final String name, final String value) {
+    public NamedArrayPrintable(final String name, final List<? extends Printable> values) {
         this.name = Objects.requireNonNull(name);
-        this.value = Objects.requireNonNull(value);
+        this.values = List.copyOf(values);
     }
 
     @Override
     public <T extends Media<T>> T printOn(final T media) {
-        return media.withValue(name, value);
+        return media.withValue(name, values);
     }
 }

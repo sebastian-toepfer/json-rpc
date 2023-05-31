@@ -21,29 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
+package io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec;
 
-import io.github.sebastiantoepfer.ddd.media.json.JsonObjectPrintable;
-import jakarta.json.JsonObject;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.printable.CompositePrintable;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.printable.NamedPrintable;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.printable.NamedStringPrintable;
+import java.util.Objects;
 
-/**
- * not a real schema, only type is supported.
- */
-public final class Schema extends BaseOpenRpc {
+public final class Tag extends BaseOpenRpc {
 
-    public Schema(final JsonObject json) {
-        this(new CompositePrintable().withPrintable(new JsonObjectPrintable(json)));
+    public Tag(final String name) {
+        this(new CompositePrintable().withPrintable(new NamedStringPrintable("name", Objects.requireNonNull(name))));
     }
 
-    public Schema() {
-        this(new CompositePrintable());
-    }
-
-    private Schema(final CompositePrintable values) {
+    private Tag(final CompositePrintable values) {
         super(values);
     }
 
-    Schema withType(final String type) {
-        return new Schema(values().withPrintable(new NamedStringPrintable("type", type)));
+    public Tag withSummary(final String summary) {
+        return new Tag(values().withPrintable(new NamedStringPrintable("summary", summary)));
+    }
+
+    public Tag withDescription(final String description) {
+        return new Tag(values().withPrintable(new NamedStringPrintable("description", description)));
+    }
+
+    public Tag withExternalDocs(final ExternalDocs externalDocs) {
+        return new Tag(values().withPrintable(new NamedPrintable("externalDocs", externalDocs)));
     }
 }

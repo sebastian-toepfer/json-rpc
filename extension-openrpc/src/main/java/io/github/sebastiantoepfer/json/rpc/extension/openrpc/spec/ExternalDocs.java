@@ -21,24 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
+package io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec;
 
-import io.github.sebastiantoepfer.ddd.common.Media;
-import io.github.sebastiantoepfer.ddd.common.Printable;
-import java.util.Objects;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.printable.CompositePrintable;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.printable.NamedStringPrintable;
+import java.net.URL;
 
-public class Info implements Printable {
+public final class ExternalDocs extends BaseOpenRpc {
 
-    private final String title;
-    private final String version;
-
-    public Info(final String title, final String version) {
-        this.title = Objects.requireNonNull(title);
-        this.version = Objects.requireNonNull(version);
+    public ExternalDocs(final URL url) {
+        this(new CompositePrintable().withPrintable(new NamedStringPrintable("url", url.toExternalForm())));
     }
 
-    @Override
-    public final <T extends Media<T>> T printOn(final T media) {
-        return media.withValue("title", title).withValue("version", version);
+    private ExternalDocs(final CompositePrintable values) {
+        super(values);
+    }
+
+    public ExternalDocs withDescription(final String description) {
+        return new ExternalDocs(values().withPrintable(new NamedStringPrintable("description", description)));
     }
 }

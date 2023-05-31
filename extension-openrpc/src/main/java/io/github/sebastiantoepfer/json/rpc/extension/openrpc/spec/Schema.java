@@ -21,23 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
+package io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec;
 
-import io.github.sebastiantoepfer.ddd.common.Media;
-import io.github.sebastiantoepfer.ddd.common.Printable;
+import io.github.sebastiantoepfer.ddd.media.json.JsonObjectPrintable;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.printable.CompositePrintable;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.printable.NamedStringPrintable;
+import jakarta.json.JsonObject;
 
-final class NamedBooleanPrintable implements Printable {
+/**
+ * not a real json schema
+ */
+public final class Schema extends BaseOpenRpc {
 
-    private final String name;
-    private final boolean value;
-
-    public NamedBooleanPrintable(final String name, final boolean value) {
-        this.name = name;
-        this.value = value;
+    public Schema(final JsonObject json) {
+        this(new CompositePrintable().withPrintable(new JsonObjectPrintable(json)));
     }
 
-    @Override
-    public <T extends Media<T>> T printOn(final T media) {
-        return media.withValue(name, value);
+    public Schema() {
+        this(new CompositePrintable());
+    }
+
+    private Schema(final CompositePrintable values) {
+        super(values);
+    }
+
+    public Schema withType(final String type) {
+        return new Schema(values().withPrintable(new NamedStringPrintable("type", type)));
     }
 }

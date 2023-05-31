@@ -21,46 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
+package io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasEntry;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
 
 import io.github.sebastiantoepfer.ddd.media.core.HashMapMedia;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ExternalDocs;
 import java.net.URI;
 import org.junit.jupiter.api.Test;
 
-class TagTest {
+class ExternalDocsTest {
 
     @Test
-    void should_print_summary() {
+    void should_print_description() throws Exception {
         assertThat(
-            new Tag("with_summary").withSummary("A short summary of the tag.").printOn(new HashMapMedia()),
-            allOf(hasEntry("name", "with_summary"), hasEntry("summary", "A short summary of the tag."))
-        );
-    }
-
-    @Test
-    void should_print_description() {
-        assertThat(
-            new Tag("with_description")
-                .withDescription("A verbose explanation for the tag.")
+            new ExternalDocs(URI.create("http://localhost:8080").toURL())
+                .withDescription("A verbose explanation of the target documentation.")
                 .printOn(new HashMapMedia()),
-            allOf(hasEntry("name", "with_description"), hasEntry("description", "A verbose explanation for the tag."))
-        );
-    }
-
-    @Test
-    void should_print_externalDocs() throws Exception {
-        assertThat(
-            new Tag("with_externalDocs")
-                .withExternalDocs(new ExternalDocs(URI.create("http://localhost/rpc").toURL()))
-                .printOn(new HashMapMedia()),
-            allOf(hasEntry("name", "with_externalDocs"), hasEntry(is("externalDocs"), is(not(nullValue()))))
+            allOf(
+                hasEntry("url", "http://localhost:8080"),
+                hasEntry("description", "A verbose explanation of the target documentation.")
+            )
         );
     }
 }

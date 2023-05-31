@@ -21,21 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
+package io.github.sebastiantoepfer.json.rpc.extension.openrpc.printable;
 
-import java.net.URL;
+import io.github.sebastiantoepfer.ddd.common.Media;
+import io.github.sebastiantoepfer.ddd.common.Printable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-public final class ExternalDocs extends BaseOpenRpc {
+public final class CompositePrintable implements Printable {
 
-    public ExternalDocs(final URL url) {
-        this(new CompositePrintable().withPrintable(new NamedStringPrintable("url", url.toExternalForm())));
+    private final List<Printable> values;
+
+    public CompositePrintable() {
+        this(List.of());
     }
 
-    private ExternalDocs(final CompositePrintable values) {
-        super(values);
+    private CompositePrintable(final List<Printable> values) {
+        this.values = List.copyOf(values);
     }
 
-    public ExternalDocs withDescription(final String description) {
-        return new ExternalDocs(values().withPrintable(new NamedStringPrintable("description", description)));
+    public CompositePrintable withPrintable(final Printable value) {
+        final List<Printable> newValues = new ArrayList<>(values);
+        newValues.add(Objects.requireNonNull(value));
+        return new CompositePrintable(newValues);
+    }
+
+    @Override
+    public <T extends Media<T>> T printOn(final T media) {
+        return values.stream().reduce(media, (m, p) -> p.printOn(m), (l, r) -> null);
     }
 }

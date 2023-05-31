@@ -26,6 +26,12 @@ package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescriptor;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.Info;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.Method;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.Reference;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.Schema;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.Tag;
 import io.github.sebastiantoepfer.json.rpc.runtime.BaseJsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcRuntime;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
@@ -35,7 +41,6 @@ import jakarta.json.JsonValue;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 class OpenRpcServiceDiscoveryJsonRpcExecutionContextTest {
@@ -100,29 +105,29 @@ class OpenRpcServiceDiscoveryJsonRpcExecutionContextTest {
                     executeDiscover(
                         new OpenRpcServiceDiscoveryJsonRpcExecutionContext(new Info("test app", "1.0.0"))
                             .withMethod(
-                                new Method(
+                                new DescribeableJsonRpcMethod(
                                     new BaseJsonRpcMethod("list_pets", List.of("limit")) {
                                         @Override
                                         protected JsonValue execute(final JsonObject params)
                                             throws JsonRpcExecutionExecption {
                                             return Json.createArrayBuilder().add("bunnies").add("cats").build();
                                         }
-                                    }
-                                )
-                                    .withTags(new Tag[] { new Tag("pets") })
-                                    .withSummary("List all pets")
-                                    .withParams(
-                                        Map.of(
-                                            "limit",
+                                    },
+                                    new Method(
+                                        "list_pets",
+                                        List.of(
                                             new ContentDescriptor("limit", new Schema().withType("integer"))
                                                 .withDescription("How many items to return at one time (max 100)")
                                                 .withRequired(false)
                                         )
                                     )
-                                    .withResultDescription(
-                                        new ContentDescriptor("pets", new Reference("#/components/schemas/Pets"))
-                                            .withDescription("A paged array of pets")
-                                    )
+                                        .withTags(new Tag[] { new Tag("pets") })
+                                        .withSummary("List all pets")
+                                        .withResultDescription(
+                                            new ContentDescriptor("pets", new Reference("#/components/schemas/Pets"))
+                                                .withDescription("A paged array of pets")
+                                        )
+                                )
                             )
                     )
                 ),

@@ -21,29 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
+package io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec;
 
-import java.util.Objects;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 
-public class Tag extends BaseOpenRpc {
+import io.github.sebastiantoepfer.ddd.media.core.HashMapMedia;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.printable.CompositePrintable;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
 
-    public Tag(final String name) {
-        this(new CompositePrintable().withPrintable(new NamedStringPrintable("name", Objects.requireNonNull(name))));
-    }
+class CompositePrintableTest {
 
-    private Tag(final CompositePrintable values) {
-        super(values);
-    }
-
-    public Tag withSummary(final String summary) {
-        return new Tag(values().withPrintable(new NamedStringPrintable("summary", summary)));
-    }
-
-    public Tag withDescription(final String description) {
-        return new Tag(values().withPrintable(new NamedStringPrintable("description", description)));
-    }
-
-    public Tag withExternalDocs(final ExternalDocs externalDocs) {
-        return new Tag(values().withPrintable(new NamedPrintable("externalDocs", externalDocs)));
+    @Test
+    void make_pitest_happy() {
+        assertThat(new CompositePrintable().printOn(new HashMapMedia()), Matchers.is(not(nullValue())));
     }
 }

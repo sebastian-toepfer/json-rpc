@@ -24,21 +24,38 @@
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
 import io.github.sebastiantoepfer.ddd.common.Media;
-import io.github.sebastiantoepfer.ddd.common.Printable;
-import java.util.List;
+import io.github.sebastiantoepfer.ddd.media.core.HashMapMedia;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.Method;
+import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
+import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethod;
+import jakarta.json.JsonValue;
+import java.util.Objects;
 
-class NamedArrayPrintable implements Printable {
+public final class DescribeableJsonRpcMethod implements JsonRpcMethod {
 
-    private final String name;
-    private final List<? extends Printable> values;
+    private final JsonRpcMethod method;
+    private final Method description;
 
-    public NamedArrayPrintable(final String name, final List<? extends Printable> values) {
-        this.name = name;
-        this.values = List.copyOf(values);
+    public DescribeableJsonRpcMethod(final JsonRpcMethod method, final Method description) {
+        if (!method.hasName(String.valueOf(description.printOn(new HashMapMedia()).get("name")))) {
+            throw new IllegalArgumentException("Description and method with different names are not allowed!");
+        }
+        this.method = Objects.requireNonNull(method);
+        this.description = Objects.requireNonNull(description);
+    }
+
+    @Override
+    public boolean hasName(final String name) {
+        return method.hasName(name);
+    }
+
+    @Override
+    public JsonValue execute(final JsonValue params) throws JsonRpcExecutionExecption {
+        return method.execute(params);
     }
 
     @Override
     public <T extends Media<T>> T printOn(final T media) {
-        return media.withValue(name, values);
+        return description.printOn(media);
     }
 }

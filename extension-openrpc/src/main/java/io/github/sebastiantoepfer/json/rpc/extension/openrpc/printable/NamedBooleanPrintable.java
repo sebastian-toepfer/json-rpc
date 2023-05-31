@@ -21,37 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
+package io.github.sebastiantoepfer.json.rpc.extension.openrpc.printable;
 
+import io.github.sebastiantoepfer.ddd.common.Media;
 import io.github.sebastiantoepfer.ddd.common.Printable;
+import java.util.Objects;
 
-public final class ContentDescriptor extends BaseOpenRpc {
+public final class NamedBooleanPrintable implements Printable {
 
-    public ContentDescriptor(final String name, final Schema schema) {
-        this(name, (Printable) schema);
+    private final String name;
+    private final boolean value;
+
+    public NamedBooleanPrintable(final String name, final boolean value) {
+        this.name = Objects.requireNonNull(name);
+        this.value = value;
     }
 
-    public ContentDescriptor(final String name, final Reference schema) {
-        this(name, (Printable) schema);
-    }
-
-    private ContentDescriptor(final String name, final Printable schema) {
-        this(
-            new CompositePrintable()
-                .withPrintable(new NamedStringPrintable("name", name))
-                .withPrintable(new NamedPrintable("schema", schema))
-        );
-    }
-
-    private ContentDescriptor(final CompositePrintable values) {
-        super(values);
-    }
-
-    public ContentDescriptor withRequired(final boolean value) {
-        return new ContentDescriptor(values().withPrintable(new NamedBooleanPrintable("required", value)));
-    }
-
-    public ContentDescriptor withDescription(final String description) {
-        return new ContentDescriptor(values().withPrintable(new NamedStringPrintable("description", description)));
+    @Override
+    public <T extends Media<T>> T printOn(final T media) {
+        return media.withValue(name, value);
     }
 }

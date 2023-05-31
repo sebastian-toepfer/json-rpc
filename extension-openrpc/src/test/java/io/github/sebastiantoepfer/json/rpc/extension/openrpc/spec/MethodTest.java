@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
+package io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -29,11 +29,6 @@ import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.is;
 
 import io.github.sebastiantoepfer.ddd.media.core.HashMapMedia;
-import io.github.sebastiantoepfer.json.rpc.runtime.BaseJsonRpcMethod;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonValue;
 import java.net.URI;
 import java.util.List;
 import org.hamcrest.Matcher;
@@ -67,21 +62,7 @@ class MethodTest {
         );
     }
 
-    @Test
-    void make_pitest_happy() throws Exception {
-        //or unsure ... how to find a good place to verify this functionality
-        assertThat(method().hasName("list_pets"), is(true));
-        assertThat(method().hasName("get_pet_by_id"), is(false));
-    }
-
     private Method method() {
-        return new Method(
-            new BaseJsonRpcMethod("list_pets", List.of("limit")) {
-                @Override
-                protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
-                    return Json.createArrayBuilder().add("bunnies").add("cats").build();
-                }
-            }
-        );
+        return new Method("list_pets", List.of());
     }
 }

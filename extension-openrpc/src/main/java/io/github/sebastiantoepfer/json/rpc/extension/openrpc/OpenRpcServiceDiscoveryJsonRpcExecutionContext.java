@@ -24,6 +24,10 @@
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
 import io.github.sebastiantoepfer.ddd.media.json.JsonObjectMedia;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescriptor;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.Info;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.Method;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.Reference;
 import io.github.sebastiantoepfer.json.rpc.runtime.BaseJsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionContext;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
@@ -34,10 +38,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-public final class OpenRpcServiceDiscoveryJsonRpcExecutionContext extends JsonRpcExecutionContext<Method> {
+public final class OpenRpcServiceDiscoveryJsonRpcExecutionContext
+    extends JsonRpcExecutionContext<DescribeableJsonRpcMethod> {
 
     private final Info info;
-    private final List<Method> methods;
+    private final List<DescribeableJsonRpcMethod> methods;
 
     public OpenRpcServiceDiscoveryJsonRpcExecutionContext(final Info info) {
         this(info, List.of());
@@ -49,19 +54,19 @@ public final class OpenRpcServiceDiscoveryJsonRpcExecutionContext extends JsonRp
     }
 
     @Override
-    public OpenRpcServiceDiscoveryJsonRpcExecutionContext withMethod(final Method method) {
-        final List<Method> newMethods = new ArrayList<>(methods);
+    public OpenRpcServiceDiscoveryJsonRpcExecutionContext withMethod(final DescribeableJsonRpcMethod method) {
+        final List<DescribeableJsonRpcMethod> newMethods = new ArrayList<>(methods);
         newMethods.add(method);
         return new OpenRpcServiceDiscoveryJsonRpcExecutionContext(info, newMethods);
     }
 
     @Override
-    protected Stream<Method> methods() {
+    protected Stream<DescribeableJsonRpcMethod> methods() {
         return Stream.concat(Stream.of(asMethod()), methods.stream());
     }
 
-    public Method asMethod() {
-        return new Method(
+    public DescribeableJsonRpcMethod asMethod() {
+        return new DescribeableJsonRpcMethod(
             new BaseJsonRpcMethod("rpc.discover", List.of()) {
                 @Override
                 protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
@@ -70,14 +75,15 @@ public final class OpenRpcServiceDiscoveryJsonRpcExecutionContext extends JsonRp
                         .withValue("methods", methods().toList())
                         .withValue("openrpc", "2.0.0");
                 }
-            }
-        )
-            .withDescription("Returns an OpenRPC schema as a description of this service")
-            .withResultDescription(
-                new ContentDescriptor(
-                    "OpenRPC Schema",
-                    new Reference("https://raw.githubusercontent.com/open-rpc/meta-schema/master/schema.json")
+            },
+            new Method("rpc.discover", List.of())
+                .withDescription("Returns an OpenRPC schema as a description of this service")
+                .withResultDescription(
+                    new ContentDescriptor(
+                        "OpenRPC Schema",
+                        new Reference("https://raw.githubusercontent.com/open-rpc/meta-schema/master/schema.json")
+                    )
                 )
-            );
+        );
     }
 }
