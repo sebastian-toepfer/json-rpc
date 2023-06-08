@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 
 public abstract class JsonRpcExecutionContext<T extends JsonRpcMethod> {
 
-    public abstract JsonRpcExecutionContext withMethod(final T method);
+    public abstract JsonRpcExecutionContext<T> withMethod(final T method);
 
     final Optional<T> findMethodWithName(final String name) {
         return methods().filter(m -> m.hasName(name)).findFirst();

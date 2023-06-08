@@ -35,9 +35,9 @@ import java.util.logging.Logger;
 public final class DefaultJsonRpcRuntime implements JsonRpcRuntime {
 
     private static final Logger LOG = Logger.getLogger(DefaultJsonRpcRuntime.class.getName());
-    private final JsonRpcExecutionContext context;
+    private final JsonRpcExecutionContext<? extends JsonRpcMethod> context;
 
-    public DefaultJsonRpcRuntime(final JsonRpcExecutionContext context) {
+    public DefaultJsonRpcRuntime(final JsonRpcExecutionContext<? extends JsonRpcMethod> context) {
         this.context = context;
     }
 

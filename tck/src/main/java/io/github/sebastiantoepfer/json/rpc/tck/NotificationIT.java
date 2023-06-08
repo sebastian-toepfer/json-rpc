@@ -60,10 +60,11 @@ class NotificationIT {
             .contentType("application/json")
             .accept("application/json")
             .body(
-                "[\n" +
-                "{\"jsonrpc\": \"2.0\", \"method\": \"notify_sum\", \"params\": [1,2,4]},\n" +
-                "{\"jsonrpc\": \"2.0\", \"method\": \"notify_hello\", \"params\": [7]}\n" +
-                "]"
+                """
+                  [
+                  {"jsonrpc": "2.0", "method": "notify_sum", "params": [1,2,4]},
+                  {"jsonrpc": "2.0", "method": "notify_hello", "params": [7]}
+                  ]"""
             )
             .when()
             .post("/rpc")
