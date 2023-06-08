@@ -33,7 +33,10 @@ final class MethodJsonRpcExecutor implements JsonRpcExecutor {
     private static final Logger LOG = Logger.getLogger(MethodJsonRpcExecutor.class.getName());
     private final JsonRpcExecutor delegate;
 
-    public MethodJsonRpcExecutor(final JsonRpcExecutionContext context, final JsonObject json) {
+    public MethodJsonRpcExecutor(
+        final JsonRpcExecutionContext<? extends JsonRpcMethod> context,
+        final JsonObject json
+    ) {
         if (new JsonRpcMethodValidation(json).isValid()) {
             delegate = new SingleMethodJsonRpcExecutor(context, json);
         } else {

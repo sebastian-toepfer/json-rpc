@@ -34,10 +34,10 @@ import java.util.logging.Logger;
 final class BatchJsonRpcExecutor implements JsonRpcExecutor {
 
     private static final Logger LOG = Logger.getLogger(BatchJsonRpcExecutor.class.getName());
-    private final JsonRpcExecutionContext context;
+    private final JsonRpcExecutionContext<? extends JsonRpcMethod> context;
     private final JsonArray json;
 
-    public BatchJsonRpcExecutor(final JsonRpcExecutionContext context, final JsonArray json) {
+    public BatchJsonRpcExecutor(final JsonRpcExecutionContext<? extends JsonRpcMethod> context, final JsonArray json) {
         this.context = Objects.requireNonNull(context);
         this.json = Json.createArrayBuilder(json).build();
     }
