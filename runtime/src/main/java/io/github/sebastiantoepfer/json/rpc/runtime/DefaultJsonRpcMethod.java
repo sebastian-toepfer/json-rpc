@@ -23,7 +23,6 @@
  */
 package io.github.sebastiantoepfer.json.rpc.runtime;
 
-import io.github.sebastiantoepfer.ddd.common.Media;
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
@@ -33,15 +32,21 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
 
-public abstract class BaseJsonRpcMethod implements JsonRpcMethod {
+public final class DefaultJsonRpcMethod implements JsonRpcMethod {
 
-    private static final Logger LOG = Logger.getLogger(BaseJsonRpcMethod.class.getName());
+    private static final Logger LOG = Logger.getLogger(DefaultJsonRpcMethod.class.getName());
     private final String name;
     private final List<String> parameterNames;
+    private final JsonRpcMethodFunction function;
 
-    protected BaseJsonRpcMethod(final String name, final List<String> parameterNames) {
+    public DefaultJsonRpcMethod(
+        final String name,
+        final List<String> parameterNames,
+        final JsonRpcMethodFunction function
+    ) {
         this.name = Objects.requireNonNull(name);
         this.parameterNames = List.copyOf(parameterNames);
+        this.function = Objects.requireNonNull(function);
     }
 
     @Override
@@ -51,7 +56,7 @@ public abstract class BaseJsonRpcMethod implements JsonRpcMethod {
 
     @Override
     public final JsonValue execute(final JsonValue params) throws JsonRpcExecutionExecption {
-        LOG.entering(BaseJsonRpcMethod.class.getName(), "execute", params);
+        LOG.entering(DefaultJsonRpcMethod.class.getName(), "execute", params);
         final JsonValue result;
         if (params == null || params.getValueType() == JsonValue.ValueType.NULL) {
             result = execute(JsonValue.EMPTY_JSON_OBJECT);
@@ -60,27 +65,27 @@ public abstract class BaseJsonRpcMethod implements JsonRpcMethod {
         } else {
             result = execute(params.asJsonObject());
         }
-        LOG.exiting(BaseJsonRpcMethod.class.getName(), "execute", result);
+        LOG.exiting(DefaultJsonRpcMethod.class.getName(), "execute", result);
+        return result;
+    }
+
+    private JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
+        LOG.entering(DefaultJsonRpcMethod.class.getName(), "execute", params);
+        final JsonValue result = function.apply(params);
+        LOG.exiting(DefaultJsonRpcMethod.class.getName(), "execute", result);
         return result;
     }
 
     private JsonObject createNamedParameters(final JsonArray params) {
-        LOG.entering(BaseJsonRpcMethod.class.getName(), "createNamedParameters", params);
+        LOG.entering(DefaultJsonRpcMethod.class.getName(), "createNamedParameters", params);
         JsonObjectBuilder builder = Json.createObjectBuilder();
         for (int i = 0; i < params.size(); i++) {
             builder = builder.add(parameterNames.get(i), params.get(i));
         }
         final JsonObject result = builder.build();
-        LOG.exiting(BaseJsonRpcMethod.class.getName(), "createNamedParameters", result);
+        LOG.exiting(DefaultJsonRpcMethod.class.getName(), "createNamedParameters", result);
         return result;
     }
-
-    @Override
-    public final <T extends Media<T>> T printOn(final T media) {
-        return media.withValue("name", name).withValue("params", parameterNames);
-    }
-
-    protected abstract JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption;
 
     @Override
     public int hashCode() {
@@ -100,7 +105,7 @@ public abstract class BaseJsonRpcMethod implements JsonRpcMethod {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final BaseJsonRpcMethod other = (BaseJsonRpcMethod) obj;
+        final DefaultJsonRpcMethod other = (DefaultJsonRpcMethod) obj;
         return Objects.equals(this.name, other.name);
     }
 

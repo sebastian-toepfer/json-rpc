@@ -23,10 +23,9 @@
  */
 package io.github.sebastiantoepfer.json.rpc.runtime;
 
-import io.github.sebastiantoepfer.ddd.common.Printable;
 import jakarta.json.JsonValue;
 
-public interface JsonRpcMethod extends Printable {
+public interface JsonRpcMethod {
     boolean hasName(String name);
 
     JsonValue execute(JsonValue params) throws JsonRpcExecutionExecption;

@@ -14,6 +14,10 @@
     <artifactId>json-rpc-extension-openrpc</artifactId>
     <name>JSON RPC :: extension :: openrpc</name>
 
+    <properties>
+        <openrpc.schema.url>https://github.com/open-rpc/meta-schema/releases/download/1.14.5/open-rpc-meta-schema.json</openrpc.schema.url>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -23,6 +27,10 @@
         <dependency>
             <groupId>io.github.sebastian-toepfer.ddd</groupId>
             <artifactId>media-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.sebastian-toepfer.ddd</groupId>
+            <artifactId>printables-core</artifactId>
         </dependency>
         <dependency>
             <groupId>io.github.sebastian-toepfer.ddd</groupId>
@@ -57,4 +65,42 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>io.github.sebastian-toepfer.json.rpc</groupId>
+                <artifactId>json-printable-maven-plugin</artifactId>
+                <version>0.1.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <schemaUrl>${openrpc.schema.url}</schemaUrl>
+                            <packageName>io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec</packageName>
+                            <jsonSchemaClassName>io.github.sebastiantoepfer.json.rpc.extension.openrpc.JsonSchemaObject</jsonSchemaClassName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <configuration>
+                    <excludedClasses>
+                        <excludedClass>io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.*</excludedClass>
+                    </excludedClasses>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

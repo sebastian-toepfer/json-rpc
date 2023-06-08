@@ -26,11 +26,7 @@ package io.github.sebastiantoepfer.json.rpc.runtime;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-import io.github.sebastiantoepfer.ddd.media.core.HashMapMedia;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonValue;
 import java.util.List;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 class WrappedJsonRpcMethodTest {
@@ -45,20 +41,13 @@ class WrappedJsonRpcMethodTest {
         assertThat(new WrappedJsonRpcMethod(createMethodWithName("test")).hasName("test"), is(true));
     }
 
-    @Test
-    void should_print_name() {
-        assertThat(
-            new WrappedJsonRpcMethod(createMethodWithName("test")).printOn(new HashMapMedia()),
-            Matchers.hasEntry("name", "test")
-        );
-    }
-
-    private static BaseJsonRpcMethod createMethodWithName(final String name) {
-        return new BaseJsonRpcMethod(name, List.of()) {
-            @Override
-            protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
+    private static DefaultJsonRpcMethod createMethodWithName(final String name) {
+        return new DefaultJsonRpcMethod(
+            name,
+            List.of(),
+            params -> {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
-        };
+        );
     }
 }

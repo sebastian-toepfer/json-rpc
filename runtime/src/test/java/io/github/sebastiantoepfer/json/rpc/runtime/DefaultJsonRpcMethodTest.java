@@ -21,37 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
+package io.github.sebastiantoepfer.json.rpc.runtime;
 
-import io.github.sebastiantoepfer.ddd.common.Printable;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
-public final class ContentDescriptor extends BaseOpenRpc {
+import jakarta.json.Json;
+import jakarta.json.JsonValue;
+import java.util.List;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import org.junit.jupiter.api.Test;
 
-    public ContentDescriptor(final String name, final Schema schema) {
-        this(name, (Printable) schema);
+class DefaultJsonRpcMethodTest {
+
+    @Test
+    void equalsContract() {
+        EqualsVerifier.simple().forClass(DefaultJsonRpcMethod.class).withOnlyTheseFields("name").verify();
     }
 
-    public ContentDescriptor(final String name, final Reference schema) {
-        this(name, (Printable) schema);
-    }
-
-    private ContentDescriptor(final String name, final Printable schema) {
-        this(
-            new CompositePrintable()
-                .withPrintable(new NamedStringPrintable("name", name))
-                .withPrintable(new NamedPrintable("schema", schema))
+    @Test
+    void should_be_callable_with_null_as_params() throws Exception {
+        assertThat(
+            new DefaultJsonRpcMethod("test", List.of(), params -> Json.createValue("hello")).execute((JsonValue) null),
+            is(Json.createValue("hello"))
         );
     }
 
-    private ContentDescriptor(final CompositePrintable values) {
-        super(values);
-    }
-
-    public ContentDescriptor withRequired(final boolean value) {
-        return new ContentDescriptor(values().withPrintable(new NamedBooleanPrintable("required", value)));
-    }
-
-    public ContentDescriptor withDescription(final String description) {
-        return new ContentDescriptor(values().withPrintable(new NamedStringPrintable("description", description)));
+    @Test
+    void should_be_callable_without_params() throws Exception {
+        assertThat(
+            new DefaultJsonRpcMethod("test", List.of(), params -> Json.createValue("hello")).execute(JsonValue.NULL),
+            is(Json.createValue("hello"))
+        );
     }
 }

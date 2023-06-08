@@ -23,25 +23,38 @@
  */
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasEntry;
+import io.github.sebastiantoepfer.ddd.common.Media;
+import io.github.sebastiantoepfer.ddd.common.Printable;
+import io.github.sebastiantoepfer.ddd.media.json.JsonObjectPrintable;
+import io.github.sebastiantoepfer.ddd.printables.core.CompositePrintable;
+import io.github.sebastiantoepfer.ddd.printables.core.NamedStringPrintable;
+import jakarta.json.JsonObject;
 
-import io.github.sebastiantoepfer.ddd.media.core.HashMapMedia;
-import jakarta.json.Json;
-import org.junit.jupiter.api.Test;
+/**
+ * not a real json schema
+ */
+public final class JsonSchemaObject implements Printable {
 
-class SchemaTest {
+    private final CompositePrintable values;
 
-    @Test
-    void should_type_name() {
-        assertThat(new Schema().withType("integer").printOn(new HashMapMedia()), hasEntry("type", "integer"));
+    public JsonSchemaObject(final JsonObject json) {
+        this(new CompositePrintable().withPrintable(new JsonObjectPrintable(json)));
     }
 
-    @Test
-    void should_print_json() {
-        assertThat(
-            new Schema(Json.createObjectBuilder().add("type", "integer").build()).printOn(new HashMapMedia()),
-            hasEntry("type", "integer")
-        );
+    public JsonSchemaObject() {
+        this(new CompositePrintable());
+    }
+
+    private JsonSchemaObject(final CompositePrintable values) {
+        this.values = values;
+    }
+
+    public JsonSchemaObject withType(final String type) {
+        return new JsonSchemaObject(values.withPrintable(new NamedStringPrintable("type", type)));
+    }
+
+    @Override
+    public <T extends Media<T>> T printOn(final T media) {
+        return values.printOn(media);
     }
 }

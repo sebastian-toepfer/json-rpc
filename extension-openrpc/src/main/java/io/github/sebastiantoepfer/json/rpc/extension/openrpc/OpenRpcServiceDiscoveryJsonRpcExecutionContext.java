@@ -24,60 +24,104 @@
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
 import io.github.sebastiantoepfer.ddd.media.json.JsonObjectMedia;
-import io.github.sebastiantoepfer.json.rpc.runtime.BaseJsonRpcMethod;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescriptorObject;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.InfoObject;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.JsonSchemaOrReference;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObject;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObjectResult;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodOrReference;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.OpenrpcDocument;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ReferenceObject;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionContext;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonValue;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 
-public final class OpenRpcServiceDiscoveryJsonRpcExecutionContext extends JsonRpcExecutionContext<Method> {
+public final class OpenRpcServiceDiscoveryJsonRpcExecutionContext
+    extends JsonRpcExecutionContext<DescribeableJsonRpcMethod> {
 
-    private final Info info;
-    private final List<Method> methods;
+    private static final Logger LOG = Logger.getLogger(OpenRpcServiceDiscoveryJsonRpcExecutionContext.class.getName());
+    private static final JsonSchemaOrReference.Reference OPENRPC_SCHEMA;
 
-    public OpenRpcServiceDiscoveryJsonRpcExecutionContext(final Info info) {
-        this(info, List.of());
+    static {
+        OPENRPC_SCHEMA =
+            new JsonSchemaOrReference.Reference(
+                new ReferenceObject(
+                    loadSchemaProperties()
+                        .getProperty(
+                            "schema_url",
+                            "https://github.com/open-rpc/meta-schema/releases/download/1.14.5/open-rpc-meta-schema.json"
+                        )
+                )
+            );
     }
 
-    private OpenRpcServiceDiscoveryJsonRpcExecutionContext(final Info info, final List methods) {
+    private static Properties loadSchemaProperties() {
+        final Properties result = new Properties();
+        try {
+            result.load(
+                OpenRpcServiceDiscoveryJsonRpcExecutionContext.class.getClassLoader()
+                    .getResourceAsStream("schema_url.properties")
+            );
+        } catch (IOException ignore) {
+            LOG.log(Level.FINE, null, ignore);
+        }
+        return result;
+    }
+
+    private final InfoObject info;
+    private final JsonSchemaOrReference openRpcSchema;
+    private final List<DescribeableJsonRpcMethod> methods;
+
+    public OpenRpcServiceDiscoveryJsonRpcExecutionContext(final InfoObject info) {
+        this(info, OPENRPC_SCHEMA, List.of());
+    }
+
+    private OpenRpcServiceDiscoveryJsonRpcExecutionContext(
+        final InfoObject info,
+        final JsonSchemaOrReference openRpcSchema,
+        final List<DescribeableJsonRpcMethod> methods
+    ) {
         this.info = Objects.requireNonNull(info, "info must be non null!");
+        this.openRpcSchema = Objects.requireNonNull(openRpcSchema, "schema mst be non null");
         this.methods = List.copyOf(methods);
     }
 
     @Override
-    public OpenRpcServiceDiscoveryJsonRpcExecutionContext withMethod(final Method method) {
-        final List<Method> newMethods = new ArrayList<>(methods);
+    public OpenRpcServiceDiscoveryJsonRpcExecutionContext withMethod(final DescribeableJsonRpcMethod method) {
+        final List<DescribeableJsonRpcMethod> newMethods = new ArrayList<>(methods);
         newMethods.add(method);
-        return new OpenRpcServiceDiscoveryJsonRpcExecutionContext(info, newMethods);
+        return new OpenRpcServiceDiscoveryJsonRpcExecutionContext(info, openRpcSchema, newMethods);
     }
 
     @Override
-    protected Stream<Method> methods() {
-        return Stream.concat(Stream.of(asMethod()), methods.stream());
+    protected Stream<DescribeableJsonRpcMethod> methods() {
+        return Stream.concat(Stream.of(createDiscoverMethod()), methods.stream());
     }
 
-    public Method asMethod() {
-        return new Method(
-            new BaseJsonRpcMethod("rpc.discover", List.of()) {
-                @Override
-                protected JsonValue execute(final JsonObject params) throws JsonRpcExecutionExecption {
-                    return new JsonObjectMedia()
-                        .withValue("info", info)
-                        .withValue("methods", methods().toList())
-                        .withValue("openrpc", "2.0.0");
-                }
-            }
-        )
-            .withDescription("Returns an OpenRPC schema as a description of this service")
-            .withResultDescription(
-                new ContentDescriptor(
-                    "OpenRPC Schema",
-                    new Reference("https://raw.githubusercontent.com/open-rpc/meta-schema/master/schema.json")
+    private DescribeableJsonRpcMethod createDiscoverMethod() {
+        return new DescribeableJsonRpcMethod(
+            new MethodObject("rpc.discover", List.of())
+                .withDescription("Returns an OpenRPC schema as a description of this service")
+                .withResult(
+                    new MethodObjectResult.Object(new ContentDescriptorObject("OpenRPC Schema", openRpcSchema))
+                ),
+            params ->
+                new OpenrpcDocument(
+                    OpenrpcDocument.Openrpc.Openrpc_130,
+                    info,
+                    methods()
+                        .map(DescribeableJsonRpcMethod::description)
+                        .map(MethodOrReference.Object::new)
+                        .map(MethodOrReference.class::cast)
+                        .toList()
                 )
-            );
+                    .printOn(new JsonObjectMedia())
+        );
     }
 }
