@@ -1,0 +1,13 @@
+---
+name: publish
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  release:
+    uses: sebastian-toepfer/gh-common/.github/workflows/publish.yml@main
+    with:
+      tag_name: ${{ github.event.release.tag_name }}
+    secrets: inherit
