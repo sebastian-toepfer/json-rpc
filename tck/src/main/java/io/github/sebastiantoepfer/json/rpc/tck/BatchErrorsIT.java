@@ -45,10 +45,12 @@ class BatchErrorsIT {
             .contentType("application/json")
             .accept("application/json")
             .body(
-                "[ \n" +
-                "{\"jsonrpc\": \"2.0\", \"method\": \"sum\", \"params\": [1,2,4], \"id\": \"1\"}, \n" +
-                "{\"jsonrpc\": \"2.0\", \"method\" \n" +
-                "]"
+                """
+                  [
+                  {"jsonrpc": "2.0", "method": "sum", "params": [1,2,4], "id": "1"},
+                  {"jsonrpc": "2.0", "method"
+                  ]
+                  """
             )
             .when()
             .post("/rpc")
