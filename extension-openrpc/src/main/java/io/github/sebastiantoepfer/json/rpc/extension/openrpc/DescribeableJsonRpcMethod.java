@@ -23,10 +23,8 @@
  */
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
-import io.github.sebastiantoepfer.ddd.common.Media;
-import io.github.sebastiantoepfer.ddd.common.Printable;
 import io.github.sebastiantoepfer.ddd.media.core.HashMapMedia;
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.Method;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObject;
 import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethod;
@@ -36,12 +34,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public final class DescribeableJsonRpcMethod implements JsonRpcMethod, Printable {
+public final class DescribeableJsonRpcMethod implements JsonRpcMethod {
 
     private final JsonRpcMethod method;
-    private final Method description;
+    private final MethodObject description;
 
-    public DescribeableJsonRpcMethod(final Method description, final JsonRpcMethodFunction function) {
+    public DescribeableJsonRpcMethod(final MethodObject description, final JsonRpcMethodFunction function) {
         this.description = Objects.requireNonNull(description);
         final Map<String, Object> desc = description.printOn(new HashMapMedia());
         this.method =
@@ -65,8 +63,7 @@ public final class DescribeableJsonRpcMethod implements JsonRpcMethod, Printable
         return method.execute(params);
     }
 
-    @Override
-    public <T extends Media<T>> T printOn(final T media) {
-        return description.printOn(media);
+    MethodObject description() {
+        return description;
     }
 }

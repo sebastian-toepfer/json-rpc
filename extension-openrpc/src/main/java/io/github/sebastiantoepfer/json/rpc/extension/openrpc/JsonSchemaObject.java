@@ -21,23 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec;
+package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.printable.CompositePrintable;
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.printable.NamedStringPrintable;
-import java.net.URL;
+import io.github.sebastiantoepfer.ddd.common.Media;
+import io.github.sebastiantoepfer.ddd.common.Printable;
+import io.github.sebastiantoepfer.ddd.media.json.JsonObjectPrintable;
+import io.github.sebastiantoepfer.ddd.printables.core.CompositePrintable;
+import io.github.sebastiantoepfer.ddd.printables.core.NamedStringPrintable;
+import jakarta.json.JsonObject;
 
-public final class ExternalDocs extends BaseOpenRpc {
+/**
+ * not a real json schema
+ */
+public final class JsonSchemaObject implements Printable {
 
-    public ExternalDocs(final URL url) {
-        this(new CompositePrintable().withPrintable(new NamedStringPrintable("url", url.toExternalForm())));
+    private final CompositePrintable values;
+
+    public JsonSchemaObject(final JsonObject json) {
+        this(new CompositePrintable().withPrintable(new JsonObjectPrintable(json)));
     }
 
-    private ExternalDocs(final CompositePrintable values) {
-        super(values);
+    public JsonSchemaObject() {
+        this(new CompositePrintable());
     }
 
-    public ExternalDocs withDescription(final String description) {
-        return new ExternalDocs(values().withPrintable(new NamedStringPrintable("description", description)));
+    private JsonSchemaObject(final CompositePrintable values) {
+        this.values = values;
+    }
+
+    public JsonSchemaObject withType(final String type) {
+        return new JsonSchemaObject(values.withPrintable(new NamedStringPrintable("type", type)));
+    }
+
+    @Override
+    public <T extends Media<T>> T printOn(final T media) {
+        return values.printOn(media);
     }
 }

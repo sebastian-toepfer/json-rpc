@@ -26,9 +26,10 @@ package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescriptor;
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.Method;
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.Schema;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescriptorObject;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescriptorOrReference;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.JsonSchemaOrReference;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObject;
 import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethodFunction;
@@ -42,7 +43,7 @@ class DescribeableJsonRpcMethodTest {
     @Test
     void should_delegate_has_names() {
         final JsonRpcMethod jsonRpcMethod = new DescribeableJsonRpcMethod(
-            new Method("list_pets", List.of()),
+            new MethodObject("list_pets", List.of()),
             params -> {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
@@ -58,7 +59,17 @@ class DescribeableJsonRpcMethodTest {
         final JsonRpcMethodFunction function = params -> params;
         assertThat(
             new DescribeableJsonRpcMethod(
-                new Method("list_pets", List.of(new ContentDescriptor("limit", new Schema()))),
+                new MethodObject(
+                    "list_pets",
+                    List.of(
+                        new ContentDescriptorOrReference.Object(
+                            new ContentDescriptorObject(
+                                "limit",
+                                new JsonSchemaOrReference.Object(new JsonSchemaObject())
+                            )
+                        )
+                    )
+                ),
                 function
             )
                 .execute(parameters),
