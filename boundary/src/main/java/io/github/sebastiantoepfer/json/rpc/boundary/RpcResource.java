@@ -50,11 +50,7 @@ public class RpcResource {
             .ok()
             .type(MediaType.APPLICATION_JSON)
             .encoding("UTF-8")
-            .entity(
-                (StreamingOutput) out -> {
-                    runtime.createExecutorFor(request).execute().writeTo(out);
-                }
-            )
+            .entity((StreamingOutput) out -> runtime.createExecutorFor(request).execute().writeTo(out))
             .build();
     }
 }

@@ -103,14 +103,13 @@ final class MethodJsonRpcExecutor implements JsonRpcExecutor {
                 result = new NotificationResponse();
             } else {
                 result =
-                    generator -> {
+                    generator ->
                         generator
                             .writeStartObject()
                             .write("jsonrpc", json.get("jsonrpc"))
                             .write("result", methodExeutionResult)
                             .write("id", id())
                             .writeEnd();
-                    };
             }
             LOG.exiting(SingleMethodJsonRpcExecutor.class.getName(), "toReponse", result);
             return result;
