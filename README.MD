@@ -1,3 +1,5 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=sebastian-toepfer_json-rpc&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=sebastian-toepfer_json-rpc)
+
 # What is json-rpc
 
 Is a specification that allows to call remote procedure over http with json as payload. See [JSON-RPC-Spec](https://www.jsonrpc.org/specification)
