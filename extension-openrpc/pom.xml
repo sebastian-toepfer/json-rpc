@@ -84,7 +84,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <schemaUrl>${openrpc.schema.url}</schemaUrl>
+                            <!--<schemaUrl>${openrpc.schema.url}</schemaUrl>-->
                             <packageName>io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec</packageName>
                             <jsonSchemaClassName>io.github.sebastiantoepfer.json.rpc.extension.openrpc.JsonSchemaObject</jsonSchemaClassName>
                         </configuration>

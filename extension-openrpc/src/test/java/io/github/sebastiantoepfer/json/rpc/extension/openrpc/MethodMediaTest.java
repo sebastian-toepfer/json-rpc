@@ -23,34 +23,19 @@
  */
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObject;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethod;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethodFunction;
-import jakarta.json.JsonValue;
-import java.util.Objects;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
-public final class DescribeableJsonRpcMethod implements JsonRpcMethod {
+import org.junit.jupiter.api.Test;
 
-    private final JsonRpcMethod method;
-    private final MethodObject description;
+class MethodMediaTest {
 
-    public DescribeableJsonRpcMethod(final MethodObject description, final JsonRpcMethodFunction function) {
-        this.description = Objects.requireNonNull(description);
-        this.method = description.printOn(new MethodMedia()).createMethodWith(function);
-    }
-
-    @Override
-    public boolean hasName(final String name) {
-        return method.hasName(name);
-    }
-
-    @Override
-    public JsonValue execute(final JsonValue params) throws JsonRpcExecutionExecption {
-        return method.execute(params);
-    }
-
-    MethodObject description() {
-        return description;
+    @Test
+    void makePiTestHappy() {
+        final MethodMedia media = new MethodMedia();
+        assertThat(media.withValue("test", 1), is(media));
+        assertThat(media.withValue("test", 1L), is(media));
+        assertThat(media.withValue("test", 1.0), is(media));
+        assertThat(media.withValue("test", true), is(media));
     }
 }

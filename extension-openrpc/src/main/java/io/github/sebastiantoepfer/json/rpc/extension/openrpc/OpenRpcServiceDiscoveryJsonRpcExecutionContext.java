@@ -88,7 +88,7 @@ public final class OpenRpcServiceDiscoveryJsonRpcExecutionContext
         final List<DescribeableJsonRpcMethod> methods
     ) {
         this.info = Objects.requireNonNull(info, "info must be non null!");
-        this.openRpcSchema = Objects.requireNonNull(openRpcSchema, "schema mst be non null");
+        this.openRpcSchema = Objects.requireNonNull(openRpcSchema, "schema must be non null");
         this.methods = List.copyOf(methods);
     }
 

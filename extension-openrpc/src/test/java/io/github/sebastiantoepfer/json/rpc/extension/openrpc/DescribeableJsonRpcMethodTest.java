@@ -25,11 +25,15 @@ package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescriptorObject;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescriptorOrReference;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.JsonSchemaOrReference;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObject;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ReferenceObject;
 import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethodFunction;
@@ -75,5 +79,26 @@ class DescribeableJsonRpcMethodTest {
                 .execute(parameters),
             is(new DefaultJsonRpcMethod("list_pets", List.of("limit"), function).execute(parameters))
         );
+    }
+
+    @Test
+    void should_not_createable_with_reference_parameters_without_use_byName_paramstucture() {
+        final MethodObject desciption = new MethodObject(
+            "list_pets",
+            List.of(new ContentDescriptorOrReference.Reference(new ReferenceObject("test")))
+        );
+
+        assertThrows(IllegalArgumentException.class, () -> new DescribeableJsonRpcMethod(desciption, a -> a));
+    }
+
+    @Test
+    void should_createable_with_reference_parameters_when_using_byName_paramstucture() {
+        final MethodObject desciption = new MethodObject(
+            "list_pets",
+            List.of(new ContentDescriptorOrReference.Reference(new ReferenceObject("test")))
+        )
+            .withParamStructure(MethodObject.MethodObjectParamStructure.byname);
+
+        assertThat(new DescribeableJsonRpcMethod(desciption, a -> a), is(not(nullValue())));
     }
 }
