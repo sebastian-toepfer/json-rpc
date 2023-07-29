@@ -64,6 +64,7 @@
         <module>runtime</module>
         <module>boundary</module>
         <module>extension-openrpc</module>
+        <module>spring-integration-autoconfigure</module>
         <module>spring-integration-starter</module>
     </modules>
 
@@ -117,6 +118,11 @@
                 <artifactId>hamcrest</artifactId>
                 <version>2.2</version>
             </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>5.4.0</version>
+            </dependency>
 
             <dependency>
                 <groupId>io.rest-assured</groupId>
@@ -143,6 +149,11 @@
                 <groupId>jakarta.enterprise</groupId>
                 <artifactId>jakarta.enterprise.cdi-api</artifactId>
                 <version>4.0.1</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.servlet</groupId>
+                <artifactId>jakarta.servlet-api</artifactId>
+                <version>6.0.0</version>
             </dependency>
 
             <dependency>
@@ -182,6 +193,11 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-autoconfigure</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-actuator-autoconfigure</artifactId>
                 <version>${spring.boot.version}</version>
             </dependency>
 

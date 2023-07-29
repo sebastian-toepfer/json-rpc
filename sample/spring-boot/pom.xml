@@ -25,6 +25,16 @@
             <artifactId>json-rpc-spring-integration-starter</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- to enable health-actuator endpoint with webmvc -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-actuator-autoconfigure</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -40,6 +50,11 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>json-rpc-tck</artifactId>
             <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

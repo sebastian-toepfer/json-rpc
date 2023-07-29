@@ -81,5 +81,10 @@
             <groupId>org.eclipse.parsson</groupId>
             <artifactId>parsson</artifactId>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>json-rpc-spring-integration-autoconfigure</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>
