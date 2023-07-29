@@ -184,4 +184,23 @@ class MethodJsonRpcExecutorTest {
             )
         );
     }
+
+    @Test
+    void should_return_nothing_for_runtimeexception_when_notification() {
+        assertThat(
+            new JsonRpcExecutorJsonAdapter(
+                new MethodJsonRpcExecutor(
+                    context,
+                    Json
+                        .createObjectBuilder()
+                        .add("jsonrpc", "2.0")
+                        .add("method", "runtimeexception")
+                        .add("params", Json.createArrayBuilder().add(42).add("Error message"))
+                        .build()
+                )
+            )
+                .execute(),
+            is(JsonValue.NULL)
+        );
+    }
 }
