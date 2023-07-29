@@ -1,2 +1,4 @@
 io.github.sebastiantoepfer.json.rpc.spring.integration.autoconfigure.SpringMvcRequestFilter
 io.github.sebastiantoepfer.json.rpc.spring.integration.autoconfigure.ActuatorEndpoints
+io.github.sebastiantoepfer.json.rpc.spring.integration.autoconfigure.CloudFoundryEndpoints
+io.github.sebastiantoepfer.json.rpc.spring.integration.autoconfigure.CompositeEndpoints
