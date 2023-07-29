@@ -7,7 +7,7 @@ on:
 
 jobs:
   release:
-    uses: sebastian-toepfer/gh-common/.github/workflows/release.yml@main
+    uses: sebastian-toepfer/gh-common/.github/workflows/release.yml@v1.0
     with:
       version: ${{ github.event.milestone.title }}
     secrets: inherit

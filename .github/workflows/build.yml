@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    uses: sebastian-toepfer/gh-common/.github/workflows/build.yml@main
+    uses: sebastian-toepfer/gh-common/.github/workflows/build.yml@v1.0
     with:
       sonar-projektKey: sebastian-toepfer_json-rpc
     secrets: inherit
