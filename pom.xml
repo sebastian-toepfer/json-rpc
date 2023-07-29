@@ -403,6 +403,15 @@
                             </goals>
                             <configuration>
                                 <daemon>true</daemon>
+                                <javaCommandLineOptions>
+                                    <!--
+                                        see: https://github.com/payara/Payara/issues/6344
+                                    -->
+                                    <option>
+                                        <key>-Djdk.util.zip.disableZip64ExtraFieldValidation</key>
+                                        <value>true</value>
+                                    </option>
+                                </javaCommandLineOptions>
                             </configuration>
                         </execution>
 
