@@ -25,6 +25,9 @@ package io.github.sebastiantoepfer.json.rpc.runtime;
 
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
+import jakarta.json.stream.JsonGenerator;
+import java.io.OutputStream;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -81,6 +84,8 @@ final class MethodJsonRpcExecutor implements JsonRpcExecutor {
                 .findMethodWithName(methodName())
                 .map(WrappedJsonRpcMethod::new)
                 .map(this::execute)
+                .map(SingleMethodJsonRpcResponse::new)
+                .map(JsonRpcResponse.class::cast)
                 .orElseGet(() -> ErrorJsonRpcExecutor.ErrorResponse.nonExistingMethod(id()));
             LOG.exiting(SingleMethodJsonRpcExecutor.class.getName(), "execute", result);
             return result;
@@ -101,19 +106,13 @@ final class MethodJsonRpcExecutor implements JsonRpcExecutor {
 
         private JsonRpcResponse toResponse(final JsonValue methodExeutionResult) {
             LOG.entering(SingleMethodJsonRpcExecutor.class.getName(), "toReponse");
-            final JsonRpcResponse result;
-            if (isNotification()) {
-                result = new NotificationResponse();
-            } else {
-                result =
-                    generator ->
-                        generator
-                            .writeStartObject()
-                            .write("jsonrpc", json.get("jsonrpc"))
-                            .write("result", methodExeutionResult)
-                            .write("id", id())
-                            .writeEnd();
-            }
+            final JsonRpcResponse result = generator ->
+                generator
+                    .writeStartObject()
+                    .write("jsonrpc", json.get("jsonrpc"))
+                    .write("result", methodExeutionResult)
+                    .write("id", id())
+                    .writeEnd();
             LOG.exiting(SingleMethodJsonRpcExecutor.class.getName(), "toReponse", result);
             return result;
         }
@@ -150,6 +149,29 @@ final class MethodJsonRpcExecutor implements JsonRpcExecutor {
             final JsonValue result = json.get("params");
             LOG.exiting(SingleMethodJsonRpcExecutor.class.getName(), "params", result);
             return result;
+        }
+
+        private class SingleMethodJsonRpcResponse implements JsonRpcResponse {
+
+            private final JsonRpcResponse response;
+
+            public SingleMethodJsonRpcResponse(final JsonRpcResponse response) {
+                this.response = Objects.requireNonNull(response);
+            }
+
+            @Override
+            public void writeTo(final OutputStream out) {
+                if (!isNotification()) {
+                    response.writeTo(out);
+                }
+            }
+
+            @Override
+            public void writeTo(final JsonGenerator generator) {
+                if (!isNotification()) {
+                    response.writeTo(generator);
+                }
+            }
         }
     }
 }
