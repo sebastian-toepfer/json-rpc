@@ -54,7 +54,7 @@
 
         <ddd.version>0.4.0</ddd.version>
 
-        <payara.version>6.2023.7</payara.version>
+        <payara.version>6.2023.8</payara.version>
         <spring.boot.version>3.1.2</spring.boot.version>
 
         <prettierJavaVersion>2.1.0</prettierJavaVersion>
