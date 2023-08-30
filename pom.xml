@@ -280,7 +280,7 @@
                 <plugin>
                     <groupId>com.hubspot.maven.plugins</groupId>
                     <artifactId>prettier-maven-plugin</artifactId>
-                    <version>0.20</version>
+                    <version>0.21</version>
                     <executions>
                         <execution>
                             <goals>
