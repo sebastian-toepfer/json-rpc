@@ -16,7 +16,7 @@ Think about it:
 
 Yes, all the above problems can be solved in a RESTful way, but not all developers are [Stefan Tikov](https://tilkov.com/about) and able to think in resources to solve the problems. For those who cannot think in resources, json-rpc can be a solution as it defines a structure that allows procedural thinking. Without the need to invent everything from scratch.
 
-# If you should not use json-rpc
+# When not to use json-rpc
 
 If you have clean resources and need a way to access them via http.
 Think of [KODI](https://kodi.tv/):
