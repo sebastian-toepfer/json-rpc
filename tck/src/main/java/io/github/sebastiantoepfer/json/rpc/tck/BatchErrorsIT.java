@@ -46,11 +46,11 @@ class BatchErrorsIT {
             .accept("application/json")
             .body(
                 """
-                  [
+                [
                   {"jsonrpc": "2.0", "method": "sum", "params": [1,2,4], "id": "1"},
                   {"jsonrpc": "2.0", "method"
-                  ]
-                  """
+                ]
+                """
             )
             .when()
             .post("/rpc")
