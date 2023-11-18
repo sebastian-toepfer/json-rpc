@@ -61,10 +61,10 @@ class NotificationIT {
             .accept("application/json")
             .body(
                 """
-                  [
+                [
                   {"jsonrpc": "2.0", "method": "notify_sum", "params": [1,2,4]},
                   {"jsonrpc": "2.0", "method": "notify_hello", "params": [7]}
-                  ]"""
+                ]"""
             )
             .when()
             .post("/rpc")
