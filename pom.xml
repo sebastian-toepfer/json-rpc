@@ -221,7 +221,21 @@
                     <configuration>
                         <compilerArgs>
                             <arg>-XDcompilePolicy=simple</arg>
-                            <arg>-Xplugin:ErrorProne -XepExcludedPaths:.*/target/generated-sources/.*</arg>
+                            <arg>
+                                -Xplugin:ErrorProne \
+                                -XepExcludedPaths:.*/target/generated-sources/.* \
+                                -Xep:EqualsGetClass:OFF \
+                                -Xep:MissingOverride:ERROR \
+                                -Xep:DefaultCharset:ERROR \
+                                -Xep:BadImport:ERROR \
+                                -Xep:TypeParameterShadowing:ERROR \
+                                -Xep:NonCanonicalType:ERROR \
+                                -Xep:EqualsIncompatibleType:ERROR \
+                                -Xep:BigDecimalEquals:ERROR \
+                                -Xep:UndefinedEquals:ERROR \
+                                -Xep:StreamResourceLeak:ERROR \
+                                -Xep:NonOverridingEquals:ERROR
+                            </arg>
                         </compilerArgs>
                         <annotationProcessorPaths>
                             <path>

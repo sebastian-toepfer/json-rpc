@@ -32,6 +32,7 @@ import jakarta.json.Json;
 import jakarta.json.JsonValue;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -152,7 +153,9 @@ class DefaultJsonRpcRuntimeTest {
     void should_work_also_with_inputstream_as_input() {
         assertThat(
             executeJsonRequest(
-                new ByteArrayInputStream("{\"jsonrpc\": \"2.0\", \"params\": [42, 23], \"id\": 1}".getBytes())
+                new ByteArrayInputStream(
+                    "{\"jsonrpc\": \"2.0\", \"params\": [42, 23], \"id\": 1}".getBytes(StandardCharsets.UTF_8)
+                )
             ),
             is(
                 Json
