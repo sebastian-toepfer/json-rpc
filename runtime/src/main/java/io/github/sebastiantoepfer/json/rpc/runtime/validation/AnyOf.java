@@ -36,6 +36,7 @@ public class AnyOf implements Rule {
         this.rules = asList(rules);
     }
 
+    @Override
     public boolean isValid(final JsonValue value) {
         return rules.stream().anyMatch(rule -> rule.isValid(value));
     }
