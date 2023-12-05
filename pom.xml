@@ -52,7 +52,7 @@
         <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
         <maven.compiler.release>${maven.compiler.target}</maven.compiler.release>
 
-        <ddd.version>0.4.0</ddd.version>
+        <ddd.version>0.5.0</ddd.version>
 
         <payara.version>6.2023.11</payara.version>
         <spring.boot.version>3.2.0</spring.boot.version>
