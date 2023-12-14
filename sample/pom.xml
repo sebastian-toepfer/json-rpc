@@ -20,6 +20,7 @@
         <module>json-rpc-adapter</module>
         <module>payara</module>
         <module>spring-boot</module>
+        <module>quarkus</module>
     </modules>
 
     <build>

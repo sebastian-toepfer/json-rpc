@@ -33,6 +33,14 @@
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
+        <!--
+            quarkus have removed commons-logging dependency from restassured :(
+        -->
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>commons-logging-jboss-logging</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>jakarta.ws.rs</groupId>
