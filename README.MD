@@ -162,3 +162,129 @@ It depends on who determines when a transaction is finished. Both force the prov
 
 This example uses a notification that allows the provider to do anything without having to send anything back to the consumer. And again, we have clean communication about how our API works. The consumer doesn't have to learn anything new. 
 In my eyes, this is a good use cases for using rpc style.
+
+# Usage
+
+see samples.
+
+## Jakarta EE
+
+Add maven dependency
+```xml
+<dependency>
+    <groupId>${project.groupId}</groupId>
+    <artifactId>json-rpc-boundary</artifactId>
+    <version>LATEST</version>
+</dependency>
+```
+
+provide a rpc-runtime via CDI:
+```java
+@Produces
+@RequestScoped
+public JsonRpcRuntime jsonRpcRuntime() {
+    return new DefaultJsonRpcRuntime(
+        new DefaultJsonRpcExecutionContext()
+            .withMethod(
+                new DefaultJsonRpcMethod(
+                    "subtract",
+                    List.of("minuend", "subtrahend"),
+                    params -> Json.createValue(params.getInt("minuend") - params.getInt("subtrahend"))
+                )
+            )
+    );
+}
+```
+
+register the rpc endpoint as jax-rs resource
+```java
+@ApplicationPath("")
+public class SampleApplication extends Application {
+
+    @Override
+    public Set<Class<?>> getClasses() {
+        return Set.of(RpcResource.class);
+    }
+}
+```
+
+## Quarkus
+
+Add maven dependency
+```xml
+<dependency>
+    <groupId>${project.groupId}</groupId>
+    <artifactId>json-rpc-boundary</artifactId>
+    <version>LATEST</version>
+</dependency>
+```
+
+enable jaxrs extension
+```xml
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-resteasy-reactive</artifactId>
+</dependency>
+```
+
+extends application.properties (to index the boundary)
+```
+quarkus.index-dependency.json-rpc-boundary.group-id=io.github.sebastian-toepfer.json.rpc
+quarkus.index-dependency.json-rpc-boundary.artifact-id=json-rpc-boundary
+```
+
+provide a rpc-runtime via CDI:
+```java
+@Produces
+@RequestScoped
+public JsonRpcRuntime jsonRpcRuntime() {
+    return new DefaultJsonRpcRuntime(
+        new DefaultJsonRpcExecutionContext()
+            .withMethod(
+                new DefaultJsonRpcMethod(
+                    "subtract",
+                    List.of("minuend", "subtrahend"),
+                    params -> Json.createValue(params.getInt("minuend") - params.getInt("subtrahend"))
+                )
+            )
+    );
+}
+```
+
+## spring-boot
+Add maven dependency
+```xml
+<dependency>
+    <groupId>${project.groupId}</groupId>
+    <artifactId>json-rpc-spring-integration-starter</artifactId>
+    <version>LATEST</version>
+</dependency>
+```
+
+register the rpc endpoint as jax-rs resource
+```java
+@Component
+public class JerseyConfig extends ResourceConfig {
+
+    public JerseyConfig() {
+        register(RpcResource.class);
+    }
+}
+```
+
+provide a rpc-runtime via Spring-DI
+```
+@Bean
+public JsonRpcRuntime jsonRpcRuntime() {
+    return new DefaultJsonRpcRuntime(
+        new DefaultJsonRpcExecutionContext()
+            .withMethod(
+                new DefaultJsonRpcMethod(
+                    "subtract",
+                    List.of("minuend", "subtrahend"),
+                    params -> Json.createValue(params.getInt("minuend") - params.getInt("subtrahend"))
+                )
+            )
+    );
+}
+```
