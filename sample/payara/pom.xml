@@ -55,15 +55,6 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.pitest</groupId>
-                <artifactId>pitest-maven</artifactId>
-                <configuration>
-                    <!-- only server configurations, makes no sense -->
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
             </plugin>

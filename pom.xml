@@ -669,11 +669,6 @@
                 </property>
             </activation>
 
-            <modules>
-                <module>tck</module>
-                <module>sample</module>
-            </modules>
-
             <properties>
                 <prettier.goal>check</prettier.goal>
             </properties>
