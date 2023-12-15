@@ -14,10 +14,6 @@
     <artifactId>json-rpc-sample-quarkus</artifactId>
     <name>JSON RPC :: sample :: quarkus</name>
 
-    <properties>
-        <quarkus.package.type>uber-jar</quarkus.package.type>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -60,30 +56,6 @@
                 <extensions>true</extensions>
             </plugin>
 
-            <!--
-            workaround until i findout how to start quarkus in the mavens pre-integration phase
-            -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <phase>pre-integration-test</phase>
-                        <configuration>
-                            <async>true</async>
-                            <executable>java</executable>
-                            <arguments>
-                                <argument>-jar</argument>
-                                <argument>${project.build.directory}/${project.artifactId}-${project.version}-runner.jar</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
@@ -96,4 +68,85 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>uber-jar</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
+            <properties>
+                <quarkus.package.type>uber-jar</quarkus.package.type>
+            </properties>
+
+            <build>
+                <plugins>
+                    <!--
+                    workaround until i findout how to start quarkus in the mavens pre-integration phase
+                    -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>run</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <phase>pre-integration-test</phase>
+                                <configuration>
+                                    <async>true</async>
+                                    <executable>java</executable>
+                                    <arguments>
+                                        <argument>-jar</argument>
+                                        <argument>${project.build.directory}/${project.artifactId}-${project.version}-runner.jar</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>native</id>
+
+            <activation>
+                <property>
+                    <name>quarkus.package.type</name>
+                    <value>native</value>
+                </property>
+            </activation>
+
+            <properties>
+                <quarkus.package.type>native</quarkus.package.type>
+            </properties>
+
+            <build>
+                <plugins>
+                    <!--
+                    workaround until i findout how to start quarkus in the mavens pre-integration phase
+                    -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>run</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <phase>pre-integration-test</phase>
+                                <configuration>
+                                    <async>true</async>
+                                    <executable>${project.build.directory}/${project.artifactId}-${project.version}-runner</executable>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
