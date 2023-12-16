@@ -28,7 +28,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public final class DefaultJsonRpcExecutionContext extends JsonRpcExecutionContext<DefaultJsonRpcMethod> {
+public final class DefaultJsonRpcExecutionContext implements JsonRpcExecutionContext<DefaultJsonRpcMethod> {
 
     private final Collection<DefaultJsonRpcMethod> methods;
 
@@ -48,7 +48,7 @@ public final class DefaultJsonRpcExecutionContext extends JsonRpcExecutionContex
     }
 
     @Override
-    protected Stream<DefaultJsonRpcMethod> methods() {
+    public Stream<DefaultJsonRpcMethod> methods() {
         return methods.stream();
     }
 }

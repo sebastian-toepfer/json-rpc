@@ -26,13 +26,12 @@ package io.github.sebastiantoepfer.json.rpc.runtime;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public abstract class JsonRpcExecutionContext<T extends JsonRpcMethod> {
+public interface JsonRpcExecutionContext<T extends JsonRpcMethod> {
+    JsonRpcExecutionContext<T> withMethod(T method);
 
-    public abstract JsonRpcExecutionContext<T> withMethod(final T method);
-
-    final Optional<T> findMethodWithName(final String name) {
+    default Optional<T> findMethodWithName(String name) {
         return methods().filter(m -> m.hasName(name)).findFirst();
     }
 
-    protected abstract Stream<T> methods();
+    Stream<T> methods();
 }

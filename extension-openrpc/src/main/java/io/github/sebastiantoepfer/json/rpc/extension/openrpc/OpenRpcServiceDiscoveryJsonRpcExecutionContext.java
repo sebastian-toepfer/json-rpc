@@ -43,7 +43,7 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public final class OpenRpcServiceDiscoveryJsonRpcExecutionContext
-    extends JsonRpcExecutionContext<DescribeableJsonRpcMethod> {
+    implements JsonRpcExecutionContext<DescribeableJsonRpcMethod> {
 
     private static final Logger LOG = Logger.getLogger(OpenRpcServiceDiscoveryJsonRpcExecutionContext.class.getName());
     private static final JsonSchemaOrReference.Reference OPENRPC_SCHEMA;
@@ -100,7 +100,7 @@ public final class OpenRpcServiceDiscoveryJsonRpcExecutionContext
     }
 
     @Override
-    protected Stream<DescribeableJsonRpcMethod> methods() {
+    public Stream<DescribeableJsonRpcMethod> methods() {
         return Stream.concat(Stream.of(createDiscoverMethod()), methods.stream());
     }
 
