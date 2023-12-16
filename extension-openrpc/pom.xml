@@ -15,7 +15,7 @@
     <name>JSON RPC :: extension :: openrpc</name>
 
     <properties>
-        <openrpc.schema.url>https://github.com/open-rpc/meta-schema/releases/download/1.14.5/open-rpc-meta-schema.json</openrpc.schema.url>
+        <openrpc.schema.url>https://github.com/open-rpc/meta-schema/releases/download/1.14.6/open-rpc-meta-schema.json</openrpc.schema.url>
     </properties>
 
     <dependencies>
@@ -93,12 +93,25 @@
             </plugin>
 
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <openrpc.schema.url>${openrpc.schema.url}</openrpc.schema.url>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+
+            <plugin>
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
                 <configuration>
                     <excludedClasses>
                         <excludedClass>io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.*</excludedClass>
                     </excludedClasses>
+                    <jvmArgs>
+                        <jvmArg>-Dopenrpc.schema.url=${openrpc.schema.url}</jvmArg>
+                    </jvmArgs>
                 </configuration>
             </plugin>
         </plugins>

@@ -81,15 +81,12 @@ class OpenRpcServiceDiscoveryJsonRpcExecutionContextTest {
                                                         "schema",
                                                         Json
                                                             .createObjectBuilder()
-                                                            .add(
-                                                                "$ref",
-                                                                "https://github.com/open-rpc/meta-schema/releases/download/1.14.5/open-rpc-meta-schema.json"
-                                                            )
+                                                            .add("$ref", System.getProperty("openrpc.schema.url"))
                                                     )
                                             )
                                     )
                             )
-                            .add("openrpc", "1.3.0")
+                            .add("openrpc", "1.3.2")
                     )
                     .add("id", "1")
                     .build()
@@ -156,12 +153,7 @@ class OpenRpcServiceDiscoveryJsonRpcExecutionContextTest {
                                     .add("name", "OpenRPC Schema")
                                     .add(
                                         "schema",
-                                        Json
-                                            .createObjectBuilder()
-                                            .add(
-                                                "$ref",
-                                                "https://github.com/open-rpc/meta-schema/releases/download/1.14.5/open-rpc-meta-schema.json"
-                                            )
+                                        Json.createObjectBuilder().add("$ref", System.getProperty("openrpc.schema.url"))
                                     )
                             )
                     )

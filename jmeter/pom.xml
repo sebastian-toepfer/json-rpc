@@ -25,6 +25,10 @@
 
     <profiles>
         <profile>
+            <id>loadtestonly</id>
+        </profile>
+
+        <profile>
             <id>payara</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
