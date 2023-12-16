@@ -225,6 +225,10 @@ enable jaxrs extension
     <groupId>io.quarkus</groupId>
     <artifactId>quarkus-resteasy-reactive</artifactId>
 </dependency>
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-resteasy-reactive-jsonb</artifactId>
+</dependency>
 ```
 
 extends application.properties (to index the boundary)
