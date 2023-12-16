@@ -55,7 +55,7 @@ public final class OpenRpcServiceDiscoveryJsonRpcExecutionContext
                     loadSchemaProperties()
                         .getProperty(
                             "schema_url",
-                            "https://github.com/open-rpc/meta-schema/releases/download/1.14.5/open-rpc-meta-schema.json"
+                            "https://github.com/open-rpc/meta-schema/releases/download/1.14.6/open-rpc-meta-schema.json"
                         )
                 )
             );
@@ -113,7 +113,7 @@ public final class OpenRpcServiceDiscoveryJsonRpcExecutionContext
                 ),
             params ->
                 new OpenrpcDocument(
-                    OpenrpcDocument.Openrpc.Openrpc_130,
+                    OpenrpcDocument.Openrpc.Openrpc_132,
                     info,
                     methods()
                         .map(DescribeableJsonRpcMethod::description)
