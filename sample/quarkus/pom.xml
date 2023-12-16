@@ -148,5 +148,46 @@
                 </plugins>
             </build>
         </profile>
+
+        <profile>
+            <id>container-native</id>
+
+            <properties>
+                <quarkus.package.type>native</quarkus.package.type>
+                <quarkus.container-image.build>true</quarkus.container-image.build>
+            </properties>
+
+            <dependencies>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-container-image-jib</artifactId>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <!--
+                    workaround until i findout how to start quarkus in the mavens pre-integration phase
+                    -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>run</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <phase>pre-integration-test</phase>
+                                <configuration>
+                                    <async>true</async>
+                                    <executable>${project.build.directory}/${project.artifactId}-${project.version}-runner</executable>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 </project>
