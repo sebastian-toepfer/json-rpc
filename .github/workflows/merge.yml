@@ -17,6 +17,6 @@ jobs:
       name: merge
       uses: ridedott/merge-me-action@v2
       with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.unprotect_the_protected }}
         MERGE_METHOD: MERGE
         ENABLE_GITHUB_API_PREVIEW: true
