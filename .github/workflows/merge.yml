@@ -6,7 +6,7 @@ on:
     types:
     - completed
     workflows:
-    - 'build / build and analyze'
+    - 'build'
 
 jobs:
   merge:
