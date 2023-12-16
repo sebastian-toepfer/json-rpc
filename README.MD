@@ -162,3 +162,197 @@ It depends on who determines when a transaction is finished. Both force the prov
 
 This example uses a notification that allows the provider to do anything without having to send anything back to the consumer. And again, we have clean communication about how our API works. The consumer doesn't have to learn anything new. 
 In my eyes, this is a good use cases for using rpc style.
+
+# Usage
+
+see samples.
+
+## Jakarta EE
+
+Add maven dependency
+```xml
+<dependency>
+    <groupId>${project.groupId}</groupId>
+    <artifactId>json-rpc-boundary</artifactId>
+    <version>LATEST</version>
+</dependency>
+```
+
+provide a rpc-runtime via CDI:
+```java
+@Produces
+@RequestScoped
+public JsonRpcRuntime jsonRpcRuntime() {
+    return new DefaultJsonRpcRuntime(
+        new DefaultJsonRpcExecutionContext()
+            .withMethod(
+                new DefaultJsonRpcMethod(
+                    "subtract",
+                    List.of("minuend", "subtrahend"),
+                    params -> Json.createValue(params.getInt("minuend") - params.getInt("subtrahend"))
+                )
+            )
+    );
+}
+```
+
+register the rpc endpoint as jax-rs resource
+```java
+@ApplicationPath("")
+public class SampleApplication extends Application {
+
+    @Override
+    public Set<Class<?>> getClasses() {
+        return Set.of(RpcResource.class);
+    }
+}
+```
+
+## Quarkus
+
+Add maven dependency
+```xml
+<dependency>
+    <groupId>${project.groupId}</groupId>
+    <artifactId>json-rpc-boundary</artifactId>
+    <version>LATEST</version>
+</dependency>
+```
+
+enable jaxrs extension
+```xml
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-resteasy-reactive</artifactId>
+</dependency>
+```
+
+extends application.properties (to index the boundary)
+```
+quarkus.index-dependency.json-rpc-boundary.group-id=io.github.sebastian-toepfer.json.rpc
+quarkus.index-dependency.json-rpc-boundary.artifact-id=json-rpc-boundary
+```
+
+provide a rpc-runtime via CDI:
+```java
+@Produces
+@RequestScoped
+public JsonRpcRuntime jsonRpcRuntime() {
+    return new DefaultJsonRpcRuntime(
+        new DefaultJsonRpcExecutionContext()
+            .withMethod(
+                new DefaultJsonRpcMethod(
+                    "subtract",
+                    List.of("minuend", "subtrahend"),
+                    params -> Json.createValue(params.getInt("minuend") - params.getInt("subtrahend"))
+                )
+            )
+    );
+}
+```
+
+## spring-boot
+Add maven dependency
+```xml
+<dependency>
+    <groupId>${project.groupId}</groupId>
+    <artifactId>json-rpc-spring-integration-starter</artifactId>
+    <version>LATEST</version>
+</dependency>
+```
+
+register the rpc endpoint as jax-rs resource
+```java
+@Component
+public class JerseyConfig extends ResourceConfig {
+
+    public JerseyConfig() {
+        register(RpcResource.class);
+    }
+}
+```
+
+provide a rpc-runtime via Spring-DI
+```
+@Bean
+public JsonRpcRuntime jsonRpcRuntime() {
+    return new DefaultJsonRpcRuntime(
+        new DefaultJsonRpcExecutionContext()
+            .withMethod(
+                new DefaultJsonRpcMethod(
+                    "subtract",
+                    List.of("minuend", "subtrahend"),
+                    params -> Json.createValue(params.getInt("minuend") - params.getInt("subtrahend"))
+                )
+            )
+    );
+}
+```
+
+## Extensions
+
+### OpenRPC
+a dynamic way of describing the available methods. for mor information about openrpc: https://open-rpc.org/
+
+Add maven dependency
+```xml
+<dependency>
+    <groupId>${project.groupId}</groupId>
+    <artifactId>json-rpc-extension-openrpc</artifactId>
+    <version>LATEST</version>
+</dependency>
+```
+
+create the method context (used instead of DefaultJsonRpcExecutionContext)
+```java
+new OpenRpcServiceDiscoveryJsonRpcExecutionContext(new InfoObject("test app", "1.0.0"))
+    .withMethod(
+        new DescribeableJsonRpcMethod(
+            new MethodObject(
+                "list_pets",
+                List.of(
+                    new ContentDescriptorOrReference.Object(
+                        new ContentDescriptorObject(
+                            "limit",
+                            new JsonSchemaOrReference.Object(
+                                new JsonSchemaObject().withType("integer")
+                            )
+                        )
+                            .withDescription("How many items to return at one time (max 100)")
+                            .withRequired(false)
+                    )
+                )
+            )
+                .withSummary("List all pets")
+                .withTags(List.of(new TagOrReference.Object(new TagObject("pets"))))
+                .withResult(
+                    new MethodObjectResult.Object(
+                        new ContentDescriptorObject(
+                            "pets",
+                            new JsonSchemaOrReference.Reference(
+                                new ReferenceObject("#/components/schemas/Pets")
+                            )
+                        )
+                            .withDescription("A paged array of pets")
+                    )
+                ),
+            params -> Json.createArrayBuilder().add("bunnies").add("cats").build()
+        )
+    )
+```
+all properties described at https://spec.open-rpc.org/#meta-json-schema can be used. The mandatory properties must be
+specified as constructor parameters, optional parameters can be added via with<PropertyName> methods such as
+`withDescription("")`. If a parameter can have different types, this is specified via an 'Or' WrapperObject.
+e.g. a JsonSchema can be set via Reference or SchemaInstance:
+`new JsonSchemaOrReference.Reference(new RefereceObject(""))`
+  or
+`new JsonSchemaOrReference.Object(new JsonSchemaObject())`.
+
+after deployment the avalible methods can be requested via:
+```json
+{
+  'jsonrpc': '2.0',
+  'method': 'rpc.discover',
+  'id': '1'
+}
+```

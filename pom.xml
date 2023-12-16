@@ -55,6 +55,7 @@
         <ddd.version>0.5.1</ddd.version>
 
         <payara.version>6.2023.11</payara.version>
+        <quarkus.version>3.6.3</quarkus.version>
         <spring.boot.version>3.2.0</spring.boot.version>
 
         <prettierJavaVersion>2.4.0</prettierJavaVersion>
@@ -172,6 +173,13 @@
                 <groupId>fish.payara.extras</groupId>
                 <artifactId>payara-micro</artifactId>
                 <version>${payara.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.quarkus.platform</groupId>
+                <artifactId>quarkus-bom</artifactId>
+                <version>${quarkus.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -471,6 +479,20 @@
                         <payaraVersion>${payara.version}</payaraVersion>
                         <startClass>io.github.sebastiantoepfer.json.rpc.sample.payara.EmbeddedPayara</startClass>
                     </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>io.quarkus.platform</groupId>
+                    <artifactId>quarkus-maven-plugin</artifactId>
+                    <version>${quarkus.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>build</goal>
+                                <goal>generate-code</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
 
                 <plugin>
