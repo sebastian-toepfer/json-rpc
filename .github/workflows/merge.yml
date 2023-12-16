@@ -3,7 +3,7 @@ name: merge dependabot
 
 on:
   workflow_run:
-    type:
+    types:
     - completed
     workflows:
     - 'build / build and analyze'
