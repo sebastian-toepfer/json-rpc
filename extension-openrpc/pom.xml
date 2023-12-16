@@ -93,12 +93,25 @@
             </plugin>
 
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <openrpc.schema.url>${openrpc.schema.url}</openrpc.schema.url>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+
+            <plugin>
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
                 <configuration>
                     <excludedClasses>
                         <excludedClass>io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.*</excludedClass>
                     </excludedClasses>
+                    <jvmArgs>
+                        <jvmArg>-Dopenrpc.schema.url=${openrpc.schema.url}</jvmArg>
+                    </jvmArgs>
                 </configuration>
             </plugin>
         </plugins>
