@@ -601,6 +601,65 @@
                 </plugin>
 
                 <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>3.1.1</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>se.thinkcode.wait</groupId>
+                    <artifactId>http</artifactId>
+                    <version>1.2.0</version>
+                    <executions>
+                        <execution>
+                            <id>service</id>
+                            <phase>pre-integration-test</phase>
+                            <goals>
+                                <goal>wait</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>3.6.1</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>com.lazerycode.jmeter</groupId>
+                    <artifactId>jmeter-maven-plugin</artifactId>
+                    <version>3.8.0</version>
+                    <executions>
+                        <execution>
+                            <id>configuration</id>
+                            <phase>pre-integration-test</phase>
+                            <goals>
+                                <goal>configure</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>jmeter-tests</id>
+                            <phase>integration-test</phase>
+                            <goals>
+                                <goal>jmeter</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>jmeter-check-results</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>results</goal>
+                            </goals>
+                            <configuration>
+                                <errorRateThresholdInPercent>5</errorRateThresholdInPercent>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
                     <groupId>org.sonatype.plugins</groupId>
                     <artifactId>nexus-staging-maven-plugin</artifactId>
                     <version>1.6.13</version>
@@ -658,6 +717,7 @@
             <modules>
                 <module>tck</module>
                 <module>sample</module>
+                <module>jmeter</module>
             </modules>
         </profile>
 
@@ -705,6 +765,7 @@
             <modules>
                 <module>tck</module>
                 <module>sample</module>
+                <module>jmeter</module>
             </modules>
 
             <build>
@@ -740,6 +801,7 @@
             <modules>
                 <module>tck</module>
                 <module>sample</module>
+                <module>jmeter</module>
             </modules>
 
             <build>
@@ -775,6 +837,7 @@
             <modules>
                 <module>tck</module>
                 <module>sample</module>
+                <module>jmeter</module>
             </modules>
 
             <build>
