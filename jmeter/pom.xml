@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.github.sebastian-toepfer.json.rpc</groupId>
+        <artifactId>json-rpc</artifactId>
+        <version>0.6.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>json-rpc-jmeter</artifactId>
+    <name>JSON RPC :: jmeter</name>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.lazerycode.jmeter</groupId>
+                <artifactId>jmeter-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>payara</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>json-rpc-sample-payara</artifactId>
+                    <version>${project.version}</version>
+                    <classifier>microbundle</classifier>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>copy-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <transitive>false</transitive>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>run</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <phase>pre-integration-test</phase>
+                                <configuration>
+                                    <async>true</async>
+                                    <quietLogs>true</quietLogs>
+                                    <executable>${JAVA_HOME}/bin/java</executable>
+                                    <arguments>
+                                        <argument>-XX:+UseCompressedOops</argument>
+                                        <argument>-Xmx512M</argument>
+                                        <argument>-jar</argument>
+                                        <argument>${project.build.directory}/dependency/json-rpc-sample-payara-${project.version}-microbundle.jar</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>se.thinkcode.wait</groupId>
+                        <artifactId>http</artifactId>
+                        <executions>
+                            <execution>
+                                <id>service</id>
+                                <configuration>
+                                    <url>http://localhost:8080/openapi</url>
+                                    <timeout>15000</timeout>
+                                    <waitableStatuses>
+                                        <waitableStatus>404</waitableStatus>
+                                        <waitableStatus>500</waitableStatus>
+                                    </waitableStatuses>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>
