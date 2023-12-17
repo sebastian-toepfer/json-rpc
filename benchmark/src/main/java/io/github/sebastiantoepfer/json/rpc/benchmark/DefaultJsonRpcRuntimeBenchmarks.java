@@ -46,10 +46,6 @@ import org.openjdk.jmh.annotations.Warmup;
 @BenchmarkMode(Mode.AverageTime)
 public class DefaultJsonRpcRuntimeBenchmarks {
 
-    public static void main(final String[] args) throws Exception {
-        org.openjdk.jmh.Main.main(args);
-    }
-
     @State(Scope.Benchmark)
     public static class SingleMethodExecutionPlan {
 
