@@ -1,0 +1,61 @@
+---
+name: benchmark
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  benchmark:
+    name: run jmh benchmark
+    runs-on: ubuntu-latest
+
+    permissions:
+      pull-requests: write
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: set up JDK
+      uses: actions/setup-java@v4
+      with:
+        java-version: 17
+        distribution: zulu
+
+    - name: cache maven packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+
+    - name: run benchmark
+      run: |
+        mvn -DskipTests=true --also-make --projects benchmark clean package
+        java -jar benchmark/target/benchmarks.jar -rf json
+
+    - name: download previous benchmark data
+      uses: actions/cache@v3
+      with:
+        path: ./cache
+        key: ${{ runner.os }}-benchmark
+
+    - name: store benchmark result
+      uses: benchmark-action/github-action-benchmark@v1
+      with:
+        name: jmh Benchmark
+        tool: 'jmh'
+        output-file-path: jmh-result.json
+        external-data-json-path: ./cache/benchmark-data.json
+        alert-threshold: '200%'
+        comment-on-alert: true
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        fail-on-alert: true
+
+    - name: update benchmark-data
+      if: ${{ github.ref == 'refs/heads/main' }}
+      run: |
+        cp jmh-result.json ./cache/benchmark-data.json

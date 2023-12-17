@@ -57,6 +57,7 @@
         <payara.version>6.2023.11</payara.version>
         <quarkus.version>3.6.3</quarkus.version>
         <spring.boot.version>3.2.0</spring.boot.version>
+        <jmh.version>1.37</jmh.version>
 
         <prettierJavaVersion>2.4.0</prettierJavaVersion>
     </properties>
@@ -67,6 +68,7 @@
         <module>extension-openrpc</module>
         <module>spring-integration-autoconfigure</module>
         <module>spring-integration-starter</module>
+        <module>benchmark</module>
     </modules>
 
     <dependencyManagement>
@@ -98,6 +100,12 @@
                 <groupId>io.github.sebastian-toepfer.ddd</groupId>
                 <artifactId>media-json-api</artifactId>
                 <version>${ddd.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.openjdk.jmh</groupId>
+                <artifactId>jmh-core</artifactId>
+                <version>${jmh.version}</version>
             </dependency>
 
             <dependency>
