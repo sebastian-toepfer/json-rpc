@@ -15,7 +15,7 @@
     <name>JSON RPC :: benchmark</name>
     
     <properties>
-        
+        <sonar.skip>true</sonar.skip>
     </properties>
 
     <dependencies>    
