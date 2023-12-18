@@ -23,9 +23,9 @@
  */
 package io.github.sebastiantoepfer.json.rpc.runtime;
 
-import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
+import jakarta.json.spi.JsonProvider;
 import jakarta.json.stream.JsonGenerator;
 import java.io.OutputStream;
 import java.util.Objects;
@@ -35,6 +35,7 @@ import java.util.logging.Logger;
 final class MethodJsonRpcExecutor implements JsonRpcExecutor {
 
     private static final Logger LOG = Logger.getLogger(MethodJsonRpcExecutor.class.getName());
+    private static final JsonProvider JSONP = JsonProvider.provider();
     private final JsonRpcExecutor delegate;
 
     public MethodJsonRpcExecutor(
@@ -149,7 +150,7 @@ final class MethodJsonRpcExecutor implements JsonRpcExecutor {
 
             @Override
             public void writeTo(final OutputStream out) {
-                try (final JsonGenerator generator = Json.createGenerator(out)) {
+                try (final JsonGenerator generator = JSONP.createGenerator(out)) {
                     writeTo(generator);
                 }
             }

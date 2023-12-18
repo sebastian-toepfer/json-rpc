@@ -23,9 +23,9 @@
  */
 package io.github.sebastiantoepfer.json.rpc.runtime;
 
-import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonValue;
+import jakarta.json.spi.JsonProvider;
 import jakarta.json.stream.JsonGenerator;
 import java.io.OutputStream;
 import java.util.Collection;
@@ -36,12 +36,13 @@ import java.util.logging.Logger;
 final class BatchJsonRpcExecutor implements JsonRpcExecutor {
 
     private static final Logger LOG = Logger.getLogger(BatchJsonRpcExecutor.class.getName());
+    private static final JsonProvider JSONP = JsonProvider.provider();
     private final JsonRpcExecutionContext<? extends JsonRpcMethod> context;
     private final JsonArray json;
 
     public BatchJsonRpcExecutor(final JsonRpcExecutionContext<? extends JsonRpcMethod> context, final JsonArray json) {
         this.context = Objects.requireNonNull(context);
-        this.json = Json.createArrayBuilder(json).build();
+        this.json = JSONP.createArrayBuilder(json).build();
     }
 
     @Override
@@ -87,7 +88,7 @@ final class BatchJsonRpcExecutor implements JsonRpcExecutor {
 
         @Override
         public void writeTo(final OutputStream out) {
-            try (JsonGenerator generator = Json.createGenerator(out)) {
+            try (JsonGenerator generator = JSONP.createGenerator(out)) {
                 writeTo(generator);
             }
         }

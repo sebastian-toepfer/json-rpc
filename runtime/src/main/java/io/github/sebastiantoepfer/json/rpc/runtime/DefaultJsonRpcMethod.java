@@ -23,11 +23,11 @@
  */
 package io.github.sebastiantoepfer.json.rpc.runtime;
 
-import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import jakarta.json.JsonValue;
+import jakarta.json.spi.JsonProvider;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
@@ -35,6 +35,7 @@ import java.util.logging.Logger;
 public final class DefaultJsonRpcMethod implements JsonRpcMethod {
 
     private static final Logger LOG = Logger.getLogger(DefaultJsonRpcMethod.class.getName());
+    private static final JsonProvider JSONP = JsonProvider.provider();
     private final String name;
     private final List<String> parameterNames;
     private final JsonRpcMethodFunction function;
@@ -78,7 +79,7 @@ public final class DefaultJsonRpcMethod implements JsonRpcMethod {
 
     private JsonObject createNamedParameters(final JsonArray params) {
         LOG.entering(DefaultJsonRpcMethod.class.getName(), "createNamedParameters", params);
-        JsonObjectBuilder builder = Json.createObjectBuilder();
+        JsonObjectBuilder builder = JSONP.createObjectBuilder();
         for (int i = 0; i < params.size(); i++) {
             builder = builder.add(parameterNames.get(i), params.get(i));
         }
