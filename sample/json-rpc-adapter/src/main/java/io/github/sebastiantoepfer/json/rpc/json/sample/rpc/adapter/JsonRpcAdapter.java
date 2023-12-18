@@ -29,12 +29,13 @@ import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcRuntime;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcRuntime;
 import io.github.sebastiantoepfer.json.rpc.sample.core.Notify;
-import jakarta.json.Json;
 import jakarta.json.JsonValue;
+import jakarta.json.spi.JsonProvider;
 import java.util.List;
 
 public final class JsonRpcAdapter {
 
+    private static final JsonProvider JSONP = JsonProvider.provider();
     private final Notify notify;
 
     public JsonRpcAdapter(final Notify notify) {
@@ -57,7 +58,7 @@ public final class JsonRpcAdapter {
             "sum",
             List.of("first", "second", "third"),
             params ->
-                Json.createValue(
+                JSONP.createValue(
                     io.github.sebastiantoepfer.json.rpc.sample.core.Math.sum(
                         params.getInt("first"),
                         params.getInt("second"),
@@ -83,7 +84,7 @@ public final class JsonRpcAdapter {
             "subtract",
             List.of("minuend", "subtrahend"),
             params ->
-                Json.createValue(
+                JSONP.createValue(
                     io.github.sebastiantoepfer.json.rpc.sample.core.Math.subtract(
                         params.getInt("minuend"),
                         params.getInt("subtrahend")
@@ -96,7 +97,7 @@ public final class JsonRpcAdapter {
         return new DefaultJsonRpcMethod(
             "get_data",
             List.of(),
-            params -> Json.createArrayBuilder().add(notify.name()).add(notify.currentValue()).build()
+            params -> JSONP.createArrayBuilder().add(notify.name()).add(notify.currentValue()).build()
         );
     }
 
