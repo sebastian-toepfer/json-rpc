@@ -23,6 +23,7 @@
  */
 package io.github.sebastiantoepfer.json.rpc.runtime;
 
+import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
 import jakarta.json.stream.JsonGenerator;
@@ -95,25 +96,12 @@ final class MethodJsonRpcExecutor implements JsonRpcExecutor {
             LOG.entering(SingleMethodJsonRpcExecutor.class.getName(), "execute", method);
             JsonRpcResponse result;
             try {
-                result = toResponse(method.execute(params()));
+                result = new MethodResultJsonRpcResponse((method.execute(params())));
             } catch (JsonRpcExecutionExecption ex) {
                 LOG.log(Level.FINE, "Catch execption", ex);
                 result = ErrorJsonRpcExecutor.ErrorResponse.customError(id(), ex);
             }
             LOG.exiting(SingleMethodJsonRpcExecutor.class.getName(), "execute", result);
-            return result;
-        }
-
-        private JsonRpcResponse toResponse(final JsonValue methodExeutionResult) {
-            LOG.entering(SingleMethodJsonRpcExecutor.class.getName(), "toReponse");
-            final JsonRpcResponse result = generator ->
-                generator
-                    .writeStartObject()
-                    .write("jsonrpc", json.get("jsonrpc"))
-                    .write("result", methodExeutionResult)
-                    .write("id", id())
-                    .writeEnd();
-            LOG.exiting(SingleMethodJsonRpcExecutor.class.getName(), "toReponse", result);
             return result;
         }
 
@@ -149,6 +137,32 @@ final class MethodJsonRpcExecutor implements JsonRpcExecutor {
             final JsonValue result = json.get("params");
             LOG.exiting(SingleMethodJsonRpcExecutor.class.getName(), "params", result);
             return result;
+        }
+
+        private class MethodResultJsonRpcResponse implements JsonRpcResponse {
+
+            private final JsonValue methodExecutionResult;
+
+            public MethodResultJsonRpcResponse(final JsonValue methodExecutionResult) {
+                this.methodExecutionResult = Objects.requireNonNull(methodExecutionResult);
+            }
+
+            @Override
+            public void writeTo(final OutputStream out) {
+                try (final JsonGenerator generator = Json.createGenerator(out)) {
+                    writeTo(generator);
+                }
+            }
+
+            @Override
+            public void writeTo(final JsonGenerator generator) {
+                generator
+                    .writeStartObject()
+                    .write("jsonrpc", json.get("jsonrpc"))
+                    .write("result", methodExecutionResult)
+                    .write("id", id())
+                    .writeEnd();
+            }
         }
 
         private class SingleMethodJsonRpcResponse implements JsonRpcResponse {

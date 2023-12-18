@@ -27,7 +27,9 @@ import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonValue;
 import jakarta.json.stream.JsonGenerator;
+import java.io.OutputStream;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -50,12 +52,7 @@ final class BatchJsonRpcExecutor implements JsonRpcExecutor {
         if (calls.stream().allMatch(JsonRpcExecutor::isNotification)) {
             result = new NotificationResponse();
         } else {
-            result =
-                (final JsonGenerator generator) -> {
-                    generator.writeStartArray();
-                    calls().stream().map(JsonRpcExecutor::execute).forEach(response -> response.writeTo(generator));
-                    generator.writeEnd();
-                };
+            result = new BatchJsonRpcReponse(calls);
         }
         LOG.exiting(BatchJsonRpcExecutor.class.getName(), "execute", result);
         return result;
@@ -78,5 +75,28 @@ final class BatchJsonRpcExecutor implements JsonRpcExecutor {
         }
         LOG.exiting(BatchJsonRpcExecutor.class.getName(), "asExecutor", result);
         return result;
+    }
+
+    private static class BatchJsonRpcReponse implements JsonRpcResponse {
+
+        private final Collection<JsonRpcExecutor> calls;
+
+        public BatchJsonRpcReponse(final Collection<JsonRpcExecutor> calls) {
+            this.calls = List.copyOf(calls);
+        }
+
+        @Override
+        public void writeTo(final OutputStream out) {
+            try (JsonGenerator generator = Json.createGenerator(out)) {
+                writeTo(generator);
+            }
+        }
+
+        @Override
+        public void writeTo(final JsonGenerator generator) {
+            generator.writeStartArray();
+            calls.stream().map(JsonRpcExecutor::execute).forEach(response -> response.writeTo(generator));
+            generator.writeEnd();
+        }
     }
 }
