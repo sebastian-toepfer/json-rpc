@@ -34,7 +34,7 @@ jobs:
 
     - name: run benchmark
       run: |
-        mvn -DskipTests=true --also-make --projects benchmark clean package
+        mvn -DskipTests=true -Pfull --also-make --projects benchmark clean package
         java -jar benchmark/target/benchmarks.jar -rf json
 
     - name: download previous benchmark data
