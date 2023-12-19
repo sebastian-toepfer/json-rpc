@@ -68,7 +68,6 @@
         <module>extension-openrpc</module>
         <module>spring-integration-autoconfigure</module>
         <module>spring-integration-starter</module>
-        <module>benchmark</module>
     </modules>
 
     <dependencyManagement>
@@ -748,6 +747,7 @@
                 <module>tck</module>
                 <module>sample</module>
                 <module>jmeter</module>
+                <module>benchmark</module>
             </modules>
         </profile>
 
@@ -796,6 +796,7 @@
                 <module>tck</module>
                 <module>sample</module>
                 <module>jmeter</module>
+                <module>benchmark</module>
             </modules>
 
             <build>
@@ -832,6 +833,7 @@
                 <module>tck</module>
                 <module>sample</module>
                 <module>jmeter</module>
+                <module>benchmark</module>
             </modules>
 
             <build>
@@ -868,6 +870,7 @@
                 <module>tck</module>
                 <module>sample</module>
                 <module>jmeter</module>
+                <module>benchmark</module>
             </modules>
 
             <build>
