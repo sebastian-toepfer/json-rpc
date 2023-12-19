@@ -24,12 +24,15 @@
 package io.github.sebastiantoepfer.json.rpc.runtime;
 
 import jakarta.json.JsonValue;
+import jakarta.json.spi.JsonProvider;
 import jakarta.json.stream.JsonGenerator;
+import java.io.OutputStream;
 import java.util.logging.Logger;
 
 final class ErrorJsonRpcExecutor implements JsonRpcExecutor {
 
     private static final Logger LOG = Logger.getLogger(ErrorJsonRpcExecutor.class.getName());
+    private static final JsonProvider JSONP = JsonProvider.provider();
 
     static JsonRpcExecutor parseError() {
         return new ErrorJsonRpcExecutor(ErrorResponse.parseError());
@@ -87,8 +90,17 @@ final class ErrorJsonRpcExecutor implements JsonRpcExecutor {
         }
 
         @Override
+        public void writeTo(final OutputStream out) {
+            LOG.entering(ErrorResponse.class.getName(), "writeTo");
+            try (final JsonGenerator generator = JSONP.createGenerator(out)) {
+                writeTo(generator);
+            }
+            LOG.exiting(ErrorResponse.class.getName(), "writeTo");
+        }
+
+        @Override
         public void writeTo(final JsonGenerator generator) {
-            LOG.entering(ErrorResponse.class.getName(), "writeResponseTo");
+            LOG.entering(ErrorResponse.class.getName(), "writeTo");
             generator
                 .writeStartObject()
                 .write("jsonrpc", "2.0")
@@ -98,7 +110,7 @@ final class ErrorJsonRpcExecutor implements JsonRpcExecutor {
                 .writeEnd()
                 .write("id", id)
                 .writeEnd();
-            LOG.exiting(ErrorResponse.class.getName(), "writeResponseTo");
+            LOG.exiting(ErrorResponse.class.getName(), "writeTo");
         }
     }
 }

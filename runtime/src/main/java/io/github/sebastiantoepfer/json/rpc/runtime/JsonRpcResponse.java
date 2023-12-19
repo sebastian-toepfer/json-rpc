@@ -23,16 +23,11 @@
  */
 package io.github.sebastiantoepfer.json.rpc.runtime;
 
-import jakarta.json.Json;
 import jakarta.json.stream.JsonGenerator;
 import java.io.OutputStream;
 
 public interface JsonRpcResponse {
-    default void writeTo(OutputStream out) {
-        try (final JsonGenerator generator = Json.createGenerator(out)) {
-            writeTo(generator);
-        }
-    }
+    void writeTo(OutputStream out);
 
     void writeTo(JsonGenerator generator);
 }

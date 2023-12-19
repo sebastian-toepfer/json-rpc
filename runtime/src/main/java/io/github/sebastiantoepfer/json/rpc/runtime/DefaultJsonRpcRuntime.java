@@ -23,9 +23,9 @@
  */
 package io.github.sebastiantoepfer.json.rpc.runtime;
 
-import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
+import jakarta.json.spi.JsonProvider;
 import jakarta.json.stream.JsonParser;
 import jakarta.json.stream.JsonParsingException;
 import java.io.Reader;
@@ -35,6 +35,7 @@ import java.util.logging.Logger;
 public final class DefaultJsonRpcRuntime implements JsonRpcRuntime {
 
     private static final Logger LOG = Logger.getLogger(DefaultJsonRpcRuntime.class.getName());
+    private static final JsonProvider JSONP = JsonProvider.provider();
     private final JsonRpcExecutionContext<? extends JsonRpcMethod> context;
 
     public DefaultJsonRpcRuntime(final JsonRpcExecutionContext<? extends JsonRpcMethod> context) {
@@ -45,7 +46,7 @@ public final class DefaultJsonRpcRuntime implements JsonRpcRuntime {
     public JsonRpcExecutor createExecutorFor(final Reader json) {
         LOG.entering(DefaultJsonRpcRuntime.class.getName(), "createExecutorFor", json);
         JsonRpcExecutor result;
-        try (final JsonParser parser = Json.createParser(json)) {
+        try (final JsonParser parser = JSONP.createParser(json)) {
             result = createExecutorFor(parser);
         } catch (JsonParsingException ex) {
             LOG.log(Level.INFO, "Invalid JSON received.", ex);

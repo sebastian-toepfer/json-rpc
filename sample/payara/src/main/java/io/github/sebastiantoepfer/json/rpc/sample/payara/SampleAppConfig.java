@@ -26,7 +26,7 @@ package io.github.sebastiantoepfer.json.rpc.sample.payara;
 import io.github.sebastiantoepfer.json.rpc.json.sample.rpc.adapter.JsonRpcAdapter;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcRuntime;
 import io.github.sebastiantoepfer.json.rpc.sample.core.Notify;
-import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Singleton;
 
@@ -34,7 +34,7 @@ import jakarta.inject.Singleton;
 public class SampleAppConfig {
 
     @Produces
-    @RequestScoped
+    @ApplicationScoped
     public JsonRpcRuntime jsonRpcRuntime() {
         return new JsonRpcAdapter(new Notify("hello")).createJsonRpcRuntime();
     }
