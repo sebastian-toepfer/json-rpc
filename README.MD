@@ -172,9 +172,9 @@ see samples.
 Add maven dependency
 ```xml
 <dependency>
-    <groupId>${project.groupId}</groupId>
+    <groupId>io.github.sebastian-toepfer.json.rpc</groupId>
     <artifactId>json-rpc-boundary</artifactId>
-    <version>LATEST</version>
+    <version>0.5.0</version>
 </dependency>
 ```
 
@@ -213,9 +213,9 @@ public class SampleApplication extends Application {
 Add maven dependency
 ```xml
 <dependency>
-    <groupId>${project.groupId}</groupId>
+    <groupId>io.github.sebastian-toepfer.json.rpc</groupId>
     <artifactId>json-rpc-boundary</artifactId>
-    <version>LATEST</version>
+    <version>0.5.0</version>
 </dependency>
 ```
 
@@ -301,9 +301,9 @@ a dynamic way of describing the available methods. for mor information about ope
 Add maven dependency
 ```xml
 <dependency>
-    <groupId>${project.groupId}</groupId>
+    <groupId>io.github.sebastian-toepfer.json.rpc</groupId>
     <artifactId>json-rpc-extension-openrpc</artifactId>
-    <version>LATEST</version>
+    <version>0.5.0</version>
 </dependency>
 ```
 
@@ -355,8 +355,8 @@ e.g. a JsonSchema can be set via Reference or SchemaInstance:
 after deployment the avalible methods can be requested via:
 ```json
 {
-  'jsonrpc': '2.0',
-  'method': 'rpc.discover',
-  'id': '1'
+  "jsonrpc": "2.0",
+  "method": "rpc.discover",
+  "id": "1"
 }
 ```
