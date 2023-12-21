@@ -55,7 +55,7 @@
         <ddd.version>0.6.0</ddd.version>
 
         <payara.version>6.2023.12</payara.version>
-        <quarkus.version>3.6.3</quarkus.version>
+        <quarkus.version>3.6.4</quarkus.version>
         <spring.boot.version>3.2.0</spring.boot.version>
         <jmh.version>1.37</jmh.version>
 
