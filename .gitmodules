@@ -1,0 +1,3 @@
+[submodule "tools/adr"]
+	path = tools/adr
+	url = git@github.com:npryce/adr-tools.git
