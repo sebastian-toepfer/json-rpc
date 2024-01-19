@@ -24,7 +24,6 @@
 package io.github.sebastiantoepfer.json.rpc.benchmark;
 
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.DescribeableJsonRpcMethod;
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.JsonSchemaObject;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.OpenRpcServiceDiscoveryJsonRpcExecutionContext;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescriptorObject;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescriptorOrReference;
@@ -33,6 +32,8 @@ import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.JsonSchemaOrRe
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObject;
 import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcRuntime;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcRuntime;
+import io.github.sebastiantoepfer.jsonschema.JsonSchemas;
+import jakarta.json.Json;
 import jakarta.json.spi.JsonProvider;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
@@ -72,7 +73,9 @@ public class OpenRpcJsonRpcRuntimeBenchmarks {
                                             new ContentDescriptorObject(
                                                 "minuend",
                                                 new JsonSchemaOrReference.Object(
-                                                    new JsonSchemaObject().withType("integer")
+                                                    JsonSchemas.load(
+                                                        Json.createObjectBuilder().add("type", "integer").build()
+                                                    )
                                                 )
                                             )
                                         ),
@@ -80,7 +83,9 @@ public class OpenRpcJsonRpcRuntimeBenchmarks {
                                             new ContentDescriptorObject(
                                                 "subtrahend",
                                                 new JsonSchemaOrReference.Object(
-                                                    new JsonSchemaObject().withType("integer")
+                                                    JsonSchemas.load(
+                                                        Json.createObjectBuilder().add("type", "integer").build()
+                                                    )
                                                 )
                                             )
                                         )

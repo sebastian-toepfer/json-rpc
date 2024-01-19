@@ -37,8 +37,10 @@ import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ReferenceObjec
 import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethodFunction;
+import io.github.sebastiantoepfer.jsonschema.JsonSchemas;
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
+import jakarta.json.JsonValue;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -69,7 +71,7 @@ class DescribeableJsonRpcMethodTest {
                         new ContentDescriptorOrReference.Object(
                             new ContentDescriptorObject(
                                 "limit",
-                                new JsonSchemaOrReference.Object(new JsonSchemaObject())
+                                new JsonSchemaOrReference.Object(JsonSchemas.load(JsonValue.EMPTY_JSON_OBJECT))
                             )
                         )
                     )
@@ -82,7 +84,7 @@ class DescribeableJsonRpcMethodTest {
     }
 
     @Test
-    void should_not_createable_with_reference_parameters_without_use_byName_paramstucture() {
+    void should_not_creatable_with_reference_parameters_without_use_byName_paramstucture() {
         final MethodObject desciption = new MethodObject(
             "list_pets",
             List.of(new ContentDescriptorOrReference.Reference(new ReferenceObject("test")))
@@ -92,7 +94,7 @@ class DescribeableJsonRpcMethodTest {
     }
 
     @Test
-    void should_createable_with_reference_parameters_when_using_byName_paramstucture() {
+    void should_creatable_with_reference_parameters_when_using_byName_paramstucture() {
         final MethodObject desciption = new MethodObject(
             "list_pets",
             List.of(new ContentDescriptorOrReference.Reference(new ReferenceObject("test")))

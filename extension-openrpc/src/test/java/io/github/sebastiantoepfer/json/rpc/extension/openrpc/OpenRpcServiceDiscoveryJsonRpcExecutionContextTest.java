@@ -36,6 +36,7 @@ import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ReferenceObjec
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.TagObject;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.TagOrReference;
 import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcRuntime;
+import io.github.sebastiantoepfer.jsonschema.JsonSchemas;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
@@ -111,7 +112,9 @@ class OpenRpcServiceDiscoveryJsonRpcExecutionContextTest {
                                                 new ContentDescriptorObject(
                                                     "limit",
                                                     new JsonSchemaOrReference.Object(
-                                                        new JsonSchemaObject().withType("integer")
+                                                        JsonSchemas.load(
+                                                            Json.createObjectBuilder().add("type", "integer").build()
+                                                        )
                                                     )
                                                 )
                                                     .withDescription("How many items to return at one time (max 100)")

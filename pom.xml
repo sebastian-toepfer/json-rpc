@@ -51,6 +51,7 @@
         <maven.compiler.source>17</maven.compiler.source>
 
         <ddd.version>0.6.0</ddd.version>
+        <json-schema.version>0.1.1</json-schema.version>
 
         <payara.version>6.2023.12</payara.version>
         <quarkus.version>3.6.6</quarkus.version>
@@ -95,6 +96,17 @@
                 <groupId>io.github.sebastian-toepfer.ddd</groupId>
                 <artifactId>media-json-api</artifactId>
                 <version>${ddd.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>io.github.sebastian-toepfer.json-schema</groupId>
+                <artifactId>json-schema-api</artifactId>
+                <version>${json-schema.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.sebastian-toepfer.json-schema</groupId>
+                <artifactId>json-schema-core</artifactId>
+                <version>${json-schema.version}</version>
             </dependency>
 
             <dependency>
