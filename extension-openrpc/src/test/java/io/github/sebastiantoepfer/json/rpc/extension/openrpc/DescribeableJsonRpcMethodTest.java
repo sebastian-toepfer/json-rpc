@@ -35,6 +35,7 @@ import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.JsonSchemaOrRe
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObject;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ReferenceObject;
 import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcMethod;
+import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethodFunction;
 import io.github.sebastiantoepfer.jsonschema.JsonSchemas;
@@ -62,6 +63,7 @@ class DescribeableJsonRpcMethodTest {
     @Test
     void should_call_method_with_parameters() throws Exception {
         final JsonArray parameters = Json.createArrayBuilder().add(2).build();
+        //TODO: fix!
         final JsonRpcMethodFunction function = params -> params;
         assertThat(
             new DescribeableJsonRpcMethod(
@@ -95,12 +97,53 @@ class DescribeableJsonRpcMethodTest {
 
     @Test
     void should_creatable_with_reference_parameters_when_using_byName_paramstucture() {
-        final MethodObject desciption = new MethodObject(
-            "list_pets",
-            List.of(new ContentDescriptorOrReference.Reference(new ReferenceObject("test")))
-        )
-            .withParamStructure(MethodObject.MethodObjectParamStructure.byname);
+        assertThat(
+            new DescribeableJsonRpcMethod(
+                new MethodObject(
+                    "list_pets",
+                    List.of(new ContentDescriptorOrReference.Reference(new ReferenceObject("test")))
+                )
+                    .withParamStructure(MethodObject.MethodObjectParamStructure.byname),
+                a -> a
+            ),
+            is(not(nullValue()))
+        );
+    }
 
-        assertThat(new DescribeableJsonRpcMethod(desciption, a -> a), is(not(nullValue())));
+    @Test
+    void should_not_callable_by_position_when_using_byName_paramstucture() {
+        final DescribeableJsonRpcMethod m = new DescribeableJsonRpcMethod(
+            new MethodObject(
+                "list_pets",
+                List.of(new ContentDescriptorOrReference.Reference(new ReferenceObject("test")))
+            )
+                .withParamStructure(MethodObject.MethodObjectParamStructure.byname),
+            a -> a
+        );
+        final JsonValue paramters = Json.createArrayBuilder().add("a").build();
+
+        assertThrows(JsonRpcExecutionExecption.class, () -> m.execute(paramters));
+    }
+
+    @Test
+    void should_not_callable_by_name_when_using_byposition_paramstucture() {
+        final DescribeableJsonRpcMethod m = new DescribeableJsonRpcMethod(
+            new MethodObject(
+                "list_pets",
+                List.of(
+                    new ContentDescriptorOrReference.Object(
+                        new ContentDescriptorObject(
+                            "limit",
+                            new JsonSchemaOrReference.Object(JsonSchemas.load(JsonValue.EMPTY_JSON_OBJECT))
+                        )
+                    )
+                )
+            )
+                .withParamStructure(MethodObject.MethodObjectParamStructure.byposition),
+            a -> a
+        );
+        final JsonValue paramters = Json.createObjectBuilder().add("list_pets", 12).build();
+
+        assertThrows(JsonRpcExecutionExecption.class, () -> m.execute(paramters));
     }
 }

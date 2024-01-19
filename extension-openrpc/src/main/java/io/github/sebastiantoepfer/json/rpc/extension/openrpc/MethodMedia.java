@@ -23,13 +23,12 @@
  */
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
+import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
 import io.github.sebastiantoepfer.ddd.common.Printable;
-import io.github.sebastiantoepfer.ddd.media.core.BaseMedia;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObject.MethodObjectParamStructure;
-import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethodFunction;
 import java.util.Arrays;
@@ -95,71 +94,20 @@ final class MethodMedia implements BaseMethodMedia<MethodMedia> {
     }
 
     JsonRpcMethod createMethodWith(final JsonRpcMethodFunction function) {
-        return new DefaultJsonRpcMethod(
-            Objects.requireNonNull(methodName, "can not determine methodname!"),
-            params.stream().map(p -> p.printOn(new MethodParamMedia())).map(MethodParamMedia::name).toList(),
-            Objects.requireNonNull(function, "function must be provided!")
-        );
-    }
-
-    private class MethodParamMedia implements BaseMethodMedia<MethodParamMedia> {
-
-        private final String name;
-
-        MethodParamMedia() {
-            this(null);
+        Objects.requireNonNull(methodName, "can not determine methodname!");
+        Objects.requireNonNull(function, "function must be provided!");
+        final List<MethodParamMedia> methodParams = params
+            .stream()
+            .map(p -> p.printOn(new MethodParamMedia()))
+            .toList();
+        if (methodParams.stream().anyMatch(not(p -> p.isValidFor(paramStructure)))) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "create a method which has parameter descibe by a reference and %s is not supported yet!",
+                    paramStructure
+                )
+            );
         }
-
-        private MethodParamMedia(final String name) {
-            this.name = name;
-        }
-
-        @Override
-        public MethodParamMedia withValue(final String name, final String value) {
-            final MethodParamMedia result;
-            if (Objects.equals("name", name)) {
-                result = new MethodParamMedia(value);
-            } else {
-                result = this;
-            }
-            return result;
-        }
-
-        public String name() {
-            if (name == null && paramStructure != MethodObjectParamStructure.byname) {
-                throw new IllegalArgumentException(
-                    String.format(
-                        "create a method which has parameter descibe by a reference and %s is not supported yet!",
-                        paramStructure
-                    )
-                );
-            } else if (name == null) {
-                return "";
-            }
-            return name;
-        }
-    }
-}
-
-//how to fake for pitest :)
-interface BaseMethodMedia<T extends BaseMethodMedia<T>> extends BaseMedia<T> {
-    @Override
-    default T withValue(final String name, final int value) {
-        return (T) this;
-    }
-
-    @Override
-    default T withValue(final String name, final long value) {
-        return (T) this;
-    }
-
-    @Override
-    default T withValue(final String name, final double value) {
-        return (T) this;
-    }
-
-    @Override
-    default T withValue(final String name, final boolean value) {
-        return (T) this;
+        return new ProtectedJsonRpcMethod(methodName, function, paramStructure, methodParams);
     }
 }
