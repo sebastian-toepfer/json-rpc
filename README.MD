@@ -2,7 +2,7 @@
 
 # What is json-rpc
 
-Is a specification that allows to call remote procedure over http with json as payload. See [JSON-RPC-Spec](https://www.jsonrpc.org/specification)
+is a json-based protocol for rpc. See [JSON-RPC-Spec](https://www.jsonrpc.org/specification).
 
 # Why still using json-rpc
 
