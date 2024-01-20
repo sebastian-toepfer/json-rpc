@@ -174,7 +174,7 @@ Add maven dependency
 <dependency>
     <groupId>io.github.sebastian-toepfer.json.rpc</groupId>
     <artifactId>json-rpc-boundary</artifactId>
-    <version>0.5.0</version>
+    <version>0.6.0</version>
 </dependency>
 ```
 
@@ -215,7 +215,7 @@ Add maven dependency
 <dependency>
     <groupId>io.github.sebastian-toepfer.json.rpc</groupId>
     <artifactId>json-rpc-boundary</artifactId>
-    <version>0.5.0</version>
+    <version>0.6.0</version>
 </dependency>
 ```
 
@@ -261,7 +261,7 @@ Add maven dependency
 <dependency>
     <groupId>${project.groupId}</groupId>
     <artifactId>json-rpc-spring-integration-starter</artifactId>
-    <version>LATEST</version>
+    <version>0.6.0</version>
 </dependency>
 ```
 
@@ -296,14 +296,14 @@ public JsonRpcRuntime jsonRpcRuntime() {
 ## Extensions
 
 ### OpenRPC
-a dynamic way of describing the available methods. for mor information about openrpc: https://open-rpc.org/
+a dynamic way of describing the available methods. for more information see [openrpc](https://open-rpc.org/)
 
 Add maven dependency
 ```xml
 <dependency>
     <groupId>io.github.sebastian-toepfer.json.rpc</groupId>
     <artifactId>json-rpc-extension-openrpc</artifactId>
-    <version>0.5.0</version>
+    <version>0.6.0</version>
 </dependency>
 ```
 
@@ -319,7 +319,7 @@ new OpenRpcServiceDiscoveryJsonRpcExecutionContext(new InfoObject("test app", "1
                         new ContentDescriptorObject(
                             "limit",
                             new JsonSchemaOrReference.Object(
-                                new JsonSchemaObject().withType("integer")
+                                Json.createObjectBuilder().add("type", "integer").build()
                             )
                         )
                             .withDescription("How many items to return at one time (max 100)")
@@ -351,6 +351,8 @@ e.g. a JsonSchema can be set via Reference or SchemaInstance:
 `new JsonSchemaOrReference.Reference(new RefereceObject(""))`
   or
 `new JsonSchemaOrReference.Object(new JsonSchemaObject())`.
+
+As of version 0.7.0, it is no longer possible to describe method parameters via a reference or to use a reference as a parameter.
 
 after deployment the avalible methods can be requested via:
 ```json
