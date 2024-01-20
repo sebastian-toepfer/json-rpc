@@ -43,7 +43,7 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public final class OpenRpcServiceDiscoveryJsonRpcExecutionContext
-    implements JsonRpcExecutionContext<DescribeableJsonRpcMethod> {
+    implements JsonRpcExecutionContext<DescribableJsonRpcMethod> {
 
     private static final Logger LOG = Logger.getLogger(OpenRpcServiceDiscoveryJsonRpcExecutionContext.class.getName());
     private static final JsonSchemaOrReference.Reference OPENRPC_SCHEMA;
@@ -76,7 +76,7 @@ public final class OpenRpcServiceDiscoveryJsonRpcExecutionContext
 
     private final InfoObject info;
     private final JsonSchemaOrReference openRpcSchema;
-    private final List<DescribeableJsonRpcMethod> methods;
+    private final List<DescribableJsonRpcMethod> methods;
 
     public OpenRpcServiceDiscoveryJsonRpcExecutionContext(final InfoObject info) {
         this(info, OPENRPC_SCHEMA, List.of());
@@ -85,27 +85,35 @@ public final class OpenRpcServiceDiscoveryJsonRpcExecutionContext
     private OpenRpcServiceDiscoveryJsonRpcExecutionContext(
         final InfoObject info,
         final JsonSchemaOrReference openRpcSchema,
-        final List<DescribeableJsonRpcMethod> methods
+        final List<DescribableJsonRpcMethod> methods
     ) {
         this.info = Objects.requireNonNull(info, "info must be non null!");
         this.openRpcSchema = Objects.requireNonNull(openRpcSchema, "schema must be non null");
         this.methods = List.copyOf(methods);
     }
 
-    @Override
+    /**
+     * @deprecated use {@code withMethod(final DescribableJsonRpcMethod method)} instead.
+     */
+    @Deprecated(since = "0.7.0", forRemoval = true)
     public OpenRpcServiceDiscoveryJsonRpcExecutionContext withMethod(final DescribeableJsonRpcMethod method) {
-        final List<DescribeableJsonRpcMethod> newMethods = new ArrayList<>(methods);
+        return withMethod(method.asCorrectlyWritten());
+    }
+
+    @Override
+    public OpenRpcServiceDiscoveryJsonRpcExecutionContext withMethod(final DescribableJsonRpcMethod method) {
+        final List<DescribableJsonRpcMethod> newMethods = new ArrayList<>(methods);
         newMethods.add(method);
         return new OpenRpcServiceDiscoveryJsonRpcExecutionContext(info, openRpcSchema, newMethods);
     }
 
     @Override
-    public Stream<DescribeableJsonRpcMethod> methods() {
+    public Stream<DescribableJsonRpcMethod> methods() {
         return Stream.concat(Stream.of(createDiscoverMethod()), methods.stream());
     }
 
-    private DescribeableJsonRpcMethod createDiscoverMethod() {
-        return new DescribeableJsonRpcMethod(
+    private DescribableJsonRpcMethod createDiscoverMethod() {
+        return new DescribableJsonRpcMethod(
             new MethodObject("rpc.discover", List.of())
                 .withDescription("Returns an OpenRPC schema as a description of this service")
                 .withResult(
@@ -116,7 +124,7 @@ public final class OpenRpcServiceDiscoveryJsonRpcExecutionContext
                     OpenrpcDocument.Openrpc.Openrpc_132,
                     info,
                     methods()
-                        .map(DescribeableJsonRpcMethod::description)
+                        .map(DescribableJsonRpcMethod::description)
                         .map(MethodOrReference.Object::new)
                         .map(MethodOrReference.class::cast)
                         .toList()

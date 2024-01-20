@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2023 sebastian.
+ * Copyright 2024 sebastian.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,34 +28,29 @@ import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethodFunction;
 import jakarta.json.JsonValue;
+import java.util.Objects;
 
-/**
- * @deprecated the class has a spelling error. it is replaced by {@code DescribableJsonRpcMethod}
- */
-@Deprecated(since = "0.7.0", forRemoval = true)
-public final class DescribeableJsonRpcMethod implements JsonRpcMethod {
+public final class DescribableJsonRpcMethod implements JsonRpcMethod {
 
-    private final DescribableJsonRpcMethod delegate;
+    private final JsonRpcMethod method;
+    private final MethodObject description;
 
-    public DescribeableJsonRpcMethod(final MethodObject description, final JsonRpcMethodFunction function) {
-        this.delegate = new DescribableJsonRpcMethod(description, function);
+    public DescribableJsonRpcMethod(final MethodObject description, final JsonRpcMethodFunction function) {
+        this.description = Objects.requireNonNull(description);
+        this.method = description.printOn(new MethodMedia()).createMethodWith(function);
     }
 
     @Override
     public boolean hasName(final String name) {
-        return delegate.hasName(name);
+        return method.hasName(name);
     }
 
     @Override
     public JsonValue execute(final JsonValue params) throws JsonRpcExecutionExecption {
-        return delegate.execute(params);
+        return method.execute(params);
     }
 
     MethodObject description() {
-        return delegate.description();
-    }
-
-    DescribableJsonRpcMethod asCorrectlyWritten() {
-        return delegate;
+        return description;
     }
 }
