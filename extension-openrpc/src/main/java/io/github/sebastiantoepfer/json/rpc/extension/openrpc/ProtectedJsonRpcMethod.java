@@ -23,11 +23,7 @@
  */
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toList;
-
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObject;
-import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethodFunction;
@@ -35,27 +31,25 @@ import io.github.sebastiantoepfer.json.rpc.runtime.validation.AnyOf;
 import io.github.sebastiantoepfer.json.rpc.runtime.validation.OfType;
 import io.github.sebastiantoepfer.json.rpc.runtime.validation.Rule;
 import jakarta.json.JsonValue;
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 final class ProtectedJsonRpcMethod implements JsonRpcMethod {
 
     private final String name;
     private final JsonRpcMethodFunction function;
     private final MethodObject.MethodObjectParamStructure paramStructure;
-    private final List<MethodParamMedia> paramters;
+    private final MethodParameters parameters;
 
     ProtectedJsonRpcMethod(
         final String name,
         final JsonRpcMethodFunction function,
         final MethodObject.MethodObjectParamStructure paramStructure,
-        final List<MethodParamMedia> paramters
+        final MethodParameters parameters
     ) {
         this.name = Objects.requireNonNull(name);
         this.function = Objects.requireNonNull(function);
         this.paramStructure = Objects.requireNonNull(paramStructure);
-        this.paramters = List.copyOf(paramters);
+        this.parameters = Objects.requireNonNull(parameters);
     }
 
     @Override
@@ -65,22 +59,21 @@ final class ProtectedJsonRpcMethod implements JsonRpcMethod {
 
     @Override
     public JsonValue execute(final JsonValue params) throws JsonRpcExecutionExecption {
-        if (params != null && !paramterRule().isValid(params)) {
+        if (params != null && !parametersRule().isValid(params)) {
             throw new JsonRpcExecutionExecption(-1, "method must be called with " + paramStructure + "!");
         }
-        return paramters
-            .stream()
-            .map(MethodParamMedia::name)
-            .flatMap(Optional::stream)
-            .collect(collectingAndThen(toList(), p -> new DefaultJsonRpcMethod(name, p, function)))
-            .execute(params);
+        return function.apply(parameters.createValidParameterObjectFrom(params));
     }
 
-    private Rule paramterRule() {
+    private Rule parametersRule() {
         return switch (paramStructure) {
             case byname -> new OfType(JsonValue.ValueType.OBJECT);
             case byposition -> new OfType(JsonValue.ValueType.ARRAY);
-            default -> new AnyOf(new OfType(JsonValue.ValueType.OBJECT), new OfType(JsonValue.ValueType.ARRAY));
+            default -> new AnyOf(
+                new OfType(JsonValue.ValueType.OBJECT),
+                new OfType(JsonValue.ValueType.ARRAY),
+                new OfType(JsonValue.ValueType.NULL)
+            );
         };
     }
 }

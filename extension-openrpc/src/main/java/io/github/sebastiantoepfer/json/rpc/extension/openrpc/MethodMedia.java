@@ -23,7 +23,6 @@
  */
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
-import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 
@@ -96,18 +95,10 @@ final class MethodMedia implements BaseMethodMedia<MethodMedia> {
     JsonRpcMethod createMethodWith(final JsonRpcMethodFunction function) {
         Objects.requireNonNull(methodName, "can not determine methodname!");
         Objects.requireNonNull(function, "function must be provided!");
-        final List<MethodParamMedia> methodParams = params
+        final MethodParameters methodParams = params
             .stream()
             .map(p -> p.printOn(new MethodParamMedia()))
-            .toList();
-        if (methodParams.stream().anyMatch(not(p -> p.isValidFor(paramStructure)))) {
-            throw new IllegalArgumentException(
-                String.format(
-                    "create a method which has parameter descibe by a reference and %s is not supported yet!",
-                    paramStructure
-                )
-            );
-        }
+            .collect(collectingAndThen(toList(), MethodParameters::new));
         return new ProtectedJsonRpcMethod(methodName, function, paramStructure, methodParams);
     }
 }

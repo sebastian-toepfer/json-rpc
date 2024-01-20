@@ -23,38 +23,70 @@
  */
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObject;
+import io.github.sebastiantoepfer.ddd.common.Printable;
+import io.github.sebastiantoepfer.ddd.media.json.JsonObjectMedia;
+import jakarta.json.JsonValue;
 import java.util.Objects;
 import java.util.Optional;
 
 final class MethodParamMedia implements BaseMethodMedia<MethodParamMedia> {
 
-    private final String name;
+    private final String parameterName;
+    private final Printable schema;
+    private final boolean required;
 
     MethodParamMedia() {
-        this(null);
+        this(null, null, false);
     }
 
-    private MethodParamMedia(final String name) {
-        this.name = name;
+    private MethodParamMedia(final String name, final Printable schema, final boolean required) {
+        this.parameterName = name;
+        this.schema = schema;
+        this.required = required;
     }
 
     @Override
     public MethodParamMedia withValue(final String name, final String value) {
         final MethodParamMedia result;
         if (Objects.equals("name", name)) {
-            result = new MethodParamMedia(value);
+            result = new MethodParamMedia(value, schema, required);
         } else {
             result = this;
         }
         return result;
     }
 
-    public Optional<String> name() {
-        return Optional.ofNullable(name);
+    @Override
+    public MethodParamMedia withValue(final String name, final Printable value) {
+        final MethodParamMedia result;
+        if (Objects.equals("schema", name)) {
+            result = new MethodParamMedia(parameterName, value, required);
+        } else {
+            result = this;
+        }
+        return result;
     }
 
-    boolean isValidFor(final MethodObject.MethodObjectParamStructure paramStructure) {
-        return name != null || paramStructure == MethodObject.MethodObjectParamStructure.byname;
+    @Override
+    public MethodParamMedia withValue(final String name, final boolean value) {
+        final MethodParamMedia result;
+        if (Objects.equals("required", name)) {
+            result = new MethodParamMedia(parameterName, schema, value);
+        } else {
+            result = this;
+        }
+        return result;
+    }
+
+    boolean isRequired() {
+        return required;
+    }
+
+    JsonValue schema() {
+        return schema.printOn(new JsonObjectMedia());
+    }
+
+    Optional<String> name() {
+        return Optional.ofNullable(parameterName);
     }
 }

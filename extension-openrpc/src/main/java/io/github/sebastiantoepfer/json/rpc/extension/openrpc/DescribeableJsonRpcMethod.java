@@ -52,7 +52,7 @@ public final class DescribeableJsonRpcMethod implements JsonRpcMethod {
     }
 
     MethodObject description() {
-        return delegate.description();
+        return delegate.asMethodObject();
     }
 
     DescribableJsonRpcMethod asCorrectlyWritten() {

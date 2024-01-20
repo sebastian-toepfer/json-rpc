@@ -48,7 +48,7 @@ public final class DefaultJsonRpcExecutionContext implements JsonRpcExecutionCon
     }
 
     @Override
-    public Stream<DefaultJsonRpcMethod> methods() {
-        return methods.stream();
+    public Stream<JsonRpcMethod> methods() {
+        return methods.stream().map(JsonRpcMethod.class::cast);
     }
 }

@@ -25,7 +25,6 @@ package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -63,7 +62,6 @@ class DescribableJsonRpcMethodTest {
     @Test
     void should_call_method_with_parameters() throws Exception {
         final JsonArray parameters = Json.createArrayBuilder().add(2).build();
-        //TODO: fix!
         final JsonRpcMethodFunction function = params -> params;
         assertThat(
             new DescribeableJsonRpcMethod(
@@ -86,7 +84,7 @@ class DescribableJsonRpcMethodTest {
     }
 
     @Test
-    void should_not_creatable_with_reference_parameters_without_use_byName_paramstucture() {
+    void should_not_creatable_with_reference_parameters() {
         final MethodObject desciption = new MethodObject(
             "list_pets",
             List.of(new ContentDescriptorOrReference.Reference(new ReferenceObject("test")))
@@ -96,33 +94,25 @@ class DescribableJsonRpcMethodTest {
     }
 
     @Test
-    void should_creatable_with_reference_parameters_when_using_byName_paramstucture() {
-        assertThat(
-            new DescribeableJsonRpcMethod(
-                new MethodObject(
-                    "list_pets",
-                    List.of(new ContentDescriptorOrReference.Reference(new ReferenceObject("test")))
-                )
-                    .withParamStructure(MethodObject.MethodObjectParamStructure.byname),
-                a -> a
-            ),
-            is(not(nullValue()))
-        );
-    }
-
-    @Test
     void should_not_callable_by_position_when_using_byName_paramstucture() {
         final DescribeableJsonRpcMethod m = new DescribeableJsonRpcMethod(
             new MethodObject(
                 "list_pets",
-                List.of(new ContentDescriptorOrReference.Reference(new ReferenceObject("test")))
+                List.of(
+                    new ContentDescriptorOrReference.Object(
+                        new ContentDescriptorObject(
+                            "limit",
+                            new JsonSchemaOrReference.Object(JsonSchemas.load(JsonValue.EMPTY_JSON_OBJECT))
+                        )
+                    )
+                )
             )
                 .withParamStructure(MethodObject.MethodObjectParamStructure.byname),
             a -> a
         );
-        final JsonValue paramters = Json.createArrayBuilder().add("a").build();
+        final JsonValue parameters = Json.createArrayBuilder().add("a").build();
 
-        assertThrows(JsonRpcExecutionExecption.class, () -> m.execute(paramters));
+        assertThrows(JsonRpcExecutionExecption.class, () -> m.execute(parameters));
     }
 
     @Test
@@ -142,8 +132,75 @@ class DescribableJsonRpcMethodTest {
                 .withParamStructure(MethodObject.MethodObjectParamStructure.byposition),
             a -> a
         );
-        final JsonValue paramters = Json.createObjectBuilder().add("list_pets", 12).build();
+        final JsonValue parameters = Json.createObjectBuilder().add("list_pets", 12).build();
 
-        assertThrows(JsonRpcExecutionExecption.class, () -> m.execute(paramters));
+        assertThrows(JsonRpcExecutionExecption.class, () -> m.execute(parameters));
+    }
+
+    @Test
+    void should_not_callable_without_required_parameter() {
+        final DescribableJsonRpcMethod m = new DescribableJsonRpcMethod(
+            new MethodObject(
+                "list_pets",
+                List.of(
+                    new ContentDescriptorOrReference.Object(
+                        new ContentDescriptorObject(
+                            "limit",
+                            new JsonSchemaOrReference.Object(
+                                JsonSchemas.load(Json.createObjectBuilder().add("type", "integer").build())
+                            )
+                        )
+                            .withRequired(true)
+                    )
+                )
+            ),
+            a -> a
+        );
+
+        assertThrows(JsonRpcExecutionExecption.class, () -> m.execute(null));
+    }
+
+    @Test
+    void should_not_callable_with_parameter_doesnt_match_his_schema() {
+        final DescribableJsonRpcMethod m = new DescribableJsonRpcMethod(
+            new MethodObject(
+                "list_pets",
+                List.of(
+                    new ContentDescriptorOrReference.Object(
+                        new ContentDescriptorObject(
+                            "limit",
+                            new JsonSchemaOrReference.Object(
+                                JsonSchemas.load(Json.createObjectBuilder().add("type", "integer").build())
+                            )
+                        )
+                    )
+                )
+            ),
+            a -> a
+        );
+
+        final JsonValue params = Json.createArrayBuilder().add(1.1).build();
+        assertThrows(JsonRpcExecutionExecption.class, () -> m.execute(params));
+    }
+
+    @Test
+    void should_callable_without_optional_parameters() throws Exception {
+        final JsonRpcMethod method = new DescribableJsonRpcMethod(
+            new MethodObject(
+                "echo",
+                List.of(
+                    new ContentDescriptorOrReference.Object(
+                        new ContentDescriptorObject(
+                            "value",
+                            new JsonSchemaOrReference.Object(JsonSchemas.load(JsonValue.EMPTY_JSON_OBJECT))
+                        )
+                    )
+                )
+            ),
+            o -> o.get("value")
+        );
+
+        assertThat(method.execute(null), is(nullValue()));
+        assertThat(method.execute(JsonValue.NULL), is(nullValue()));
     }
 }

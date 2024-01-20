@@ -23,73 +23,29 @@
  */
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
-import io.github.sebastiantoepfer.ddd.media.json.JsonObjectMedia;
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescriptorObject;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.InfoObject;
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.JsonSchemaOrReference;
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObject;
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObjectResult;
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodOrReference;
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.OpenrpcDocument;
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ReferenceObject;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionContext;
-import java.io.IOException;
+import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethod;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public final class OpenRpcServiceDiscoveryJsonRpcExecutionContext
     implements JsonRpcExecutionContext<DescribableJsonRpcMethod> {
 
-    private static final Logger LOG = Logger.getLogger(OpenRpcServiceDiscoveryJsonRpcExecutionContext.class.getName());
-    private static final JsonSchemaOrReference.Reference OPENRPC_SCHEMA;
-
-    static {
-        OPENRPC_SCHEMA =
-            new JsonSchemaOrReference.Reference(
-                new ReferenceObject(
-                    loadSchemaProperties()
-                        .getProperty(
-                            "schema_url",
-                            "https://github.com/open-rpc/meta-schema/releases/download/1.14.6/open-rpc-meta-schema.json"
-                        )
-                )
-            );
-    }
-
-    private static Properties loadSchemaProperties() {
-        final Properties result = new Properties();
-        try {
-            result.load(
-                OpenRpcServiceDiscoveryJsonRpcExecutionContext.class.getClassLoader()
-                    .getResourceAsStream("schema_url.properties")
-            );
-        } catch (IOException ignore) {
-            LOG.log(Level.FINE, null, ignore);
-        }
-        return result;
-    }
-
-    private final InfoObject info;
-    private final JsonSchemaOrReference openRpcSchema;
+    private final DiscoveryJsonRpcMethod discovery;
     private final List<DescribableJsonRpcMethod> methods;
 
     public OpenRpcServiceDiscoveryJsonRpcExecutionContext(final InfoObject info) {
-        this(info, OPENRPC_SCHEMA, List.of());
+        this(info, List.of());
     }
 
     private OpenRpcServiceDiscoveryJsonRpcExecutionContext(
         final InfoObject info,
-        final JsonSchemaOrReference openRpcSchema,
         final List<DescribableJsonRpcMethod> methods
     ) {
-        this.info = Objects.requireNonNull(info, "info must be non null!");
-        this.openRpcSchema = Objects.requireNonNull(openRpcSchema, "schema must be non null");
         this.methods = List.copyOf(methods);
+        this.discovery = new DiscoveryJsonRpcMethod(info, methods);
     }
 
     /**
@@ -104,32 +60,11 @@ public final class OpenRpcServiceDiscoveryJsonRpcExecutionContext
     public OpenRpcServiceDiscoveryJsonRpcExecutionContext withMethod(final DescribableJsonRpcMethod method) {
         final List<DescribableJsonRpcMethod> newMethods = new ArrayList<>(methods);
         newMethods.add(method);
-        return new OpenRpcServiceDiscoveryJsonRpcExecutionContext(info, openRpcSchema, newMethods);
+        return new OpenRpcServiceDiscoveryJsonRpcExecutionContext(discovery.asInfo(), newMethods);
     }
 
     @Override
-    public Stream<DescribableJsonRpcMethod> methods() {
-        return Stream.concat(Stream.of(createDiscoverMethod()), methods.stream());
-    }
-
-    private DescribableJsonRpcMethod createDiscoverMethod() {
-        return new DescribableJsonRpcMethod(
-            new MethodObject("rpc.discover", List.of())
-                .withDescription("Returns an OpenRPC schema as a description of this service")
-                .withResult(
-                    new MethodObjectResult.Object(new ContentDescriptorObject("OpenRPC Schema", openRpcSchema))
-                ),
-            params ->
-                new OpenrpcDocument(
-                    OpenrpcDocument.Openrpc.Openrpc_132,
-                    info,
-                    methods()
-                        .map(DescribableJsonRpcMethod::description)
-                        .map(MethodOrReference.Object::new)
-                        .map(MethodOrReference.class::cast)
-                        .toList()
-                )
-                    .printOn(new JsonObjectMedia())
-        );
+    public Stream<JsonRpcMethod> methods() {
+        return Stream.concat(Stream.of(discovery), methods.stream());
     }
 }

@@ -50,7 +50,7 @@ public final class DescribableJsonRpcMethod implements JsonRpcMethod {
         return method.execute(params);
     }
 
-    MethodObject description() {
+    MethodObject asMethodObject() {
         return description;
     }
 }
