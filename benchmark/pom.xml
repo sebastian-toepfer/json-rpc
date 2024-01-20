@@ -37,6 +37,11 @@
             <groupId>org.eclipse.parsson</groupId>
             <artifactId>parsson</artifactId>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>json-rpc-extension-openrpc</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     
     <build>
