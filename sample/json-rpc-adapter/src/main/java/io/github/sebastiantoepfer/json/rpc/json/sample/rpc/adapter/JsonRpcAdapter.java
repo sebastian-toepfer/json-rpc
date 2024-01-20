@@ -24,11 +24,18 @@
 
 package io.github.sebastiantoepfer.json.rpc.json.sample.rpc.adapter;
 
-import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcExecutionContext;
-import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcMethod;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.DescribeableJsonRpcMethod;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.OpenRpcServiceDiscoveryJsonRpcExecutionContext;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescriptorObject;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescriptorOrReference;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.InfoObject;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.JsonSchemaOrReference;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObject;
 import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcRuntime;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcRuntime;
 import io.github.sebastiantoepfer.json.rpc.sample.core.Notify;
+import io.github.sebastiantoepfer.jsonschema.JsonSchema;
+import io.github.sebastiantoepfer.jsonschema.JsonSchemas;
 import jakarta.json.JsonValue;
 import jakarta.json.spi.JsonProvider;
 import java.util.List;
@@ -36,6 +43,10 @@ import java.util.List;
 public final class JsonRpcAdapter {
 
     private static final JsonProvider JSONP = JsonProvider.provider();
+    private static final JsonSchema INT_TYPE_SCHEMA = JsonSchemas.load(
+        JSONP.createObjectBuilder().add("type", "integer").build()
+    );
+
     private final Notify notify;
 
     public JsonRpcAdapter(final Notify notify) {
@@ -44,7 +55,7 @@ public final class JsonRpcAdapter {
 
     public JsonRpcRuntime createJsonRpcRuntime() {
         return new DefaultJsonRpcRuntime(
-            new DefaultJsonRpcExecutionContext()
+            new OpenRpcServiceDiscoveryJsonRpcExecutionContext(new InfoObject("Tck App", "1.0.0"))
                 .withMethod(sum())
                 .withMethod(notifyHello())
                 .withMethod(subtract())
@@ -53,10 +64,25 @@ public final class JsonRpcAdapter {
         );
     }
 
-    private static DefaultJsonRpcMethod sum() {
-        return new DefaultJsonRpcMethod(
-            "sum",
-            List.of("first", "second", "third"),
+    private static DescribeableJsonRpcMethod sum() {
+        return new DescribeableJsonRpcMethod(
+            new MethodObject(
+                "sum",
+                List.of(
+                    new ContentDescriptorOrReference.Object(
+                        new ContentDescriptorObject("first", new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA))
+                            .withRequired(true)
+                    ),
+                    new ContentDescriptorOrReference.Object(
+                        new ContentDescriptorObject("second", new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA))
+                            .withRequired(true)
+                    ),
+                    new ContentDescriptorOrReference.Object(
+                        new ContentDescriptorObject("third", new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA))
+                            .withRequired(true)
+                    )
+                )
+            ),
             params ->
                 JSONP.createValue(
                     io.github.sebastiantoepfer.json.rpc.sample.core.Math.sum(
@@ -68,10 +94,17 @@ public final class JsonRpcAdapter {
         );
     }
 
-    private DefaultJsonRpcMethod notifyHello() {
-        return new DefaultJsonRpcMethod(
-            "notify_hello",
-            List.of("value"),
+    private DescribeableJsonRpcMethod notifyHello() {
+        return new DescribeableJsonRpcMethod(
+            new MethodObject(
+                "notify_hello",
+                List.of(
+                    new ContentDescriptorOrReference.Object(
+                        new ContentDescriptorObject("value", new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA))
+                            .withRequired(true)
+                    )
+                )
+            ),
             params -> {
                 notify.hello(params.getInt("value"));
                 return JsonValue.NULL;
@@ -79,10 +112,21 @@ public final class JsonRpcAdapter {
         );
     }
 
-    private static DefaultJsonRpcMethod subtract() {
-        return new DefaultJsonRpcMethod(
-            "subtract",
-            List.of("minuend", "subtrahend"),
+    private static DescribeableJsonRpcMethod subtract() {
+        return new DescribeableJsonRpcMethod(
+            new MethodObject(
+                "subtract",
+                List.of(
+                    new ContentDescriptorOrReference.Object(
+                        new ContentDescriptorObject("minuend", new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA))
+                            .withRequired(true)
+                    ),
+                    new ContentDescriptorOrReference.Object(
+                        new ContentDescriptorObject("subtrahend", new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA))
+                            .withRequired(true)
+                    )
+                )
+            ),
             params ->
                 JSONP.createValue(
                     io.github.sebastiantoepfer.json.rpc.sample.core.Math.subtract(
@@ -93,18 +137,32 @@ public final class JsonRpcAdapter {
         );
     }
 
-    private DefaultJsonRpcMethod getData() {
-        return new DefaultJsonRpcMethod(
-            "get_data",
-            List.of(),
+    private DescribeableJsonRpcMethod getData() {
+        return new DescribeableJsonRpcMethod(
+            new MethodObject("get_data", List.of()),
             params -> JSONP.createArrayBuilder().add(notify.name()).add(notify.currentValue()).build()
         );
     }
 
-    private DefaultJsonRpcMethod notifySum() {
-        return new DefaultJsonRpcMethod(
-            "notify_sum",
-            List.of("first", "second", "third"),
+    private DescribeableJsonRpcMethod notifySum() {
+        return new DescribeableJsonRpcMethod(
+            new MethodObject(
+                "notify_sum",
+                List.of(
+                    new ContentDescriptorOrReference.Object(
+                        new ContentDescriptorObject("first", new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA))
+                            .withRequired(true)
+                    ),
+                    new ContentDescriptorOrReference.Object(
+                        new ContentDescriptorObject("second", new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA))
+                            .withRequired(true)
+                    ),
+                    new ContentDescriptorOrReference.Object(
+                        new ContentDescriptorObject("third", new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA))
+                            .withRequired(true)
+                    )
+                )
+            ),
             params -> {
                 notify.hello(
                     io.github.sebastiantoepfer.json.rpc.sample.core.Math.sum(

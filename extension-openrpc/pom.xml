@@ -36,6 +36,14 @@
             <groupId>io.github.sebastian-toepfer.ddd</groupId>
             <artifactId>media-json-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.github.sebastian-toepfer.json-schema</groupId>
+            <artifactId>json-schema-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.sebastian-toepfer.json-schema</groupId>
+            <artifactId>json-schema-core</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -86,7 +94,7 @@
                         <configuration>
                             <schemaUrl>${openrpc.schema.url}</schemaUrl>
                             <packageName>io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec</packageName>
-                            <jsonSchemaClassName>io.github.sebastiantoepfer.json.rpc.extension.openrpc.JsonSchemaObject</jsonSchemaClassName>
+                            <jsonSchemaClassName>io.github.sebastiantoepfer.jsonschema.JsonSchema</jsonSchemaClassName>
                         </configuration>
                     </execution>
                 </executions>

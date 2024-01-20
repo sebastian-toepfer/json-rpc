@@ -23,38 +23,19 @@
  */
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
-import io.github.sebastiantoepfer.ddd.common.Media;
-import io.github.sebastiantoepfer.ddd.common.Printable;
-import io.github.sebastiantoepfer.ddd.media.json.JsonObjectPrintable;
-import io.github.sebastiantoepfer.ddd.printables.core.CompositePrintable;
-import io.github.sebastiantoepfer.ddd.printables.core.NamedStringPrintable;
-import jakarta.json.JsonObject;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
-/**
- * not a real json schema
- */
-public final class JsonSchemaObject implements Printable {
+import org.junit.jupiter.api.Test;
 
-    private final CompositePrintable values;
+class MethodMediaTest {
 
-    public JsonSchemaObject(final JsonObject json) {
-        this(new CompositePrintable().withPrintable(new JsonObjectPrintable(json)));
-    }
-
-    public JsonSchemaObject() {
-        this(new CompositePrintable());
-    }
-
-    private JsonSchemaObject(final CompositePrintable values) {
-        this.values = values;
-    }
-
-    public JsonSchemaObject withType(final String type) {
-        return new JsonSchemaObject(values.withPrintable(new NamedStringPrintable("type", type)));
-    }
-
-    @Override
-    public <T extends Media<T>> T printOn(final T media) {
-        return values.printOn(media);
+    @Test
+    void makePiTestHappy() {
+        final MethodMedia media = new MethodMedia();
+        assertThat(media.withValue("test", 1), is(media));
+        assertThat(media.withValue("test", 1L), is(media));
+        assertThat(media.withValue("test", 1.0), is(media));
+        assertThat(media.withValue("test", true), is(media));
     }
 }

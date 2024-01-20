@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2023 sebastian.
+ * Copyright 2024 sebastian.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,54 +26,19 @@ package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescriptorObject;
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescriptorOrReference;
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.JsonSchemaOrReference;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObject;
-import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcMethod;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethod;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethodFunction;
-import jakarta.json.Json;
-import jakarta.json.JsonArray;
 import java.util.List;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 class DescribeableJsonRpcMethodTest {
 
     @Test
-    void should_delegate_has_names() {
-        final JsonRpcMethod jsonRpcMethod = new DescribeableJsonRpcMethod(
-            new MethodObject("list_pets", List.of()),
-            params -> {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-        );
-        //pitest :(
-        assertThat(jsonRpcMethod.hasName("get_pet"), is(false));
-        assertThat(jsonRpcMethod.hasName("list_pets"), is(true));
-    }
-
-    @Test
-    void should_call_method_with_parameters() throws Exception {
-        final JsonArray parameters = Json.createArrayBuilder().add(2).build();
-        final JsonRpcMethodFunction function = params -> params;
+    void should_return_his_description() {
+        final MethodObject descritpption = new MethodObject("test", List.of());
         assertThat(
-            new DescribeableJsonRpcMethod(
-                new MethodObject(
-                    "list_pets",
-                    List.of(
-                        new ContentDescriptorOrReference.Object(
-                            new ContentDescriptorObject(
-                                "limit",
-                                new JsonSchemaOrReference.Object(new JsonSchemaObject())
-                            )
-                        )
-                    )
-                ),
-                function
-            )
-                .execute(parameters),
-            is(new DefaultJsonRpcMethod("list_pets", List.of("limit"), function).execute(parameters))
+            new DescribeableJsonRpcMethod(descritpption, p -> p).description(),
+            is(Matchers.sameInstance(descritpption))
         );
     }
 }

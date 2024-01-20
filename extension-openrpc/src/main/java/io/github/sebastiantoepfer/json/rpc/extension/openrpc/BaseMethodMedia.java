@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2023 sebastian.
+ * Copyright 2024 sebastian.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,39 +23,27 @@
  */
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObject;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethod;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethodFunction;
-import jakarta.json.JsonValue;
+import io.github.sebastiantoepfer.ddd.media.core.BaseMedia;
 
-/**
- * @deprecated the class has a spelling error. it is replaced by {@code DescribableJsonRpcMethod}
- */
-@Deprecated(since = "0.7.0", forRemoval = true)
-public final class DescribeableJsonRpcMethod implements JsonRpcMethod {
-
-    private final DescribableJsonRpcMethod delegate;
-
-    public DescribeableJsonRpcMethod(final MethodObject description, final JsonRpcMethodFunction function) {
-        this.delegate = new DescribableJsonRpcMethod(description, function);
+//how to fake for pitest :)
+interface BaseMethodMedia<T extends BaseMethodMedia<T>> extends BaseMedia<T> {
+    @Override
+    default T withValue(final String name, final int value) {
+        return (T) this;
     }
 
     @Override
-    public boolean hasName(final String name) {
-        return delegate.hasName(name);
+    default T withValue(final String name, final long value) {
+        return (T) this;
     }
 
     @Override
-    public JsonValue execute(final JsonValue params) throws JsonRpcExecutionExecption {
-        return delegate.execute(params);
+    default T withValue(final String name, final double value) {
+        return (T) this;
     }
 
-    MethodObject description() {
-        return delegate.asMethodObject();
-    }
-
-    DescribableJsonRpcMethod asCorrectlyWritten() {
-        return delegate;
+    @Override
+    default T withValue(final String name, final boolean value) {
+        return (T) this;
     }
 }
