@@ -104,7 +104,7 @@ class OpenRpcServiceDiscoveryJsonRpcExecutionContextTest {
                     executeDiscover(
                         new OpenRpcServiceDiscoveryJsonRpcExecutionContext(new InfoObject("test app", "1.0.0"))
                             .withMethod(
-                                new DescribeableJsonRpcMethod(
+                                new DescribableJsonRpcMethod(
                                     new MethodObject(
                                         "list_pets",
                                         List.of(
@@ -199,7 +199,7 @@ class OpenRpcServiceDiscoveryJsonRpcExecutionContextTest {
         new DefaultJsonRpcRuntime(
             new OpenRpcServiceDiscoveryJsonRpcExecutionContext(new InfoObject("test app", "1.0.0"))
                 .withMethod(
-                    new DescribeableJsonRpcMethod(
+                    new DescribableJsonRpcMethod(
                         new MethodObject(
                             "list_pets",
                             List.of(

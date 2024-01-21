@@ -23,7 +23,7 @@
  */
 package io.github.sebastiantoepfer.json.rpc.benchmark;
 
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.DescribeableJsonRpcMethod;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.DescribableJsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.OpenRpcServiceDiscoveryJsonRpcExecutionContext;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescriptorObject;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescriptorOrReference;
@@ -65,7 +65,7 @@ public class OpenRpcJsonRpcRuntimeBenchmarks {
                 new DefaultJsonRpcRuntime(
                     new OpenRpcServiceDiscoveryJsonRpcExecutionContext(new InfoObject("Benchmark App", "1.0.0"))
                         .withMethod(
-                            new DescribeableJsonRpcMethod(
+                            new DescribableJsonRpcMethod(
                                 new MethodObject(
                                     "subtract",
                                     List.of(
