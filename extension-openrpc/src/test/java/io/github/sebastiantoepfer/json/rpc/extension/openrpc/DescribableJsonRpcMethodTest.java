@@ -48,7 +48,7 @@ class DescribableJsonRpcMethodTest {
 
     @Test
     void should_delegate_has_names() {
-        final JsonRpcMethod jsonRpcMethod = new DescribeableJsonRpcMethod(
+        final JsonRpcMethod jsonRpcMethod = new DescribableJsonRpcMethod(
             new MethodObject("list_pets", List.of()),
             params -> {
                 throw new UnsupportedOperationException("Not supported yet.");
@@ -64,7 +64,7 @@ class DescribableJsonRpcMethodTest {
         final JsonArray parameters = Json.createArrayBuilder().add(2).build();
         final JsonRpcMethodFunction function = params -> params;
         assertThat(
-            new DescribeableJsonRpcMethod(
+            new DescribableJsonRpcMethod(
                 new MethodObject(
                     "list_pets",
                     List.of(
@@ -90,12 +90,12 @@ class DescribableJsonRpcMethodTest {
             List.of(new ContentDescriptorOrReference.Reference(new ReferenceObject("test")))
         );
 
-        assertThrows(IllegalArgumentException.class, () -> new DescribeableJsonRpcMethod(desciption, a -> a));
+        assertThrows(IllegalArgumentException.class, () -> new DescribableJsonRpcMethod(desciption, a -> a));
     }
 
     @Test
     void should_not_callable_by_position_when_using_byName_paramstucture() {
-        final DescribeableJsonRpcMethod m = new DescribeableJsonRpcMethod(
+        final DescribableJsonRpcMethod m = new DescribableJsonRpcMethod(
             new MethodObject(
                 "list_pets",
                 List.of(
@@ -117,7 +117,7 @@ class DescribableJsonRpcMethodTest {
 
     @Test
     void should_not_callable_by_name_when_using_byposition_paramstucture() {
-        final DescribeableJsonRpcMethod m = new DescribeableJsonRpcMethod(
+        final DescribableJsonRpcMethod m = new DescribableJsonRpcMethod(
             new MethodObject(
                 "list_pets",
                 List.of(

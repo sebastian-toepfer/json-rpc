@@ -311,7 +311,7 @@ create the method context (used instead of DefaultJsonRpcExecutionContext)
 ```java
 new OpenRpcServiceDiscoveryJsonRpcExecutionContext(new InfoObject("test app", "1.0.0"))
     .withMethod(
-        new DescribeableJsonRpcMethod(
+        new DescribableJsonRpcMethod(
             new MethodObject(
                 "list_pets",
                 List.of(
@@ -319,7 +319,7 @@ new OpenRpcServiceDiscoveryJsonRpcExecutionContext(new InfoObject("test app", "1
                         new ContentDescriptorObject(
                             "limit",
                             new JsonSchemaOrReference.Object(
-                                Json.createObjectBuilder().add("type", "integer").build()
+                                JsonSchemas.load(Json.createObjectBuilder().add("type", "integer").build())
                             )
                         )
                             .withDescription("How many items to return at one time (max 100)")
@@ -352,7 +352,8 @@ e.g. a JsonSchema can be set via Reference or SchemaInstance:
   or
 `new JsonSchemaOrReference.Object(new JsonSchemaObject())`.
 
-As of version 0.7.0, it is no longer possible to describe method parameters via a reference or to use a reference as a parameter.
+As of version 0.7.0, it is no longer possible to describe method parameters via a reference or to use a reference as a
+parameter.
 
 after deployment the avalible methods can be requested via:
 ```json

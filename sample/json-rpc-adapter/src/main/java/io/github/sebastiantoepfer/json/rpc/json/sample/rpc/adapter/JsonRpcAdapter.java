@@ -24,7 +24,7 @@
 
 package io.github.sebastiantoepfer.json.rpc.json.sample.rpc.adapter;
 
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.DescribeableJsonRpcMethod;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.DescribableJsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.OpenRpcServiceDiscoveryJsonRpcExecutionContext;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescriptorObject;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescriptorOrReference;
@@ -64,8 +64,8 @@ public final class JsonRpcAdapter {
         );
     }
 
-    private static DescribeableJsonRpcMethod sum() {
-        return new DescribeableJsonRpcMethod(
+    private static DescribableJsonRpcMethod sum() {
+        return new DescribableJsonRpcMethod(
             new MethodObject(
                 "sum",
                 List.of(
@@ -94,8 +94,8 @@ public final class JsonRpcAdapter {
         );
     }
 
-    private DescribeableJsonRpcMethod notifyHello() {
-        return new DescribeableJsonRpcMethod(
+    private DescribableJsonRpcMethod notifyHello() {
+        return new DescribableJsonRpcMethod(
             new MethodObject(
                 "notify_hello",
                 List.of(
@@ -112,8 +112,8 @@ public final class JsonRpcAdapter {
         );
     }
 
-    private static DescribeableJsonRpcMethod subtract() {
-        return new DescribeableJsonRpcMethod(
+    private static DescribableJsonRpcMethod subtract() {
+        return new DescribableJsonRpcMethod(
             new MethodObject(
                 "subtract",
                 List.of(
@@ -137,15 +137,15 @@ public final class JsonRpcAdapter {
         );
     }
 
-    private DescribeableJsonRpcMethod getData() {
-        return new DescribeableJsonRpcMethod(
+    private DescribableJsonRpcMethod getData() {
+        return new DescribableJsonRpcMethod(
             new MethodObject("get_data", List.of()),
             params -> JSONP.createArrayBuilder().add(notify.name()).add(notify.currentValue()).build()
         );
     }
 
-    private DescribeableJsonRpcMethod notifySum() {
-        return new DescribeableJsonRpcMethod(
+    private DescribableJsonRpcMethod notifySum() {
+        return new DescribableJsonRpcMethod(
             new MethodObject(
                 "notify_sum",
                 List.of(

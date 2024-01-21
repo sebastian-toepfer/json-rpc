@@ -48,14 +48,6 @@ public final class OpenRpcServiceDiscoveryJsonRpcExecutionContext
         this.discovery = new DiscoveryJsonRpcMethod(info, methods);
     }
 
-    /**
-     * @deprecated use {@code withMethod(final DescribableJsonRpcMethod method)} instead.
-     */
-    @Deprecated(since = "0.7.0", forRemoval = true)
-    public OpenRpcServiceDiscoveryJsonRpcExecutionContext withMethod(final DescribeableJsonRpcMethod method) {
-        return withMethod(method.asCorrectlyWritten());
-    }
-
     @Override
     public OpenRpcServiceDiscoveryJsonRpcExecutionContext withMethod(final DescribableJsonRpcMethod method) {
         final List<DescribableJsonRpcMethod> newMethods = new ArrayList<>(methods);
