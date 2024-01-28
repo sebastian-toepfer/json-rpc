@@ -41,6 +41,11 @@ final class WrappedJsonRpcMethod implements JsonRpcMethod {
     }
 
     @Override
+    public String name() {
+        return delegate.name();
+    }
+
+    @Override
     public JsonValue execute(final JsonValue params) throws JsonRpcExecutionExecption {
         LOG.entering(DefaultJsonRpcMethod.class.getName(), "execute", params);
         final JsonValue result;

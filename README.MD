@@ -301,9 +301,9 @@ a dynamic way of describing the available methods. for more information see [ope
 Add maven dependency
 ```xml
 <dependency>
-    <groupId>io.github.sebastian-toepfer.json.rpc</groupId>
+    <groupId>io.github.sebastian-toepfer.json.rpc.extension</groupId>
     <artifactId>json-rpc-extension-openrpc</artifactId>
-    <version>0.6.0</version>
+    <version>0.7.0</version>
 </dependency>
 ```
 
@@ -362,4 +362,35 @@ after deployment the avalible methods can be requested via:
   "method": "rpc.discover",
   "id": "1"
 }
+```
+
+### Micrometer
+
+Add maven dependency
+```xml
+<dependency>
+    <groupId>io.github.sebastian-toepfer.json.rpc.extension</groupId>
+    <artifactId>json-rpc-extension-micrometer</artifactId>
+    <version>0.7.0</version>
+</dependency>
+```
+
+create the method context, which wrapped any other context
+```java
+new ObservableJsonRpcExecutionContext<>(
+    registry,                              //e.g. new SimpleMeterRegistry()
+    new DefaultJsonRpcExecutionContext(),  //or any other context
+    DefaultJsonRpcMethodMetrics.CALLCOUNT,
+    DefaultJsonRpcMethodMetrics.CALLTIME
+)
+```
+or to prefix any metric
+```java
+new ObservableJsonRpcExecutionContext<>(
+    registry,                              //e.g. new SimpleMeterRegistry()
+    new DefaultJsonRpcExecutionContext(),  //or any other context
+    "prefix",
+    DefaultJsonRpcMethodMetrics.CALLCOUNT,
+    DefaultJsonRpcMethodMetrics.CALLTIME
+)
 ```

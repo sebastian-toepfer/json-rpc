@@ -58,6 +58,11 @@ final class ProtectedJsonRpcMethod implements JsonRpcMethod {
     }
 
     @Override
+    public String name() {
+        return name;
+    }
+
+    @Override
     public JsonValue execute(final JsonValue params) throws JsonRpcExecutionExecption {
         if (params != null && !parametersRule().isValid(params)) {
             throw new JsonRpcExecutionExecption(-1, "method must be called with " + paramStructure + "!");

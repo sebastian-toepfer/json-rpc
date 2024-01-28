@@ -21,41 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
+package io.github.sebastiantoepfer.json.rpc.extension.micrometer;
 
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObject;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethod;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethodFunction;
-import jakarta.json.JsonValue;
-import java.util.Objects;
+import io.micrometer.core.instrument.MeterRegistry;
 
-public final class DescribableJsonRpcMethod implements JsonRpcMethod {
-
-    private final JsonRpcMethod method;
-    private final MethodObject description;
-
-    public DescribableJsonRpcMethod(final MethodObject description, final JsonRpcMethodFunction function) {
-        this.description = Objects.requireNonNull(description);
-        this.method = description.printOn(new MethodMedia()).createMethodWith(function);
-    }
-
-    @Override
-    public boolean hasName(final String name) {
-        return method.hasName(name);
-    }
-
-    @Override
-    public String name() {
-        return method.name();
-    }
-
-    @Override
-    public JsonValue execute(final JsonValue params) throws JsonRpcExecutionExecption {
-        return method.execute(params);
-    }
-
-    MethodObject asMethodObject() {
-        return description;
-    }
+public interface JsonRpcMethodMetric {
+    JsonRpcMethod observe(MeterRegistry registry, JsonRpcMethod methodToObserve);
 }

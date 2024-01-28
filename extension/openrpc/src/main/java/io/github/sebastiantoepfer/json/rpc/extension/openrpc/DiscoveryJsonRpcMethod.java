@@ -95,6 +95,11 @@ class DiscoveryJsonRpcMethod implements JsonRpcMethod {
     }
 
     @Override
+    public String name() {
+        return methodName;
+    }
+
+    @Override
     public JsonValue execute(final JsonValue params) throws JsonRpcExecutionExecption {
         return Stream
             .concat(

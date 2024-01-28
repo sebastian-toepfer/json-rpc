@@ -47,14 +47,16 @@ import org.junit.jupiter.api.Test;
 class DescribableJsonRpcMethodTest {
 
     @Test
-    void should_delegate_has_names() {
+    void should_know_his_name() {
         final JsonRpcMethod jsonRpcMethod = new DescribableJsonRpcMethod(
             new MethodObject("list_pets", List.of()),
             params -> {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
         );
+
         //pitest :(
+        assertThat(jsonRpcMethod.name(), is("list_pets"));
         assertThat(jsonRpcMethod.hasName("get_pet"), is(false));
         assertThat(jsonRpcMethod.hasName("list_pets"), is(true));
     }

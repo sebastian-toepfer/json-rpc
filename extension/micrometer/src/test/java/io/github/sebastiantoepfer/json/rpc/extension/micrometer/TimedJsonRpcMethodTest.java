@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2023 sebastian.
+ * Copyright 2024 sebastian.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,50 +21,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.runtime;
+package io.github.sebastiantoepfer.json.rpc.extension.micrometer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcMethod;
+import io.micrometer.core.instrument.Timer;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import jakarta.json.Json;
 import jakarta.json.JsonValue;
 import java.util.List;
-import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
-class DefaultJsonRpcMethodTest {
+class TimedJsonRpcMethodTest {
 
     @Test
-    void equalsContract() {
-        EqualsVerifier.simple().forClass(DefaultJsonRpcMethod.class).withOnlyTheseFields("name").verify();
+    public void should_messure_his_call_time() throws Exception {
+        final Timer time = new SimpleMeterRegistry().timer("test");
+        new TimedJsonRpcMethod(time, new DefaultJsonRpcMethod("list", List.of(), p -> p))
+            .execute(JsonValue.EMPTY_JSON_OBJECT);
+        assertThat(time.count(), is(1L));
     }
 
     @Test
-    void should_be_callable_with_null_as_params() throws Exception {
+    void should_call_decored_method() throws Exception {
         assertThat(
-            new DefaultJsonRpcMethod("test", List.of(), params -> Json.createValue("hello")).execute((JsonValue) null),
-            is(Json.createValue("hello"))
-        );
-    }
-
-    @Test
-    void should_be_callable_without_params() throws Exception {
-        assertThat(
-            new DefaultJsonRpcMethod("test", List.of(), params -> Json.createValue("hello")).execute(JsonValue.NULL),
-            is(Json.createValue("hello"))
+            new TimedJsonRpcMethod(
+                new SimpleMeterRegistry().timer("list"),
+                new DefaultJsonRpcMethod("test", List.of(), p -> p)
+            )
+                .execute(Json.createObjectBuilder().add("name", "jane").build()),
+            is(Json.createObjectBuilder().add("name", "jane").build())
         );
     }
 
     @Test
     void should_know_his_name() {
-        final DefaultJsonRpcMethod method = new DefaultJsonRpcMethod(
-            "test",
-            List.of(),
-            params -> Json.createValue("hello")
+        final TimedJsonRpcMethod method = new TimedJsonRpcMethod(
+            new SimpleMeterRegistry().timer("list"),
+            new DefaultJsonRpcMethod("test", List.of(), p -> p)
         );
 
-        assertThat(method.name(), is("test"));
         assertThat(method.hasName("test"), is(true));
-        assertThat(method.hasName("function"), is(false));
+        assertThat(method.hasName("list"), is(false));
+        assertThat(method.name(), is("test"));
     }
 }
