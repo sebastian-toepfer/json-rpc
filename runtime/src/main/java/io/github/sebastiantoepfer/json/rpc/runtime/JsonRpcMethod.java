@@ -28,5 +28,7 @@ import jakarta.json.JsonValue;
 public interface JsonRpcMethod {
     boolean hasName(String name);
 
+    String name();
+
     JsonValue execute(JsonValue params) throws JsonRpcExecutionExecption;
 }

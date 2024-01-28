@@ -23,39 +23,21 @@
  */
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObject;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethod;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethodFunction;
-import jakarta.json.JsonValue;
-import java.util.Objects;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
-public final class DescribableJsonRpcMethod implements JsonRpcMethod {
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.InfoObject;
+import java.util.List;
+import org.junit.jupiter.api.Test;
 
-    private final JsonRpcMethod method;
-    private final MethodObject description;
+class DiscoveryJsonRpcMethodTest {
 
-    public DescribableJsonRpcMethod(final MethodObject description, final JsonRpcMethodFunction function) {
-        this.description = Objects.requireNonNull(description);
-        this.method = description.printOn(new MethodMedia()).createMethodWith(function);
-    }
+    @Test
+    void should_know_his_name() {
+        final DiscoveryJsonRpcMethod m = new DiscoveryJsonRpcMethod(new InfoObject("test", "1.0.0"), List.of());
 
-    @Override
-    public boolean hasName(final String name) {
-        return method.hasName(name);
-    }
-
-    @Override
-    public String name() {
-        return method.name();
-    }
-
-    @Override
-    public JsonValue execute(final JsonValue params) throws JsonRpcExecutionExecption {
-        return method.execute(params);
-    }
-
-    MethodObject asMethodObject() {
-        return description;
+        assertThat(m.name(), is("rpc.discover"));
+        assertThat(m.hasName("rpc.discover"), is(true));
+        assertThat(m.hasName("list"), is(false));
     }
 }

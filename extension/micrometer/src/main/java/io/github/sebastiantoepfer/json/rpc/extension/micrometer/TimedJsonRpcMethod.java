@@ -21,41 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
+package io.github.sebastiantoepfer.json.rpc.extension.micrometer;
 
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObject;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethod;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethodFunction;
+import io.micrometer.core.instrument.Timer;
 import jakarta.json.JsonValue;
 import java.util.Objects;
 
-public final class DescribableJsonRpcMethod implements JsonRpcMethod {
+final class TimedJsonRpcMethod implements JsonRpcMethod {
 
-    private final JsonRpcMethod method;
-    private final MethodObject description;
+    private final Timer timer;
+    private final JsonRpcMethod methodToObserve;
 
-    public DescribableJsonRpcMethod(final MethodObject description, final JsonRpcMethodFunction function) {
-        this.description = Objects.requireNonNull(description);
-        this.method = description.printOn(new MethodMedia()).createMethodWith(function);
+    public TimedJsonRpcMethod(final Timer timer, final JsonRpcMethod methodToObserve) {
+        this.timer = Objects.requireNonNull(timer);
+        this.methodToObserve = Objects.requireNonNull(methodToObserve);
     }
 
     @Override
     public boolean hasName(final String name) {
-        return method.hasName(name);
+        return methodToObserve.hasName(name);
     }
 
     @Override
     public String name() {
-        return method.name();
+        return methodToObserve.name();
     }
 
     @Override
     public JsonValue execute(final JsonValue params) throws JsonRpcExecutionExecption {
-        return method.execute(params);
-    }
-
-    MethodObject asMethodObject() {
-        return description;
+        try {
+            return timer.recordCallable(() -> methodToObserve.execute(params));
+        } catch (JsonRpcExecutionExecption e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new CanNotTakeMetric(ex);
+        }
     }
 }

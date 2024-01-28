@@ -56,6 +56,11 @@ public final class DefaultJsonRpcMethod implements JsonRpcMethod {
     }
 
     @Override
+    public String name() {
+        return name;
+    }
+
+    @Override
     public final JsonValue execute(final JsonValue params) throws JsonRpcExecutionExecption {
         LOG.entering(DefaultJsonRpcMethod.class.getName(), "execute", params);
         final JsonValue result;

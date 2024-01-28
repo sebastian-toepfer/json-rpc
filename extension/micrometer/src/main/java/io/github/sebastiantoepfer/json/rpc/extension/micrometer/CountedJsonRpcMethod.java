@@ -21,41 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
+package io.github.sebastiantoepfer.json.rpc.extension.micrometer;
 
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObject;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethod;
-import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethodFunction;
+import io.micrometer.core.instrument.Counter;
 import jakarta.json.JsonValue;
 import java.util.Objects;
 
-public final class DescribableJsonRpcMethod implements JsonRpcMethod {
+final class CountedJsonRpcMethod implements JsonRpcMethod {
 
-    private final JsonRpcMethod method;
-    private final MethodObject description;
+    private final Counter counter;
+    private final JsonRpcMethod methodToObserve;
 
-    public DescribableJsonRpcMethod(final MethodObject description, final JsonRpcMethodFunction function) {
-        this.description = Objects.requireNonNull(description);
-        this.method = description.printOn(new MethodMedia()).createMethodWith(function);
+    CountedJsonRpcMethod(final Counter counter, final JsonRpcMethod methodToObserve) {
+        this.counter = Objects.requireNonNull(counter);
+        this.methodToObserve = Objects.requireNonNull(methodToObserve);
     }
 
     @Override
     public boolean hasName(final String name) {
-        return method.hasName(name);
+        return methodToObserve.hasName(name);
     }
 
     @Override
     public String name() {
-        return method.name();
+        return methodToObserve.name();
     }
 
     @Override
     public JsonValue execute(final JsonValue params) throws JsonRpcExecutionExecption {
-        return method.execute(params);
-    }
-
-    MethodObject asMethodObject() {
-        return description;
+        counter.increment();
+        return methodToObserve.execute(params);
     }
 }

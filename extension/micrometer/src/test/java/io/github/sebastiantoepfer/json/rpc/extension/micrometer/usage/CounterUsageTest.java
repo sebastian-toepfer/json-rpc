@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2023 sebastian.
+ * Copyright 2024 sebastian.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,38 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.runtime;
+package io.github.sebastiantoepfer.json.rpc.extension.micrometer.usage;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 
-import java.util.List;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.jupiter.api.Test;
 
-class WrappedJsonRpcMethodTest {
+/**
+ * Test to learn how a counter works and ensure that the knowledge is still valid.
+ */
+class CounterUsageTest {
 
     @Test
-    void should_return_false_when_delegate_has_different_name() {
-        assertThat(new WrappedJsonRpcMethod(createMethodWithName("test")).hasName("list"), is(false));
-    }
+    void should_count_the_calls() throws Exception {
+        final MeterRegistry registry = new SimpleMeterRegistry();
 
-    @Test
-    void should_return_true_when_delegate_has_different_name() {
-        assertThat(new WrappedJsonRpcMethod(createMethodWithName("test")).hasName("test"), is(true));
-    }
-
-    @Test
-    void should_return_name_of_delegate() {
-        assertThat(new WrappedJsonRpcMethod(createMethodWithName("test")).name(), is("test"));
-    }
-
-    private static DefaultJsonRpcMethod createMethodWithName(final String name) {
-        return new DefaultJsonRpcMethod(
-            name,
-            List.of(),
-            params -> {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-        );
+        registry.counter("test").increment();
+        assertThat(registry.counter("test").count(), is(1.0));
     }
 }

@@ -18,6 +18,7 @@
 
     <modules>
         <module>openrpc</module>
+        <module>micrometer</module>
     </modules>
 
 </project>

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2023 sebastian.
+ * Copyright 2024 sebastian.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,38 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.runtime;
+package io.github.sebastiantoepfer.json.rpc.extension.micrometer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import io.github.sebastiantoepfer.json.rpc.runtime.DefaultJsonRpcMethod;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
+import jakarta.json.JsonValue;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-class WrappedJsonRpcMethodTest {
+class JsonRpcMethodMetricsTest {
 
     @Test
-    void should_return_false_when_delegate_has_different_name() {
-        assertThat(new WrappedJsonRpcMethod(createMethodWithName("test")).hasName("list"), is(false));
-    }
+    void should_create_method_with_metrics() throws Exception {
+        final MeterRegistry meters = new SimpleMeterRegistry();
+        new JsonRpcMethodMetrics(
+            meters,
+            List.of(DefaultJsonRpcMethodMetrics.CALLCOUNT, DefaultJsonRpcMethodMetrics.CALLTIME),
+            ""
+        )
+            .observe(new DefaultJsonRpcMethod("list", List.of(), p -> p))
+            .execute(JsonValue.EMPTY_JSON_OBJECT);
 
-    @Test
-    void should_return_true_when_delegate_has_different_name() {
-        assertThat(new WrappedJsonRpcMethod(createMethodWithName("test")).hasName("test"), is(true));
-    }
-
-    @Test
-    void should_return_name_of_delegate() {
-        assertThat(new WrappedJsonRpcMethod(createMethodWithName("test")).name(), is("test"));
-    }
-
-    private static DefaultJsonRpcMethod createMethodWithName(final String name) {
-        return new DefaultJsonRpcMethod(
-            name,
-            List.of(),
-            params -> {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-        );
+        assertThat(meters.timer("list.calltime").count(), is(1L));
+        assertThat(meters.counter("list.callcount").count(), is(1.0));
     }
 }
