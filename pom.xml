@@ -62,6 +62,7 @@
     <modules>
         <module>runtime</module>
         <module>boundary</module>
+        <module>extension</module>
         <module>extension-openrpc</module>
         <module>spring-integration-autoconfigure</module>
         <module>spring-integration-starter</module>

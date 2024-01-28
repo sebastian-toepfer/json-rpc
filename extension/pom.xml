@@ -11,12 +11,13 @@
         <version>0.7.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>json-rpc-extension-openrpc</artifactId>
-    <name>JSON RPC :: extension :: openrpc (deprecated)</name>
+    <groupId>io.github.sebastian-toepfer.json.rpc.extension</groupId>
+    <artifactId>json-rpc-extension</artifactId>
+    <name>JSON RPC :: extension</name>
+    <packaging>pom</packaging>
 
-    <distributionManagement>
-        <relocation>
-            <groupId>io.github.sebastian-toepfer.json.rpc.extension</groupId>
-        </relocation>
-    </distributionManagement>
+    <modules>
+        <module>openrpc</module>
+    </modules>
+
 </project>
