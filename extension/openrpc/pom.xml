@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.github.sebastian-toepfer.json.rpc.extension</groupId>
+        <artifactId>json-rpc-extension</artifactId>
+        <version>0.7.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>json-rpc-extension-openrpc</artifactId>
+    <name>JSON RPC :: extension :: openrpc</name>
+
+    <properties>
+        <openrpc.schema.url>https://github.com/open-rpc/meta-schema/releases/download/1.14.6/open-rpc-meta-schema.json</openrpc.schema.url>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.sebastian-toepfer.json.rpc</groupId>
+            <artifactId>json-rpc-runtime</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.sebastian-toepfer.ddd</groupId>
+            <artifactId>media-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.sebastian-toepfer.ddd</groupId>
+            <artifactId>printables-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.sebastian-toepfer.ddd</groupId>
+            <artifactId>media-json-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.sebastian-toepfer.json-schema</groupId>
+            <artifactId>json-schema-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.sebastian-toepfer.json-schema</groupId>
+            <artifactId>json-schema-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.parsson</groupId>
+            <artifactId>parsson</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.json</groupId>
+            <artifactId>jakarta.json-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>io.github.sebastian-toepfer.json.rpc</groupId>
+                <artifactId>json-printable-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>generate</id>
+                        <configuration>
+                            <schemaUrl>${openrpc.schema.url}</schemaUrl>
+                            <packageName>io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec</packageName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <openrpc.schema.url>${openrpc.schema.url}</openrpc.schema.url>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <configuration>
+                    <excludedClasses>
+                        <excludedClass>io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.*</excludedClass>
+                    </excludedClasses>
+                    <jvmArgs>
+                        <jvmArg>-Dopenrpc.schema.url=${openrpc.schema.url}</jvmArg>
+                    </jvmArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

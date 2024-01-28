@@ -25,7 +25,7 @@
         </dependency>
 
         <dependency>
-            <groupId>io.github.sebastian-toepfer.json.rpc</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>json-rpc-runtime</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -38,7 +38,7 @@
             <artifactId>parsson</artifactId>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>io.github.sebastian-toepfer.json.rpc.extension</groupId>
             <artifactId>json-rpc-extension-openrpc</artifactId>
             <version>${project.version}</version>
         </dependency>
