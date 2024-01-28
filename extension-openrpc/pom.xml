@@ -85,16 +85,12 @@
             <plugin>
                 <groupId>io.github.sebastian-toepfer.json.rpc</groupId>
                 <artifactId>json-printable-maven-plugin</artifactId>
-                <version>0.1.3</version>
                 <executions>
                     <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
+                        <id>generate</id>
                         <configuration>
                             <schemaUrl>${openrpc.schema.url}</schemaUrl>
                             <packageName>io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec</packageName>
-                            <jsonSchemaClassName>io.github.sebastiantoepfer.jsonschema.JsonSchema</jsonSchemaClassName>
                         </configuration>
                     </execution>
                 </executions>

@@ -211,6 +211,20 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>io.github.sebastian-toepfer.json.rpc</groupId>
+                    <artifactId>json-printable-maven-plugin</artifactId>
+                    <version>0.2.1</version>
+                    <executions>
+                        <execution>
+                            <id>generate</id>
+                            <goals>
+                                <goal>generate</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-war-plugin</artifactId>
                     <version>3.4.0</version>
