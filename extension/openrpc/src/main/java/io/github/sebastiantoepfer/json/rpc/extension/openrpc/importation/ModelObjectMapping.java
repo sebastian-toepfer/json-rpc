@@ -23,29 +23,6 @@
  */
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc.importation;
 
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObject;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonValue;
-import java.util.Objects;
-
-final class JsonMethodObject {
-
-    private final JsonObject methodObject;
-
-    JsonMethodObject(final JsonObject methodObject) {
-        this.methodObject = Objects.requireNonNull(methodObject);
-    }
-
-    public MethodObject asMethodObject() {
-        return new MethodObject(
-            methodObject.getString("name"),
-            methodObject
-                .getJsonArray("params")
-                .stream()
-                .map(JsonValue::asJsonObject)
-                .map(obj -> new JsonContentDescriptorOrReference(obj))
-                .map(JsonContentDescriptorOrReference::asContentDescriptorOrReference)
-                .toList()
-        );
-    }
+interface ModelObjectMapping<T> {
+    T asModelObject();
 }

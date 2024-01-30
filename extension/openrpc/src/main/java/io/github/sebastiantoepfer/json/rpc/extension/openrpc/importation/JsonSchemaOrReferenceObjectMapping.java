@@ -23,34 +23,27 @@
  */
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc.importation;
 
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescriptorObject;
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescriptorOrReference;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.JsonSchemaOrReference;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ReferenceObject;
 import io.github.sebastiantoepfer.jsonschema.JsonSchemas;
 import jakarta.json.JsonObject;
 import java.util.Objects;
 
-final class JsonContentDescriptorOrReference {
+class JsonSchemaOrReferenceObjectMapping implements ModelObjectMapping<JsonSchemaOrReference> {
 
-    private final JsonObject contentDesc;
+    private final JsonObject jsonObject;
 
-    public JsonContentDescriptorOrReference(final JsonObject contentDesc) {
-        this.contentDesc = Objects.requireNonNull(contentDesc);
+    JsonSchemaOrReferenceObjectMapping(final JsonObject jsonObject) {
+        this.jsonObject = Objects.requireNonNull(jsonObject);
     }
 
-    public ContentDescriptorOrReference asContentDescriptorOrReference() {
-        final ContentDescriptorOrReference result;
-        if (contentDesc.containsKey("$ref")) {
-            result = new ContentDescriptorOrReference.Reference(new ReferenceObject(contentDesc.getString("$ref")));
+    @Override
+    public JsonSchemaOrReference asModelObject() {
+        final JsonSchemaOrReference result;
+        if (jsonObject.containsKey("$ref")) {
+            result = new JsonSchemaOrReference.Reference(new ReferenceObject(jsonObject.getString("$ref")));
         } else {
-            result =
-                new ContentDescriptorOrReference.Object(
-                    new ContentDescriptorObject(
-                        contentDesc.getString("name"),
-                        new JsonSchemaOrReference.Object(JsonSchemas.load(contentDesc.get("schema")))
-                    )
-                );
+            result = new JsonSchemaOrReference.Object(JsonSchemas.load(jsonObject));
         }
         return result;
     }

@@ -51,7 +51,7 @@ public final class OpenRPCSpec {
         this(
             spec,
             new OpenRpcServiceDiscoveryJsonRpcExecutionContext(
-                new JsonInfoObject(spec.getJsonObject("info")).asInfoObject()
+                new InfoObjectMapping(spec.getJsonObject("info")).asModelObject()
             )
         );
     }
@@ -83,8 +83,8 @@ public final class OpenRPCSpec {
                 .stream()
                 .map(JsonValue::asJsonObject)
                 .filter(obj -> obj.getString("name").equals(methodName))
-                .map(obj -> new JsonMethodObject(obj))
-                .map(JsonMethodObject::asMethodObject)
+                .map(MethodObjectMapping::new)
+                .map(MethodObjectMapping::asModelObject)
                 .findFirst()
                 .map(method -> new DescribableJsonRpcMethod(method, function))
                 .map(context::withMethod)

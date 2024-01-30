@@ -23,18 +23,22 @@
  */
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc.importation;
 
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.InfoObject;
-import jakarta.json.JsonObject;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasEntry;
 
-final class JsonInfoObject {
+import io.github.sebastiantoepfer.ddd.media.core.HashMapMedia;
+import jakarta.json.Json;
+import org.junit.jupiter.api.Test;
 
-    private final JsonObject infoObject;
+class ServerObjectMappingTest {
 
-    JsonInfoObject(final JsonObject infoObject) {
-        this.infoObject = infoObject;
-    }
-
-    public InfoObject asInfoObject() {
-        return new InfoObject(infoObject.getString("title"), infoObject.getString("version"));
+    @Test
+    void should_create_with_url() {
+        assertThat(
+            new ServerObjectMapping(Json.createObjectBuilder().add("url", "http://localhost").build())
+                .asModelObject()
+                .printOn(new HashMapMedia()),
+            hasEntry("url", "http://localhost")
+        );
     }
 }
