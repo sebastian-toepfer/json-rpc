@@ -352,7 +352,7 @@ e.g. a JsonSchema can be set via Reference or SchemaInstance:
   or
 `new JsonSchemaOrReference.Object(new JsonSchemaObject())`.
 
-As of version 0.7.0, it is no longer possible to describe method parameters via a reference or to use a reference as a
+As of version **0.7.0**, it is no longer possible to describe method parameters via a reference or to use a reference as a
 parameter.
 
 after deployment the avalible methods can be requested via:
@@ -363,6 +363,18 @@ after deployment the avalible methods can be requested via:
   "id": "1"
 }
 ```
+
+Use an existing spec:
+```java
+JsonRpcExecutionContext<DescribableJsonRpcMethod> context = OpenRPCSpec
+    .load(OpenRPCSpecTest.class.getClassLoader().getResourceAsStream("petstore-openrpc.json"))
+    .map(in -> Json.createValue("list_pets"))
+    .toName("list_pets")
+    .map(in -> Json.createValue("create_pet"))
+    .toName("create_pet")
+    .asContext()
+```
+it is possible to add more method to this context.
 
 ### Micrometer
 
