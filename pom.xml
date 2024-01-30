@@ -53,7 +53,7 @@
         <ddd.version>0.6.0</ddd.version>
         <json-schema.version>0.1.1</json-schema.version>
 
-        <payara.version>6.2023.12</payara.version>
+        <payara.version>6.2024.1</payara.version>
         <quarkus.version>3.6.8</quarkus.version>
         <spring.boot.version>3.2.2</spring.boot.version>
         <jmh.version>1.37</jmh.version>
