@@ -51,6 +51,7 @@
         <maven.compiler.source>17</maven.compiler.source>
 
         <ddd.version>0.6.0</ddd.version>
+        <condition4j.version>0.1.0</condition4j.version>
         <json-schema.version>0.1.2</json-schema.version>
 
         <payara.version>6.2024.1</payara.version>
@@ -97,6 +98,21 @@
                 <groupId>io.github.sebastian-toepfer.ddd</groupId>
                 <artifactId>media-json-api</artifactId>
                 <version>${ddd.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.sebastian-toepfer.common</groupId>
+                <artifactId>condition4j-api</artifactId>
+                <version>${condition4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.sebastian-toepfer.common</groupId>
+                <artifactId>condition4j-core</artifactId>
+                <version>${condition4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.sebastian-toepfer.common</groupId>
+                <artifactId>condition4j-json-p</artifactId>
+                <version>${condition4j.version}</version>
             </dependency>
             
             <dependency>
