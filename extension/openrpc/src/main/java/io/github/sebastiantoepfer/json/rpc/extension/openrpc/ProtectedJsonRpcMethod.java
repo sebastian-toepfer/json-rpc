@@ -23,13 +23,13 @@
  */
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
+import io.github.sebastiantoepfer.common.condition4j.Fulfilable;
+import io.github.sebastiantoepfer.common.condition4j.core.AnyOf;
+import io.github.sebastiantoepfer.common.condition4j.json.JsonValueOfType;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObject;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethodFunction;
-import io.github.sebastiantoepfer.json.rpc.runtime.validation.AnyOf;
-import io.github.sebastiantoepfer.json.rpc.runtime.validation.OfType;
-import io.github.sebastiantoepfer.json.rpc.runtime.validation.Rule;
 import jakarta.json.JsonValue;
 import java.util.Objects;
 
@@ -64,20 +64,20 @@ final class ProtectedJsonRpcMethod implements JsonRpcMethod {
 
     @Override
     public JsonValue execute(final JsonValue params) throws JsonRpcExecutionExecption {
-        if (params != null && !parametersRule().isValid(params)) {
+        if (params != null && !parametersCondition().isFulfilledBy(params)) {
             throw new JsonRpcExecutionExecption(-1, "method must be called with " + paramStructure + "!");
         }
         return function.apply(parameters.createValidParameterObjectFrom(params));
     }
 
-    private Rule parametersRule() {
+    private Fulfilable<JsonValue> parametersCondition() {
         return switch (paramStructure) {
-            case byname -> new OfType(JsonValue.ValueType.OBJECT);
-            case byposition -> new OfType(JsonValue.ValueType.ARRAY);
-            default -> new AnyOf(
-                new OfType(JsonValue.ValueType.OBJECT),
-                new OfType(JsonValue.ValueType.ARRAY),
-                new OfType(JsonValue.ValueType.NULL)
+            case byname -> new JsonValueOfType(JsonValue.ValueType.OBJECT);
+            case byposition -> new JsonValueOfType(JsonValue.ValueType.ARRAY);
+            default -> new AnyOf<>(
+                new JsonValueOfType(JsonValue.ValueType.OBJECT),
+                new JsonValueOfType(JsonValue.ValueType.ARRAY),
+                new JsonValueOfType(JsonValue.ValueType.NULL)
             );
         };
     }

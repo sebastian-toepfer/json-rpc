@@ -23,6 +23,10 @@
  */
 package io.github.sebastiantoepfer.json.rpc.runtime;
 
+import io.github.sebastiantoepfer.common.condition4j.core.AllOf;
+import io.github.sebastiantoepfer.common.condition4j.core.AnyOf;
+import io.github.sebastiantoepfer.common.condition4j.json.JsonPropertyWhichFulfilThe;
+import io.github.sebastiantoepfer.common.condition4j.json.JsonValueOfType;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
 import jakarta.json.spi.JsonProvider;
@@ -42,7 +46,23 @@ final class MethodJsonRpcExecutor implements JsonRpcExecutor {
         final JsonRpcExecutionContext<? extends JsonRpcMethod> context,
         final JsonObject json
     ) {
-        if (new JsonRpcMethodValidation(json).isValid()) {
+        if (
+            new AllOf<>(
+                new JsonPropertyWhichFulfilThe(
+                    JSONP.createPointer("/method"),
+                    new JsonValueOfType(JsonValue.ValueType.STRING)
+                ),
+                new JsonPropertyWhichFulfilThe(
+                    JSONP.createPointer("/params"),
+                    new AnyOf<>(
+                        new JsonValueOfType(JsonValue.ValueType.OBJECT),
+                        new JsonValueOfType(JsonValue.ValueType.ARRAY),
+                        new JsonValueOfType(JsonValue.ValueType.NULL)
+                    )
+                )
+            )
+                .isFulfilledBy(json)
+        ) {
             delegate = new SingleMethodJsonRpcExecutor(context, json);
         } else {
             delegate = ErrorJsonRpcExecutor.invalidRequest();

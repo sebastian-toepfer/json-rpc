@@ -16,6 +16,15 @@
 
     <dependencies>
         <dependency>
+            <groupId>io.github.sebastian-toepfer.common</groupId>
+            <artifactId>condition4j-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.sebastian-toepfer.common</groupId>
+            <artifactId>condition4j-json-p</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <scope>test</scope>
