@@ -35,14 +35,13 @@ class LicenseObjectMapping implements ModelObjectMapping<LicenseObject> {
 
     LicenseObjectMapping(final JsonObject json) {
         this.json = json;
-        this.mapping =
-            new JsonObjectModelMapping<>(
-                v -> new LicenseObject(),
-                List.of(
-                    new OptionalField<>("name", v -> JsonString.class.cast(v).getString(), (v, o) -> o.withName(v)),
-                    new OptionalField<>("url", v -> JsonString.class.cast(v).getString(), (v, o) -> o.withUrl(v))
-                )
-            );
+        this.mapping = new JsonObjectModelMapping<>(
+            v -> new LicenseObject(),
+            List.of(
+                new OptionalField<>("name", v -> JsonString.class.cast(v).getString(), (v, o) -> o.withName(v)),
+                new OptionalField<>("url", v -> JsonString.class.cast(v).getString(), (v, o) -> o.withUrl(v))
+            )
+        );
     }
 
     @Override

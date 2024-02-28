@@ -38,8 +38,7 @@ class InfoObjectMappingTest {
     void should_create_with_description() {
         assertThat(
             new InfoObjectMapping(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("title", "title")
                     .add("version", "1.0.0")
                     .add("description", "description")
@@ -55,8 +54,7 @@ class InfoObjectMappingTest {
     void should_create_with_termsOfService() throws Exception {
         assertThat(
             new InfoObjectMapping(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("title", "title")
                     .add("version", "1.0.0")
                     .add("termsOfService", "http://localhost")
@@ -72,8 +70,7 @@ class InfoObjectMappingTest {
     void should_create_with_contact() throws Exception {
         assertThat(
             new InfoObjectMapping(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("title", "title")
                     .add("version", "1.0.0")
                     .add("contact", Json.createObjectBuilder().add("name", "jane"))
@@ -89,8 +86,7 @@ class InfoObjectMappingTest {
     void should_create_with_license() throws Exception {
         assertThat(
             new InfoObjectMapping(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("title", "title")
                     .add("version", "1.0.0")
                     .add("license", Json.createObjectBuilder().add("name", "MIT"))

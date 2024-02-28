@@ -40,116 +40,111 @@ final class MethodObjectMapping implements ModelObjectMapping<MethodObject> {
 
     MethodObjectMapping(final JsonObject methodObject) {
         this.methodObject = Objects.requireNonNull(methodObject);
-        this.mapping =
-            new JsonObjectModelMapping<>(
-                v ->
-                    new MethodObject(
-                        v.getString("name"),
+        this.mapping = new JsonObjectModelMapping<>(
+            v ->
+                new MethodObject(
+                    v.getString("name"),
+                    v
+                        .getJsonArray("params")
+                        .stream()
+                        .map(JsonValue::asJsonObject)
+                        .map(ContentDescriptorOrReferenceObjectMapping::new)
+                        .map(ContentDescriptorOrReferenceObjectMapping::asModelObject)
+                        .toList()
+                ),
+            List.of(
+                new OptionalField<>(
+                    "description",
+                    v -> JsonString.class.cast(v).getString(),
+                    (v, o) -> o.withDescription(v)
+                ),
+                new OptionalField<>("summary", v -> JsonString.class.cast(v).getString(), (v, o) -> o.withSummary(v)),
+                new OptionalField<>(
+                    "servers",
+                    v ->
                         v
-                            .getJsonArray("params")
+                            .asJsonArray()
                             .stream()
                             .map(JsonValue::asJsonObject)
-                            .map(ContentDescriptorOrReferenceObjectMapping::new)
-                            .map(ContentDescriptorOrReferenceObjectMapping::asModelObject)
-                            .toList()
-                    ),
-                List.of(
-                    new OptionalField<>(
-                        "description",
-                        v -> JsonString.class.cast(v).getString(),
-                        (v, o) -> o.withDescription(v)
-                    ),
-                    new OptionalField<>(
-                        "summary",
-                        v -> JsonString.class.cast(v).getString(),
-                        (v, o) -> o.withSummary(v)
-                    ),
-                    new OptionalField<>(
-                        "servers",
-                        v ->
-                            v
-                                .asJsonArray()
-                                .stream()
-                                .map(JsonValue::asJsonObject)
-                                .map(ServerObjectMapping::new)
-                                .map(ServerObjectMapping::asModelObject)
-                                .toList(),
-                        (v, o) -> o.withServers(v)
-                    ),
-                    new OptionalField<>(
-                        "tags",
-                        v ->
-                            v
-                                .asJsonArray()
-                                .stream()
-                                .map(JsonValue::asJsonObject)
-                                .map(TagOrReferenceObjectMapping::new)
-                                .map(TagOrReferenceObjectMapping::asModelObject)
-                                .toList(),
-                        (v, o) -> o.withTags(v)
-                    ),
-                    new OptionalField<>(
-                        "paramStructure",
-                        v -> MethodObject.MethodObjectParamStructure.valueOf(JsonString.class.cast(v).getString()),
-                        (v, o) -> o.withParamStructure(v)
-                    ),
-                    new OptionalField<>(
-                        "result",
-                        v -> new MethodObjectResultObjectMapping(v.asJsonObject()).asModelObject(),
-                        (v, o) -> o.withResult(v)
-                    ),
-                    new OptionalField<>(
-                        "errors",
-                        v ->
-                            v
-                                .asJsonArray()
-                                .stream()
-                                .map(JsonValue::asJsonObject)
-                                .map(ErrorOrReferenceObjectMapping::new)
-                                .map(ErrorOrReferenceObjectMapping::asModelObject)
-                                .toList(),
-                        (v, o) -> o.withErrors(v)
-                    ),
-                    new OptionalField<>(
-                        "links",
-                        v ->
-                            v
-                                .asJsonArray()
-                                .stream()
-                                .map(JsonValue::asJsonObject)
-                                .map(LinkOrReferenceObjectMapping::new)
-                                .map(LinkOrReferenceObjectMapping::asModelObject)
-                                .toList(),
-                        (v, o) -> o.withLinks(v)
-                    ),
-                    new OptionalField<>(
-                        "examples",
-                        v ->
-                            v
-                                .asJsonArray()
-                                .stream()
-                                .map(JsonValue::asJsonObject)
-                                .map(ExamplePairingOrReferenceObjectMapping::new)
-                                .map(ExamplePairingOrReferenceObjectMapping::asModelObject)
-                                .toList(),
-                        (v, o) -> o.withExamples(v)
-                    ),
-                    new OptionalField<>("deprecated", v -> v == JsonValue.TRUE, (v, o) -> o.withDeprecated(v)),
-                    new OptionalField<>(
-                        "externalDocs",
-                        v -> {
-                            try {
-                                return new ExternalDocumentationObject(
-                                    URI.create(v.asJsonObject().getString("url")).toURL()
-                                );
-                            } catch (MalformedURLException e) {
-                                throw new IllegalArgumentException(e);
-                            }
-                        },
-                        (v, o) -> o.withExternalDocs(v)
-                    )
+                            .map(ServerObjectMapping::new)
+                            .map(ServerObjectMapping::asModelObject)
+                            .toList(),
+                    (v, o) -> o.withServers(v)
+                ),
+                new OptionalField<>(
+                    "tags",
+                    v ->
+                        v
+                            .asJsonArray()
+                            .stream()
+                            .map(JsonValue::asJsonObject)
+                            .map(TagOrReferenceObjectMapping::new)
+                            .map(TagOrReferenceObjectMapping::asModelObject)
+                            .toList(),
+                    (v, o) -> o.withTags(v)
+                ),
+                new OptionalField<>(
+                    "paramStructure",
+                    v -> MethodObject.MethodObjectParamStructure.valueOf(JsonString.class.cast(v).getString()),
+                    (v, o) -> o.withParamStructure(v)
+                ),
+                new OptionalField<>(
+                    "result",
+                    v -> new MethodObjectResultObjectMapping(v.asJsonObject()).asModelObject(),
+                    (v, o) -> o.withResult(v)
+                ),
+                new OptionalField<>(
+                    "errors",
+                    v ->
+                        v
+                            .asJsonArray()
+                            .stream()
+                            .map(JsonValue::asJsonObject)
+                            .map(ErrorOrReferenceObjectMapping::new)
+                            .map(ErrorOrReferenceObjectMapping::asModelObject)
+                            .toList(),
+                    (v, o) -> o.withErrors(v)
+                ),
+                new OptionalField<>(
+                    "links",
+                    v ->
+                        v
+                            .asJsonArray()
+                            .stream()
+                            .map(JsonValue::asJsonObject)
+                            .map(LinkOrReferenceObjectMapping::new)
+                            .map(LinkOrReferenceObjectMapping::asModelObject)
+                            .toList(),
+                    (v, o) -> o.withLinks(v)
+                ),
+                new OptionalField<>(
+                    "examples",
+                    v ->
+                        v
+                            .asJsonArray()
+                            .stream()
+                            .map(JsonValue::asJsonObject)
+                            .map(ExamplePairingOrReferenceObjectMapping::new)
+                            .map(ExamplePairingOrReferenceObjectMapping::asModelObject)
+                            .toList(),
+                    (v, o) -> o.withExamples(v)
+                ),
+                new OptionalField<>("deprecated", v -> v == JsonValue.TRUE, (v, o) -> o.withDeprecated(v)),
+                new OptionalField<>(
+                    "externalDocs",
+                    v -> {
+                        try {
+                            return new ExternalDocumentationObject(
+                                URI.create(v.asJsonObject().getString("url")).toURL()
+                            );
+                        } catch (MalformedURLException e) {
+                            throw new IllegalArgumentException(e);
+                        }
+                    },
+                    (v, o) -> o.withExternalDocs(v)
                 )
-            );
+            )
+        );
     }
 
     @Override

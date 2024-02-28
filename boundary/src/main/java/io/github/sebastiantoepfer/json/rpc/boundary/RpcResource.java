@@ -46,8 +46,7 @@ public class RpcResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response execute(final InputStream request) {
-        return Response
-            .ok()
+        return Response.ok()
             .type(MediaType.APPLICATION_JSON)
             .encoding("UTF-8")
             .entity((StreamingOutput) out -> runtime.createExecutorFor(request).execute().writeTo(out))

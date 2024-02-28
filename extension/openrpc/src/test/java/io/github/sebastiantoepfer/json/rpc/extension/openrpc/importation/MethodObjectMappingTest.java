@@ -52,8 +52,7 @@ class MethodObjectMappingTest {
     void should_create_with_description() {
         assertThat(
             new MethodObjectMapping(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("name", "name")
                     .add("params", JsonValue.EMPTY_JSON_ARRAY)
                     .add("description", "description")
@@ -69,8 +68,7 @@ class MethodObjectMappingTest {
     void should_create_with_summary() {
         assertThat(
             new MethodObjectMapping(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("name", "name")
                     .add("params", JsonValue.EMPTY_JSON_ARRAY)
                     .add("summary", "summary")
@@ -86,8 +84,7 @@ class MethodObjectMappingTest {
     void should_create_with_deprecated() {
         assertThat(
             new MethodObjectMapping(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("name", "name")
                     .add("params", JsonValue.EMPTY_JSON_ARRAY)
                     .add("deprecated", true)
@@ -103,8 +100,7 @@ class MethodObjectMappingTest {
     void should_create_with_non_deprecated() {
         assertThat(
             new MethodObjectMapping(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("name", "name")
                     .add("params", JsonValue.EMPTY_JSON_ARRAY)
                     .add("deprecated", false)
@@ -120,8 +116,7 @@ class MethodObjectMappingTest {
     void should_create_with_servers() {
         assertThat(
             new MethodObjectMapping(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("name", "name")
                     .add("params", JsonValue.EMPTY_JSON_ARRAY)
                     .add(
@@ -140,8 +135,7 @@ class MethodObjectMappingTest {
     void should_create_with_tags() {
         assertThat(
             new MethodObjectMapping(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("name", "name")
                     .add("params", JsonValue.EMPTY_JSON_ARRAY)
                     .add("tags", Json.createArrayBuilder().add(Json.createObjectBuilder().add("$ref", "tag")))
@@ -157,8 +151,7 @@ class MethodObjectMappingTest {
     void should_create_with_paramStructure() {
         assertThat(
             new MethodObjectMapping(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("name", "name")
                     .add("params", JsonValue.EMPTY_JSON_ARRAY)
                     .add("paramStructure", "either")
@@ -174,8 +167,7 @@ class MethodObjectMappingTest {
     void should_create_with_result() {
         assertThat(
             new MethodObjectMapping(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("name", "name")
                     .add("params", JsonValue.EMPTY_JSON_ARRAY)
                     .add("result", Json.createObjectBuilder().add("$ref", "test"))
@@ -191,8 +183,7 @@ class MethodObjectMappingTest {
     void should_create_with_errors() {
         assertThat(
             new MethodObjectMapping(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("name", "name")
                     .add("params", JsonValue.EMPTY_JSON_ARRAY)
                     .add("errors", Json.createArrayBuilder().add(Json.createObjectBuilder().add("$ref", "test")))
@@ -208,8 +199,7 @@ class MethodObjectMappingTest {
     void should_create_with_links() {
         assertThat(
             new MethodObjectMapping(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("name", "name")
                     .add("params", JsonValue.EMPTY_JSON_ARRAY)
                     .add("links", Json.createArrayBuilder().add(Json.createObjectBuilder().add("$ref", "test")))
@@ -225,8 +215,7 @@ class MethodObjectMappingTest {
     void should_create_with_examples() {
         assertThat(
             new MethodObjectMapping(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("name", "name")
                     .add("params", JsonValue.EMPTY_JSON_ARRAY)
                     .add("examples", Json.createArrayBuilder().add(Json.createObjectBuilder().add("$ref", "test")))
@@ -242,8 +231,7 @@ class MethodObjectMappingTest {
     void should_create_with_externalDocs() {
         assertThat(
             new MethodObjectMapping(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("name", "name")
                     .add("params", JsonValue.EMPTY_JSON_ARRAY)
                     .add("externalDocs", Json.createObjectBuilder().add("url", "http://www.qwant.de"))

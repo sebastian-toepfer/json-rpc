@@ -37,28 +37,23 @@ class ContentDescriptorObjectMapping implements ModelObjectMapping<ContentDescri
 
     public ContentDescriptorObjectMapping(final JsonObject json) {
         this.json = Objects.requireNonNull(json);
-        this.mapping =
-            new JsonObjectModelMapping<>(
-                v ->
-                    new ContentDescriptorObject(
-                        v.getString("name"),
-                        new JsonSchemaOrReferenceObjectMapping(v.getJsonObject("schema")).asModelObject()
-                    ),
-                List.of(
-                    new OptionalField<>(
-                        "description",
-                        v -> JsonString.class.cast(v).getString(),
-                        (v, o) -> o.withDescription(v)
-                    ),
-                    new OptionalField<>(
-                        "summary",
-                        v -> JsonString.class.cast(v).getString(),
-                        (v, o) -> o.withSummary(v)
-                    ),
-                    new OptionalField<>("required", v -> v == JsonValue.TRUE, (v, o) -> o.withRequired(v)),
-                    new OptionalField<>("deprecated", v -> v == JsonValue.TRUE, (v, o) -> o.withDeprecated(v))
-                )
-            );
+        this.mapping = new JsonObjectModelMapping<>(
+            v ->
+                new ContentDescriptorObject(
+                    v.getString("name"),
+                    new JsonSchemaOrReferenceObjectMapping(v.getJsonObject("schema")).asModelObject()
+                ),
+            List.of(
+                new OptionalField<>(
+                    "description",
+                    v -> JsonString.class.cast(v).getString(),
+                    (v, o) -> o.withDescription(v)
+                ),
+                new OptionalField<>("summary", v -> JsonString.class.cast(v).getString(), (v, o) -> o.withSummary(v)),
+                new OptionalField<>("required", v -> v == JsonValue.TRUE, (v, o) -> o.withRequired(v)),
+                new OptionalField<>("deprecated", v -> v == JsonValue.TRUE, (v, o) -> o.withDeprecated(v))
+            )
+        );
     }
 
     @Override

@@ -39,8 +39,9 @@ class TimedJsonRpcMethodTest {
     @Test
     public void should_messure_his_call_time() throws Exception {
         final Timer time = new SimpleMeterRegistry().timer("test");
-        new TimedJsonRpcMethod(time, new DefaultJsonRpcMethod("list", List.of(), p -> p))
-            .execute(JsonValue.EMPTY_JSON_OBJECT);
+        new TimedJsonRpcMethod(time, new DefaultJsonRpcMethod("list", List.of(), p -> p)).execute(
+            JsonValue.EMPTY_JSON_OBJECT
+        );
         assertThat(time.count(), is(1L));
     }
 
@@ -50,8 +51,7 @@ class TimedJsonRpcMethodTest {
             new TimedJsonRpcMethod(
                 new SimpleMeterRegistry().timer("list"),
                 new DefaultJsonRpcMethod("test", List.of(), p -> p)
-            )
-                .execute(Json.createObjectBuilder().add("name", "jane").build()),
+            ).execute(Json.createObjectBuilder().add("name", "jane").build()),
             is(Json.createObjectBuilder().add("name", "jane").build())
         );
     }

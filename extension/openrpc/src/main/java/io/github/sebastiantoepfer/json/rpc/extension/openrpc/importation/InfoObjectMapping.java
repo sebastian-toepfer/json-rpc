@@ -37,38 +37,37 @@ final class InfoObjectMapping implements ModelObjectMapping<InfoObject> {
 
     InfoObjectMapping(final JsonObject json) {
         this.json = json;
-        this.mapping =
-            new JsonObjectModelMapping<>(
-                v -> new InfoObject(v.getString("title"), v.getString("version")),
-                List.of(
-                    new OptionalField<>(
-                        "description",
-                        v -> JsonString.class.cast(v).getString(),
-                        (v, o) -> o.withDescription(v)
-                    ),
-                    new OptionalField<>(
-                        "termsOfService",
-                        v -> {
-                            try {
-                                return URI.create(JsonString.class.cast(v).getString()).toURL();
-                            } catch (MalformedURLException e) {
-                                return null;
-                            }
-                        },
-                        (v, o) -> o.withTermsOfService(v)
-                    ),
-                    new OptionalField<>(
-                        "contact",
-                        v -> new ContactObjectMapping(v.asJsonObject()).asModelObject(),
-                        (v, o) -> o.withContact(v)
-                    ),
-                    new OptionalField<>(
-                        "license",
-                        v -> new LicenseObjectMapping(v.asJsonObject()).asModelObject(),
-                        (v, o) -> o.withLicense(v)
-                    )
+        this.mapping = new JsonObjectModelMapping<>(
+            v -> new InfoObject(v.getString("title"), v.getString("version")),
+            List.of(
+                new OptionalField<>(
+                    "description",
+                    v -> JsonString.class.cast(v).getString(),
+                    (v, o) -> o.withDescription(v)
+                ),
+                new OptionalField<>(
+                    "termsOfService",
+                    v -> {
+                        try {
+                            return URI.create(JsonString.class.cast(v).getString()).toURL();
+                        } catch (MalformedURLException e) {
+                            return null;
+                        }
+                    },
+                    (v, o) -> o.withTermsOfService(v)
+                ),
+                new OptionalField<>(
+                    "contact",
+                    v -> new ContactObjectMapping(v.asJsonObject()).asModelObject(),
+                    (v, o) -> o.withContact(v)
+                ),
+                new OptionalField<>(
+                    "license",
+                    v -> new LicenseObjectMapping(v.asJsonObject()).asModelObject(),
+                    (v, o) -> o.withLicense(v)
                 )
-            );
+            )
+        );
     }
 
     @Override

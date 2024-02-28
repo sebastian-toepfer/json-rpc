@@ -43,15 +43,14 @@ class RpcResourceTest extends JerseyTest {
 
     @Override
     protected Application configure() {
-        return new ResourceConfig(RpcResource.class)
-            .register(
-                new AbstractBinder() {
-                    @Override
-                    protected void configure() {
-                        bind(new DefaultJsonRpcRuntime(new DefaultJsonRpcExecutionContext())).to(JsonRpcRuntime.class);
-                    }
+        return new ResourceConfig(RpcResource.class).register(
+            new AbstractBinder() {
+                @Override
+                protected void configure() {
+                    bind(new DefaultJsonRpcRuntime(new DefaultJsonRpcExecutionContext())).to(JsonRpcRuntime.class);
                 }
-            );
+            }
+        );
     }
 
     @Test
@@ -62,8 +61,7 @@ class RpcResourceTest extends JerseyTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .buildPost(
                     Entity.json(
-                        Json
-                            .createObjectBuilder()
+                        Json.createObjectBuilder()
                             .add("jsonrpc", "2.0")
                             .add("method", "sum")
                             .add("parmas", Json.createArrayBuilder().add(1).add(2).add(4))
@@ -74,8 +72,7 @@ class RpcResourceTest extends JerseyTest {
                 .invoke()
                 .readEntity(JsonStructure.class),
             is(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("jsonrpc", "2.0")
                     .add("error", Json.createObjectBuilder().add("code", -32601).add("message", "Method not found"))
                     .add("id", "89")

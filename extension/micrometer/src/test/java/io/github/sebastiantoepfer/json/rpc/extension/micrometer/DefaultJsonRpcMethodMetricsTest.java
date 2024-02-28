@@ -39,18 +39,20 @@ class DefaultJsonRpcMethodMetricsTest {
     @Test
     void should_messure_his_call_time() throws Exception {
         final SimpleMeterRegistry registry = new SimpleMeterRegistry();
-        DefaultJsonRpcMethodMetrics.CALLTIME
-            .observe(registry, new DefaultJsonRpcMethod("list", List.of(), p -> p))
-            .execute(JsonValue.EMPTY_JSON_OBJECT);
+        DefaultJsonRpcMethodMetrics.CALLTIME.observe(
+            registry,
+            new DefaultJsonRpcMethod("list", List.of(), p -> p)
+        ).execute(JsonValue.EMPTY_JSON_OBJECT);
         assertThat(registry.timer("list.calltime").max(TimeUnit.NANOSECONDS), is(greaterThan(0.0)));
     }
 
     @Test
     void should_count_his_calls() throws Exception {
         final SimpleMeterRegistry registry = new SimpleMeterRegistry();
-        DefaultJsonRpcMethodMetrics.CALLCOUNT
-            .observe(registry, new DefaultJsonRpcMethod("list", List.of(), p -> p))
-            .execute(JsonValue.EMPTY_JSON_OBJECT);
+        DefaultJsonRpcMethodMetrics.CALLCOUNT.observe(
+            registry,
+            new DefaultJsonRpcMethod("list", List.of(), p -> p)
+        ).execute(JsonValue.EMPTY_JSON_OBJECT);
         assertThat(registry.counter("list.callcount").count(), is(1.0));
     }
 }

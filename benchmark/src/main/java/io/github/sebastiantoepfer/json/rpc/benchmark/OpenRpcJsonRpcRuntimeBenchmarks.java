@@ -61,48 +61,41 @@ public class OpenRpcJsonRpcRuntimeBenchmarks {
 
         public OpenRPCSingleMethodExecutionPlan() {
             final JsonProvider provider = JsonProvider.provider();
-            runtime =
-                new DefaultJsonRpcRuntime(
-                    new OpenRpcServiceDiscoveryJsonRpcExecutionContext(new InfoObject("Benchmark App", "1.0.0"))
-                        .withMethod(
-                            new DescribableJsonRpcMethod(
-                                new MethodObject(
-                                    "subtract",
-                                    List.of(
-                                        new ContentDescriptorOrReference.Object(
-                                            new ContentDescriptorObject(
-                                                "minuend",
-                                                new JsonSchemaOrReference.Object(
-                                                    JsonSchemas.load(
-                                                        Json.createObjectBuilder().add("type", "integer").build()
-                                                    )
-                                                )
-                                            )
-                                        ),
-                                        new ContentDescriptorOrReference.Object(
-                                            new ContentDescriptorObject(
-                                                "subtrahend",
-                                                new JsonSchemaOrReference.Object(
-                                                    JsonSchemas.load(
-                                                        Json.createObjectBuilder().add("type", "integer").build()
-                                                    )
-                                                )
-                                            )
+            runtime = new DefaultJsonRpcRuntime(
+                new OpenRpcServiceDiscoveryJsonRpcExecutionContext(new InfoObject("Benchmark App", "1.0.0")).withMethod(
+                    new DescribableJsonRpcMethod(
+                        new MethodObject(
+                            "subtract",
+                            List.of(
+                                new ContentDescriptorOrReference.Object(
+                                    new ContentDescriptorObject(
+                                        "minuend",
+                                        new JsonSchemaOrReference.Object(
+                                            JsonSchemas.load(Json.createObjectBuilder().add("type", "integer").build())
                                         )
                                     )
                                 ),
-                                params -> provider.createValue(params.getInt("minuend") - params.getInt("subtrahend"))
+                                new ContentDescriptorOrReference.Object(
+                                    new ContentDescriptorObject(
+                                        "subtrahend",
+                                        new JsonSchemaOrReference.Object(
+                                            JsonSchemas.load(Json.createObjectBuilder().add("type", "integer").build())
+                                        )
+                                    )
+                                )
                             )
-                        )
-                );
-            methodRequest =
-                provider
-                    .createObjectBuilder()
-                    .add("jsonrpc", "2.0")
-                    .add("method", "subtract")
-                    .add("params", provider.createArrayBuilder().add(42).add(23))
-                    .build()
-                    .toString();
+                        ),
+                        params -> provider.createValue(params.getInt("minuend") - params.getInt("subtrahend"))
+                    )
+                )
+            );
+            methodRequest = provider
+                .createObjectBuilder()
+                .add("jsonrpc", "2.0")
+                .add("method", "subtract")
+                .add("params", provider.createArrayBuilder().add(42).add(23))
+                .build()
+                .toString();
         }
     }
 

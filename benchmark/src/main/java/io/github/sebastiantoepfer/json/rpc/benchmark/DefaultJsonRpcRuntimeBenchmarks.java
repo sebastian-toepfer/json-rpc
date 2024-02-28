@@ -54,25 +54,23 @@ public class DefaultJsonRpcRuntimeBenchmarks {
 
         public SingleMethodExecutionPlan() {
             final JsonProvider provider = JsonProvider.provider();
-            runtime =
-                new DefaultJsonRpcRuntime(
-                    new DefaultJsonRpcExecutionContext()
-                        .withMethod(
-                            new DefaultJsonRpcMethod(
-                                "subtract",
-                                List.of("minuend", "subtrahend"),
-                                params -> provider.createValue(params.getInt("minuend") - params.getInt("subtrahend"))
-                            )
+            runtime = new DefaultJsonRpcRuntime(
+                new DefaultJsonRpcExecutionContext()
+                    .withMethod(
+                        new DefaultJsonRpcMethod(
+                            "subtract",
+                            List.of("minuend", "subtrahend"),
+                            params -> provider.createValue(params.getInt("minuend") - params.getInt("subtrahend"))
                         )
-                );
-            methodRequest =
-                provider
-                    .createObjectBuilder()
-                    .add("jsonrpc", "2.0")
-                    .add("method", "subtract")
-                    .add("params", provider.createArrayBuilder().add(42).add(23))
-                    .build()
-                    .toString();
+                    )
+            );
+            methodRequest = provider
+                .createObjectBuilder()
+                .add("jsonrpc", "2.0")
+                .add("method", "subtract")
+                .add("params", provider.createArrayBuilder().add(42).add(23))
+                .build()
+                .toString();
         }
     }
 
