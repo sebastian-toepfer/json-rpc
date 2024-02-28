@@ -39,22 +39,14 @@ public final class JsonRpcMethods {
     }
 
     public static DefaultJsonRpcMethod exception() {
-        return new DefaultJsonRpcMethod(
-            "exception",
-            List.of("code", "message"),
-            params -> {
-                throw new JsonRpcExecutionExecption(params.getInt("code"), params.getString("message"));
-            }
-        );
+        return new DefaultJsonRpcMethod("exception", List.of("code", "message"), params -> {
+            throw new JsonRpcExecutionExecption(params.getInt("code"), params.getString("message"));
+        });
     }
 
     public static DefaultJsonRpcMethod runtimeexception() {
-        return new DefaultJsonRpcMethod(
-            "runtimeexception",
-            List.of("code", "message"),
-            params -> {
-                throw new NullPointerException();
-            }
-        );
+        return new DefaultJsonRpcMethod("runtimeexception", List.of("code", "message"), params -> {
+            throw new NullPointerException();
+        });
     }
 }

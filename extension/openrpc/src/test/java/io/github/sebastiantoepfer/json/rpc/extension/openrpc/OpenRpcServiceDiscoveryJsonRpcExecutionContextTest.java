@@ -52,21 +52,17 @@ class OpenRpcServiceDiscoveryJsonRpcExecutionContextTest {
         assertThat(
             executeDiscover(new OpenRpcServiceDiscoveryJsonRpcExecutionContext(new InfoObject("test app", "1.0.0"))),
             is(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("jsonrpc", "2.0")
                     .add(
                         "result",
-                        Json
-                            .createObjectBuilder()
+                        Json.createObjectBuilder()
                             .add("info", Json.createObjectBuilder().add("title", "test app").add("version", "1.0.0"))
                             .add(
                                 "methods",
-                                Json
-                                    .createArrayBuilder()
+                                Json.createArrayBuilder()
                                     .add(
-                                        Json
-                                            .createObjectBuilder()
+                                        Json.createObjectBuilder()
                                             .add("name", "rpc.discover")
                                             .add(
                                                 "description",
@@ -75,13 +71,11 @@ class OpenRpcServiceDiscoveryJsonRpcExecutionContextTest {
                                             .add("params", JsonValue.EMPTY_JSON_ARRAY)
                                             .add(
                                                 "result",
-                                                Json
-                                                    .createObjectBuilder()
+                                                Json.createObjectBuilder()
                                                     .add("name", "OpenRPC Schema")
                                                     .add(
                                                         "schema",
-                                                        Json
-                                                            .createObjectBuilder()
+                                                        Json.createObjectBuilder()
                                                             .add("$ref", System.getProperty("openrpc.schema.url"))
                                                     )
                                             )
@@ -98,61 +92,54 @@ class OpenRpcServiceDiscoveryJsonRpcExecutionContextTest {
     @Test
     void should_return_all_methods_in_discover() {
         assertThat(
-            Json
-                .createPointer("/result/methods")
-                .getValue(
-                    executeDiscover(
-                        new OpenRpcServiceDiscoveryJsonRpcExecutionContext(new InfoObject("test app", "1.0.0"))
-                            .withMethod(
-                                new DescribableJsonRpcMethod(
-                                    new MethodObject(
-                                        "list_pets",
-                                        List.of(
-                                            new ContentDescriptorOrReference.Object(
-                                                new ContentDescriptorObject(
-                                                    "limit",
-                                                    new JsonSchemaOrReference.Object(
-                                                        JsonSchemas.load(
-                                                            Json.createObjectBuilder().add("type", "integer").build()
-                                                        )
-                                                    )
+            Json.createPointer("/result/methods").getValue(
+                executeDiscover(
+                    new OpenRpcServiceDiscoveryJsonRpcExecutionContext(new InfoObject("test app", "1.0.0")).withMethod(
+                        new DescribableJsonRpcMethod(
+                            new MethodObject(
+                                "list_pets",
+                                List.of(
+                                    new ContentDescriptorOrReference.Object(
+                                        new ContentDescriptorObject(
+                                            "limit",
+                                            new JsonSchemaOrReference.Object(
+                                                JsonSchemas.load(
+                                                    Json.createObjectBuilder().add("type", "integer").build()
                                                 )
-                                                    .withDescription("How many items to return at one time (max 100)")
-                                                    .withRequired(false)
                                             )
                                         )
+                                            .withDescription("How many items to return at one time (max 100)")
+                                            .withRequired(false)
                                     )
-                                        .withSummary("List all pets")
-                                        .withTags(List.of(new TagOrReference.Object(new TagObject("pets"))))
-                                        .withResult(
-                                            new MethodObjectResult.Object(
-                                                new ContentDescriptorObject(
-                                                    "pets",
-                                                    new JsonSchemaOrReference.Reference(
-                                                        new ReferenceObject("#/components/schemas/Pets")
-                                                    )
-                                                )
-                                                    .withDescription("A paged array of pets")
-                                            )
-                                        ),
-                                    params -> Json.createArrayBuilder().add("bunnies").add("cats").build()
                                 )
                             )
+                                .withSummary("List all pets")
+                                .withTags(List.of(new TagOrReference.Object(new TagObject("pets"))))
+                                .withResult(
+                                    new MethodObjectResult.Object(
+                                        new ContentDescriptorObject(
+                                            "pets",
+                                            new JsonSchemaOrReference.Reference(
+                                                new ReferenceObject("#/components/schemas/Pets")
+                                            )
+                                        ).withDescription("A paged array of pets")
+                                    )
+                                ),
+                            params -> Json.createArrayBuilder().add("bunnies").add("cats").build()
+                        )
                     )
-                ),
+                )
+            ),
             is(
-                Json
-                    .createArrayBuilder()
+                Json.createArrayBuilder()
                     .add(
-                        Json
-                            .createObjectBuilder()
+                        Json.createObjectBuilder()
                             .add("name", "rpc.discover")
                             .add("description", "Returns an OpenRPC schema as a description of this service")
                             .add("params", JsonValue.EMPTY_JSON_ARRAY)
                             .add(
                                 "result",
-                                Json
-                                    .createObjectBuilder()
+                                Json.createObjectBuilder()
                                     .add("name", "OpenRPC Schema")
                                     .add(
                                         "schema",
@@ -161,18 +148,15 @@ class OpenRpcServiceDiscoveryJsonRpcExecutionContextTest {
                             )
                     )
                     .add(
-                        Json
-                            .createObjectBuilder()
+                        Json.createObjectBuilder()
                             .add("name", "list_pets")
                             .add("summary", "List all pets")
                             .add("tags", Json.createArrayBuilder().add(Json.createObjectBuilder().add("name", "pets")))
                             .add(
                                 "params",
-                                Json
-                                    .createArrayBuilder()
+                                Json.createArrayBuilder()
                                     .add(
-                                        Json
-                                            .createObjectBuilder()
+                                        Json.createObjectBuilder()
                                             .add("name", "limit")
                                             .add("description", "How many items to return at one time (max 100)")
                                             .add("required", false)
@@ -181,8 +165,7 @@ class OpenRpcServiceDiscoveryJsonRpcExecutionContextTest {
                             )
                             .add(
                                 "result",
-                                Json
-                                    .createObjectBuilder()
+                                Json.createObjectBuilder()
                                     .add("name", "pets")
                                     .add("description", "A paged array of pets")
                                     .add("schema", Json.createObjectBuilder().add("$ref", "#/components/schemas/Pets"))
@@ -197,44 +180,41 @@ class OpenRpcServiceDiscoveryJsonRpcExecutionContextTest {
     void should_excute_other_than_discovery_method() {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         new DefaultJsonRpcRuntime(
-            new OpenRpcServiceDiscoveryJsonRpcExecutionContext(new InfoObject("test app", "1.0.0"))
-                .withMethod(
-                    new DescribableJsonRpcMethod(
-                        new MethodObject(
-                            "list_pets",
-                            List.of(
-                                new ContentDescriptorOrReference.Object(
-                                    new ContentDescriptorObject(
-                                        "limit",
-                                        new JsonSchemaOrReference.Object(
-                                            JsonSchemas.load(Json.createObjectBuilder().add("type", "integer").build())
-                                        )
+            new OpenRpcServiceDiscoveryJsonRpcExecutionContext(new InfoObject("test app", "1.0.0")).withMethod(
+                new DescribableJsonRpcMethod(
+                    new MethodObject(
+                        "list_pets",
+                        List.of(
+                            new ContentDescriptorOrReference.Object(
+                                new ContentDescriptorObject(
+                                    "limit",
+                                    new JsonSchemaOrReference.Object(
+                                        JsonSchemas.load(Json.createObjectBuilder().add("type", "integer").build())
                                     )
-                                        .withDescription("How many items to return at one time (max 100)")
-                                        .withRequired(false)
                                 )
+                                    .withDescription("How many items to return at one time (max 100)")
+                                    .withRequired(false)
                             )
                         )
-                            .withSummary("List all pets")
-                            .withTags(List.of(new TagOrReference.Object(new TagObject("pets"))))
-                            .withResult(
-                                new MethodObjectResult.Object(
-                                    new ContentDescriptorObject(
-                                        "pets",
-                                        new JsonSchemaOrReference.Reference(
-                                            new ReferenceObject("#/components/schemas/Pets")
-                                        )
-                                    )
-                                        .withDescription("A paged array of pets")
-                                )
-                            ),
-                        params -> Json.createArrayBuilder().add("bunnies").add("cats").build()
                     )
+                        .withSummary("List all pets")
+                        .withTags(List.of(new TagOrReference.Object(new TagObject("pets"))))
+                        .withResult(
+                            new MethodObjectResult.Object(
+                                new ContentDescriptorObject(
+                                    "pets",
+                                    new JsonSchemaOrReference.Reference(
+                                        new ReferenceObject("#/components/schemas/Pets")
+                                    )
+                                ).withDescription("A paged array of pets")
+                            )
+                        ),
+                    params -> Json.createArrayBuilder().add("bunnies").add("cats").build()
                 )
+            )
         )
             .createExecutorFor(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("jsonrpc", "2.0")
                     .add("method", "list_pets")
                     .add("id", "1")
@@ -253,8 +233,7 @@ class OpenRpcServiceDiscoveryJsonRpcExecutionContextTest {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         new DefaultJsonRpcRuntime(ctx)
             .createExecutorFor(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("jsonrpc", "2.0")
                     .add("method", "rpc.discover")
                     .add("id", "1")

@@ -42,10 +42,9 @@ class DefaultJsonRpcRuntimeTest {
 
     @BeforeEach
     void createExecutor() {
-        this.jsonRpcRuntimeExecutor =
-            new JsonRpcRuntimeExecutor(
-                new DefaultJsonRpcRuntime(new DefaultJsonRpcExecutionContext().withMethod(subtract()))
-            );
+        this.jsonRpcRuntimeExecutor = new JsonRpcRuntimeExecutor(
+            new DefaultJsonRpcRuntime(new DefaultJsonRpcExecutionContext().withMethod(subtract()))
+        );
     }
 
     @Test
@@ -53,8 +52,7 @@ class DefaultJsonRpcRuntimeTest {
         assertThat(
             executeJsonRequest("{\"jsonrpc\": \"2.0\", \"method\": \"foobar, \"params\": \"bar\", \"baz]"),
             is(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("jsonrpc", "2.0")
                     .add("error", Json.createObjectBuilder().add("code", -32700).add("message", "Parse error"))
                     .addNull("id")
@@ -68,8 +66,7 @@ class DefaultJsonRpcRuntimeTest {
         assertThat(
             executeJsonRequest("{\"jsonrpc\": \"2.0\", \"method\": 1, \"params\": \"bar\"}"),
             is(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("jsonrpc", "2.0")
                     .add("error", Json.createObjectBuilder().add("code", -32600).add("message", "Invalid Request"))
                     .addNull("id")
@@ -88,8 +85,7 @@ class DefaultJsonRpcRuntimeTest {
                 "]"
             ),
             is(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("jsonrpc", "2.0")
                     .add("error", Json.createObjectBuilder().add("code", -32700).add("message", "Parse error"))
                     .addNull("id")
@@ -103,8 +99,7 @@ class DefaultJsonRpcRuntimeTest {
         assertThat(
             executeJsonRequest("[]"),
             is(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("jsonrpc", "2.0")
                     .add("error", Json.createObjectBuilder().add("code", -32600).add("message", "Invalid Request"))
                     .addNull("id")
@@ -126,8 +121,7 @@ class DefaultJsonRpcRuntimeTest {
         assertThat(
             executeJsonRequest("[{\"jsonrpc\": \"2.0\", \"method\": \"subtract\", \"params\": [42, 23], \"id\": 1}]"),
             is(
-                Json
-                    .createArrayBuilder()
+                Json.createArrayBuilder()
                     .add(Json.createObjectBuilder().add("jsonrpc", "2.0").add("result", 19).add("id", 1))
                     .build()
             )
@@ -139,8 +133,7 @@ class DefaultJsonRpcRuntimeTest {
         assertThat(
             executeJsonRequest("{\"jsonrpc\": \"2.0\", \"params\": [42, 23], \"id\": 1}"),
             is(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("jsonrpc", "2.0")
                     .add("error", Json.createObjectBuilder().add("code", -32600).add("message", "Invalid Request"))
                     .addNull("id")
@@ -158,8 +151,7 @@ class DefaultJsonRpcRuntimeTest {
                 )
             ),
             is(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("jsonrpc", "2.0")
                     .add("error", Json.createObjectBuilder().add("code", -32600).add("message", "Invalid Request"))
                     .addNull("id")

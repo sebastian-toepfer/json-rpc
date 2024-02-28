@@ -45,52 +45,41 @@ final class MethodParameters {
     private final Validator validator;
 
     public MethodParameters(final List<MethodParamMedia> parameters) {
-        this.parameters =
-            parameters
-                .stream()
-                .map(MethodParamMedia::name)
-                .map(n ->
-                    n.orElseThrow(() -> new IllegalArgumentException("parameter with references not supported yet!"))
-                )
-                .toList();
-        validator =
-            JsonSchemas
-                .load(
-                    JSONP
-                        .createObjectBuilder()
-                        .add(
-                            "properties",
-                            parameters
-                                .stream()
-                                .map(p -> Map.entry(p.name().orElse(""), p.schema()))
-                                .collect(
-                                    Collector.of(
-                                        JSONP::createObjectBuilder,
-                                        (JsonObjectBuilder b, Map.Entry<String, JsonValue> v) ->
-                                            b.add(v.getKey(), v.getValue()),
-                                        JsonObjectBuilder::addAll
-                                    )
-                                )
+        this.parameters = parameters
+            .stream()
+            .map(MethodParamMedia::name)
+            .map(n -> n.orElseThrow(() -> new IllegalArgumentException("parameter with references not supported yet!")))
+            .toList();
+        validator = JsonSchemas.load(
+            JSONP.createObjectBuilder()
+                .add(
+                    "properties",
+                    parameters
+                        .stream()
+                        .map(p -> Map.entry(p.name().orElse(""), p.schema()))
+                        .collect(
+                            Collector.of(
+                                JSONP::createObjectBuilder,
+                                (JsonObjectBuilder b, Map.Entry<String, JsonValue> v) ->
+                                    b.add(v.getKey(), v.getValue()),
+                                JsonObjectBuilder::addAll
+                            )
                         )
-                        .add(
-                            "required",
-                            parameters
-                                .stream()
-                                .filter(MethodParamMedia::isRequired)
-                                .map(MethodParamMedia::name)
-                                .flatMap(Optional::stream)
-                                .map(JSONP::createValue)
-                                .collect(
-                                    Collector.of(
-                                        JSONP::createArrayBuilder,
-                                        JsonArrayBuilder::add,
-                                        JsonArrayBuilder::addAll
-                                    )
-                                )
-                        )
-                        .build()
                 )
-                .validator();
+                .add(
+                    "required",
+                    parameters
+                        .stream()
+                        .filter(MethodParamMedia::isRequired)
+                        .map(MethodParamMedia::name)
+                        .flatMap(Optional::stream)
+                        .map(JSONP::createValue)
+                        .collect(
+                            Collector.of(JSONP::createArrayBuilder, JsonArrayBuilder::add, JsonArrayBuilder::addAll)
+                        )
+                )
+                .build()
+        ).validator();
     }
 
     JsonObject createValidParameterObjectFrom(final JsonValue parameters) throws JsonRpcExecutionExecption {
@@ -115,8 +104,7 @@ final class MethodParameters {
     }
 
     private JsonObject createAsObject(final JsonArray asJsonArray) {
-        return IntStream
-            .range(0, Math.min(asJsonArray.size(), parameters.size()))
+        return IntStream.range(0, Math.min(asJsonArray.size(), parameters.size()))
             .boxed()
             .map(i -> Map.entry(parameters.get(i), asJsonArray.get(i)))
             .collect(

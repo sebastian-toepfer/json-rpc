@@ -35,15 +35,14 @@ class ContactObjectMapping implements ModelObjectMapping<ContactObject> {
 
     ContactObjectMapping(final JsonObject json) {
         this.json = json;
-        this.mapping =
-            new JsonObjectModelMapping<>(
-                v -> new ContactObject(),
-                List.of(
-                    new OptionalField<>("name", v -> JsonString.class.cast(v).getString(), (v, o) -> o.withName(v)),
-                    new OptionalField<>("url", v -> JsonString.class.cast(v).getString(), (v, o) -> o.withUrl(v)),
-                    new OptionalField<>("email", v -> JsonString.class.cast(v).getString(), (v, o) -> o.withEmail(v))
-                )
-            );
+        this.mapping = new JsonObjectModelMapping<>(
+            v -> new ContactObject(),
+            List.of(
+                new OptionalField<>("name", v -> JsonString.class.cast(v).getString(), (v, o) -> o.withName(v)),
+                new OptionalField<>("url", v -> JsonString.class.cast(v).getString(), (v, o) -> o.withUrl(v)),
+                new OptionalField<>("email", v -> JsonString.class.cast(v).getString(), (v, o) -> o.withEmail(v))
+            )
+        );
     }
 
     @Override

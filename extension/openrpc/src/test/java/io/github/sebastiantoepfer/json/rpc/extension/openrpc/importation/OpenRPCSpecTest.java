@@ -36,8 +36,7 @@ class OpenRPCSpecTest {
     @Test
     void should_create_context_from_inputstream() {
         assertThat(
-            OpenRPCSpec
-                .load(OpenRPCSpecTest.class.getClassLoader().getResourceAsStream("petstore-openrpc.json"))
+            OpenRPCSpec.load(OpenRPCSpecTest.class.getClassLoader().getResourceAsStream("petstore-openrpc.json"))
                 .map(in -> Json.createValue("list_pets"))
                 .toName("list_pets")
                 .map(in -> Json.createValue("create_pet"))
@@ -54,9 +53,9 @@ class OpenRPCSpecTest {
 
     @Test
     void should_throw_illegal_argument_exception_if_an_invalid_method_name_should_be_used() {
-        final OpenRPCSpec.MethodMapping map = OpenRPCSpec
-            .load(OpenRPCSpecTest.class.getClassLoader().getResourceAsStream("petstore-openrpc.json"))
-            .map(in -> Json.createValue("list_pets"));
+        final OpenRPCSpec.MethodMapping map = OpenRPCSpec.load(
+            OpenRPCSpecTest.class.getClassLoader().getResourceAsStream("petstore-openrpc.json")
+        ).map(in -> Json.createValue("list_pets"));
 
         assertThat(
             assertThrows(IllegalArgumentException.class, () -> map.toName("subtract")).getMessage(),

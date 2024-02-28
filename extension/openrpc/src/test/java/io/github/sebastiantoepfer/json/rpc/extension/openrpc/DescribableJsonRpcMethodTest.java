@@ -48,12 +48,12 @@ class DescribableJsonRpcMethodTest {
 
     @Test
     void should_know_his_name() {
-        final JsonRpcMethod jsonRpcMethod = new DescribableJsonRpcMethod(
-            new MethodObject("list_pets", List.of()),
-            params -> {
+        final JsonRpcMethod jsonRpcMethod = new DescribableJsonRpcMethod(new MethodObject(
+                "list_pets",
+                List.of()
+            ), params -> {
                 throw new UnsupportedOperationException("Not supported yet.");
-            }
-        );
+            });
 
         //pitest :(
         assertThat(jsonRpcMethod.name(), is("list_pets"));
@@ -79,8 +79,7 @@ class DescribableJsonRpcMethodTest {
                     )
                 ),
                 function
-            )
-                .execute(parameters),
+            ).execute(parameters),
             is(new DefaultJsonRpcMethod("list_pets", List.of("limit"), function).execute(parameters))
         );
     }
@@ -108,8 +107,7 @@ class DescribableJsonRpcMethodTest {
                         )
                     )
                 )
-            )
-                .withParamStructure(MethodObject.MethodObjectParamStructure.byname),
+            ).withParamStructure(MethodObject.MethodObjectParamStructure.byname),
             a -> a
         );
         final JsonValue parameters = Json.createArrayBuilder().add("a").build();
@@ -130,8 +128,7 @@ class DescribableJsonRpcMethodTest {
                         )
                     )
                 )
-            )
-                .withParamStructure(MethodObject.MethodObjectParamStructure.byposition),
+            ).withParamStructure(MethodObject.MethodObjectParamStructure.byposition),
             a -> a
         );
         final JsonValue parameters = Json.createObjectBuilder().add("list_pets", 12).build();
@@ -151,8 +148,7 @@ class DescribableJsonRpcMethodTest {
                             new JsonSchemaOrReference.Object(
                                 JsonSchemas.load(Json.createObjectBuilder().add("type", "integer").build())
                             )
-                        )
-                            .withRequired(true)
+                        ).withRequired(true)
                     )
                 )
             ),

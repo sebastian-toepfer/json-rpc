@@ -61,13 +61,11 @@ final class MethodMedia implements BaseMethodMedia<MethodMedia> {
         if (Objects.equals(name, "name")) {
             result = new MethodMedia(value, params, paramStructure);
         } else if (Objects.equals(name, "paramStructure")) {
-            result =
-                Arrays
-                    .stream(MethodObjectParamStructure.values())
-                    .filter(s -> Objects.equals(s.toString(), value))
-                    .map(s -> new MethodMedia(methodName, params, s))
-                    .findFirst()
-                    .orElse(this);
+            result = Arrays.stream(MethodObjectParamStructure.values())
+                .filter(s -> Objects.equals(s.toString(), value))
+                .map(s -> new MethodMedia(methodName, params, s))
+                .findFirst()
+                .orElse(this);
         } else {
             result = this;
         }
@@ -78,14 +76,13 @@ final class MethodMedia implements BaseMethodMedia<MethodMedia> {
     public MethodMedia withValue(final String name, final Collection<?> values) {
         final MethodMedia result;
         if (Objects.equals(name, "params")) {
-            result =
-                values
-                    .stream()
-                    .filter(Printable.class::isInstance)
-                    .map(Printable.class::cast)
-                    .collect(
-                        collectingAndThen(toList(), newParams -> new MethodMedia(methodName, newParams, paramStructure))
-                    );
+            result = values
+                .stream()
+                .filter(Printable.class::isInstance)
+                .map(Printable.class::cast)
+                .collect(
+                    collectingAndThen(toList(), newParams -> new MethodMedia(methodName, newParams, paramStructure))
+                );
         } else {
             result = this;
         }

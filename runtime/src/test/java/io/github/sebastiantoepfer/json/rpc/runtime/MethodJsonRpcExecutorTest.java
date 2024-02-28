@@ -41,11 +41,10 @@ class MethodJsonRpcExecutorTest {
 
     @BeforeEach
     void createExecutionContext() {
-        context =
-            new DefaultJsonRpcExecutionContext()
-                .withMethod(subtract())
-                .withMethod(exception())
-                .withMethod(runtimeexception());
+        context = new DefaultJsonRpcExecutionContext()
+            .withMethod(subtract())
+            .withMethod(exception())
+            .withMethod(runtimeexception());
     }
 
     @Test
@@ -54,16 +53,14 @@ class MethodJsonRpcExecutorTest {
             new JsonRpcExecutorJsonAdapter(
                 new MethodJsonRpcExecutor(
                     context,
-                    Json
-                        .createObjectBuilder()
+                    Json.createObjectBuilder()
                         .add("jsonrpc", "2.0")
                         .add("method", "subtract")
                         .add("params", Json.createArrayBuilder().add(42).add(23))
                         .add("id", 5)
                         .build()
                 )
-            )
-                .execute(),
+            ).execute(),
             is(Json.createObjectBuilder().add("jsonrpc", "2.0").add("result", 19).add("id", 5).build())
         );
     }
@@ -74,16 +71,14 @@ class MethodJsonRpcExecutorTest {
             new JsonRpcExecutorJsonAdapter(
                 new MethodJsonRpcExecutor(
                     context,
-                    Json
-                        .createObjectBuilder()
+                    Json.createObjectBuilder()
                         .add("jsonrpc", "2.0")
                         .add("method", "subtract")
                         .add("params", Json.createObjectBuilder().add("subtrahend", 23).add("minuend", 42))
                         .add("id", 5)
                         .build()
                 )
-            )
-                .execute(),
+            ).execute(),
             is(Json.createObjectBuilder().add("jsonrpc", "2.0").add("result", 19).add("id", 5).build())
         );
     }
@@ -94,15 +89,13 @@ class MethodJsonRpcExecutorTest {
             new JsonRpcExecutorJsonAdapter(
                 new MethodJsonRpcExecutor(
                     context,
-                    Json
-                        .createObjectBuilder()
+                    Json.createObjectBuilder()
                         .add("jsonrpc", "2.0")
                         .add("method", "subtract")
                         .add("params", Json.createObjectBuilder().add("subtrahend", 23).add("minuend", 42))
                         .build()
                 )
-            )
-                .execute(),
+            ).execute(),
             is(JsonValue.NULL)
         );
     }
@@ -115,11 +108,9 @@ class MethodJsonRpcExecutorTest {
                     context,
                     Json.createObjectBuilder().add("jsonrpc", "2.0").add("method", "foobar").add("id", 5).build()
                 )
-            )
-                .execute(),
+            ).execute(),
             is(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("jsonrpc", "2.0")
                     .add("error", Json.createObjectBuilder().add("code", -32601).add("message", "Method not found"))
                     .add("id", 5)
@@ -134,19 +125,16 @@ class MethodJsonRpcExecutorTest {
             new JsonRpcExecutorJsonAdapter(
                 new MethodJsonRpcExecutor(
                     context,
-                    Json
-                        .createObjectBuilder()
+                    Json.createObjectBuilder()
                         .add("jsonrpc", "2.0")
                         .add("method", "exception")
                         .add("params", Json.createArrayBuilder().add(42).add("Error message"))
                         .add("id", 5)
                         .build()
                 )
-            )
-                .execute(),
+            ).execute(),
             is(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("jsonrpc", "2.0")
                     .add("error", Json.createObjectBuilder().add("code", 42).add("message", "Error message"))
                     .add("id", 5)
@@ -161,19 +149,16 @@ class MethodJsonRpcExecutorTest {
             new JsonRpcExecutorJsonAdapter(
                 new MethodJsonRpcExecutor(
                     context,
-                    Json
-                        .createObjectBuilder()
+                    Json.createObjectBuilder()
                         .add("jsonrpc", "2.0")
                         .add("method", "runtimeexception")
                         .add("params", Json.createArrayBuilder().add(42).add("Error message"))
                         .add("id", 5)
                         .build()
                 )
-            )
-                .execute(),
+            ).execute(),
             is(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("jsonrpc", "2.0")
                     .add(
                         "error",
@@ -191,15 +176,13 @@ class MethodJsonRpcExecutorTest {
             new JsonRpcExecutorJsonAdapter(
                 new MethodJsonRpcExecutor(
                     context,
-                    Json
-                        .createObjectBuilder()
+                    Json.createObjectBuilder()
                         .add("jsonrpc", "2.0")
                         .add("method", "runtimeexception")
                         .add("params", Json.createArrayBuilder().add(42).add("Error message"))
                         .build()
                 )
-            )
-                .execute(),
+            ).execute(),
             is(JsonValue.NULL)
         );
     }

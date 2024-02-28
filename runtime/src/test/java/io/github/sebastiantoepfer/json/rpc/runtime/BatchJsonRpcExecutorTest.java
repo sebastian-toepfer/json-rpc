@@ -45,14 +45,13 @@ class BatchJsonRpcExecutorTest {
     @Test
     void should_return_error_reponse_for_invalid_but_not_empty_array() {
         assertThat(
-            new JsonRpcExecutorJsonAdapter(new BatchJsonRpcExecutor(context, Json.createArrayBuilder().add(1).build()))
-                .execute(),
+            new JsonRpcExecutorJsonAdapter(
+                new BatchJsonRpcExecutor(context, Json.createArrayBuilder().add(1).build())
+            ).execute(),
             is(
-                Json
-                    .createArrayBuilder()
+                Json.createArrayBuilder()
                     .add(
-                        Json
-                            .createObjectBuilder()
+                        Json.createObjectBuilder()
                             .add("jsonrpc", "2.0")
                             .add(
                                 "error",
@@ -70,14 +69,11 @@ class BatchJsonRpcExecutorTest {
         assertThat(
             new JsonRpcExecutorJsonAdapter(
                 new BatchJsonRpcExecutor(context, Json.createArrayBuilder().add(1).add(2).add(3).build())
-            )
-                .execute(),
+            ).execute(),
             is(
-                Json
-                    .createArrayBuilder()
+                Json.createArrayBuilder()
                     .add(
-                        Json
-                            .createObjectBuilder()
+                        Json.createObjectBuilder()
                             .add("jsonrpc", "2.0")
                             .add(
                                 "error",
@@ -86,8 +82,7 @@ class BatchJsonRpcExecutorTest {
                             .addNull("id")
                     )
                     .add(
-                        Json
-                            .createObjectBuilder()
+                        Json.createObjectBuilder()
                             .add("jsonrpc", "2.0")
                             .add(
                                 "error",
@@ -96,8 +91,7 @@ class BatchJsonRpcExecutorTest {
                             .addNull("id")
                     )
                     .add(
-                        Json
-                            .createObjectBuilder()
+                        Json.createObjectBuilder()
                             .add("jsonrpc", "2.0")
                             .add(
                                 "error",
@@ -116,38 +110,32 @@ class BatchJsonRpcExecutorTest {
             new JsonRpcExecutorJsonAdapter(
                 new BatchJsonRpcExecutor(
                     context,
-                    Json
-                        .createArrayBuilder()
+                    Json.createArrayBuilder()
                         .add(
-                            Json
-                                .createObjectBuilder()
+                            Json.createObjectBuilder()
                                 .add("jsonrpc", "2.0")
                                 .add("method", "subtract")
                                 .add("params", Json.createObjectBuilder().add("subtrahend", 23).add("minuend", 42))
                                 .add("id", 1)
                         )
                         .add(
-                            Json
-                                .createObjectBuilder()
+                            Json.createObjectBuilder()
                                 .add("jsonrpc", "2.0")
                                 .add("method", "subtract")
                                 .add("params", Json.createObjectBuilder().add("subtrahend", 1).add("minuend", 3))
                                 .add("id", 2)
                         )
                         .add(
-                            Json
-                                .createObjectBuilder()
+                            Json.createObjectBuilder()
                                 .add("jsonrpc", "2.0")
                                 .add("method", "subtract")
                                 .add("params", Json.createObjectBuilder().add("subtrahend", 1).add("minuend", 3))
                         )
                         .build()
                 )
-            )
-                .execute(),
+            ).execute(),
             is(
-                Json
-                    .createArrayBuilder()
+                Json.createArrayBuilder()
                     .add(Json.createObjectBuilder().add("jsonrpc", "2.0").add("result", 19).add("id", 1))
                     .add(Json.createObjectBuilder().add("jsonrpc", "2.0").add("result", 2).add("id", 2))
                     .build()
@@ -161,33 +149,28 @@ class BatchJsonRpcExecutorTest {
             new JsonRpcExecutorJsonAdapter(
                 new BatchJsonRpcExecutor(
                     context,
-                    Json
-                        .createArrayBuilder()
+                    Json.createArrayBuilder()
                         .add(
-                            Json
-                                .createObjectBuilder()
+                            Json.createObjectBuilder()
                                 .add("jsonrpc", "2.0")
                                 .add("method", "subtract")
                                 .add("params", Json.createObjectBuilder().add("subtrahend", 23).add("minuend", 42))
                         )
                         .add(
-                            Json
-                                .createObjectBuilder()
+                            Json.createObjectBuilder()
                                 .add("jsonrpc", "2.0")
                                 .add("method", "subtract")
                                 .add("params", Json.createObjectBuilder().add("subtrahend", 1).add("minuend", 3))
                         )
                         .add(
-                            Json
-                                .createObjectBuilder()
+                            Json.createObjectBuilder()
                                 .add("jsonrpc", "2.0")
                                 .add("method", "subtract")
                                 .add("params", Json.createObjectBuilder().add("subtrahend", 1).add("minuend", 3))
                         )
                         .build()
                 )
-            )
-                .execute(),
+            ).execute(),
             is(JsonValue.NULL)
         );
     }
@@ -198,34 +181,29 @@ class BatchJsonRpcExecutorTest {
             new JsonRpcExecutorJsonAdapter(
                 new BatchJsonRpcExecutor(
                     context,
-                    Json
-                        .createArrayBuilder()
+                    Json.createArrayBuilder()
                         .add(
-                            Json
-                                .createObjectBuilder()
+                            Json.createObjectBuilder()
                                 .add("jsonrpc", "2.0")
                                 .add("method", "subtract")
                                 .add("params", Json.createObjectBuilder().add("subtrahend", 23).add("minuend", 42))
                                 .add("id", 1)
                         )
                         .add(
-                            Json
-                                .createObjectBuilder()
+                            Json.createObjectBuilder()
                                 .add("jsonrpc", "2.0")
                                 .add("method", "subtract")
                                 .add("params", "value")
                                 .add("id", 2)
                         )
                         .add(
-                            Json
-                                .createObjectBuilder()
+                            Json.createObjectBuilder()
                                 .add("jsonrpc", "2.0")
                                 .add("params", Json.createObjectBuilder().add("subtrahend", 1).add("minuend", 3))
                                 .add("id", 3)
                         )
                         .add(
-                            Json
-                                .createObjectBuilder()
+                            Json.createObjectBuilder()
                                 .add("jsonrpc", "2.0")
                                 .add("method", "subtract")
                                 .add("params", Json.createObjectBuilder().add("subtrahend", 1).add("minuend", 3))
@@ -233,15 +211,12 @@ class BatchJsonRpcExecutorTest {
                         )
                         .build()
                 )
-            )
-                .execute(),
+            ).execute(),
             is(
-                Json
-                    .createArrayBuilder()
+                Json.createArrayBuilder()
                     .add(Json.createObjectBuilder().add("jsonrpc", "2.0").add("result", 19).add("id", 1))
                     .add(
-                        Json
-                            .createObjectBuilder()
+                        Json.createObjectBuilder()
                             .add("jsonrpc", "2.0")
                             .add(
                                 "error",
@@ -250,8 +225,7 @@ class BatchJsonRpcExecutorTest {
                             .addNull("id")
                     )
                     .add(
-                        Json
-                            .createObjectBuilder()
+                        Json.createObjectBuilder()
                             .add("jsonrpc", "2.0")
                             .add(
                                 "error",

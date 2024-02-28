@@ -60,8 +60,7 @@ final class MethodJsonRpcExecutor implements JsonRpcExecutor {
                         new JsonValueOfType(JsonValue.ValueType.NULL)
                     )
                 )
-            )
-                .isFulfilledBy(json)
+            ).isFulfilledBy(json)
         ) {
             delegate = new SingleMethodJsonRpcExecutor(context, json);
         } else {

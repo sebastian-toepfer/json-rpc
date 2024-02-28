@@ -38,8 +38,9 @@ class CountedJsonRpcMethodTest {
     @Test
     void should_count_his_call() throws Exception {
         final Counter counter = new SimpleMeterRegistry().counter("list");
-        new CountedJsonRpcMethod(counter, new DefaultJsonRpcMethod("test", List.of(), p -> p))
-            .execute(Json.createObjectBuilder().add("name", "jane").build());
+        new CountedJsonRpcMethod(counter, new DefaultJsonRpcMethod("test", List.of(), p -> p)).execute(
+            Json.createObjectBuilder().add("name", "jane").build()
+        );
         assertThat(counter.count(), is(1.0));
     }
 
@@ -49,8 +50,7 @@ class CountedJsonRpcMethodTest {
             new CountedJsonRpcMethod(
                 new SimpleMeterRegistry().counter("list"),
                 new DefaultJsonRpcMethod("test", List.of(), p -> p)
-            )
-                .execute(Json.createObjectBuilder().add("name", "jane").build()),
+            ).execute(Json.createObjectBuilder().add("name", "jane").build()),
             is(Json.createObjectBuilder().add("name", "jane").build())
         );
     }

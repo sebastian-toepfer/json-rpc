@@ -37,17 +37,16 @@ final class ServerObjectMapping implements ModelObjectMapping<ServerObject> {
 
     public ServerObjectMapping(final JsonObject json) {
         this.json = Objects.requireNonNull(json);
-        this.mapping =
-            new JsonObjectModelMapping<>(
-                v -> {
-                    try {
-                        return new ServerObject(URI.create(v.getString("url")).toURL());
-                    } catch (MalformedURLException e) {
-                        throw new IllegalArgumentException();
-                    }
-                },
-                List.of()
-            );
+        this.mapping = new JsonObjectModelMapping<>(
+            v -> {
+                try {
+                    return new ServerObject(URI.create(v.getString("url")).toURL());
+                } catch (MalformedURLException e) {
+                    throw new IllegalArgumentException();
+                }
+            },
+            List.of()
+        );
     }
 
     @Override

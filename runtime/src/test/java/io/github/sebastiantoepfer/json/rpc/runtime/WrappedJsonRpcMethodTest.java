@@ -47,12 +47,8 @@ class WrappedJsonRpcMethodTest {
     }
 
     private static DefaultJsonRpcMethod createMethodWithName(final String name) {
-        return new DefaultJsonRpcMethod(
-            name,
-            List.of(),
-            params -> {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-        );
+        return new DefaultJsonRpcMethod(name, List.of(), params -> {
+            throw new UnsupportedOperationException("Not supported yet.");
+        });
     }
 }

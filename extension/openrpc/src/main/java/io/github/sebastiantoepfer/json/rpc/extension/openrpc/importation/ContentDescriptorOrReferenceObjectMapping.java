@@ -42,10 +42,9 @@ final class ContentDescriptorOrReferenceObjectMapping implements ModelObjectMapp
         if (contentDesc.containsKey("$ref")) {
             result = new ContentDescriptorOrReference.Reference(new ReferenceObject(contentDesc.getString("$ref")));
         } else {
-            result =
-                new ContentDescriptorOrReference.Object(
-                    new ContentDescriptorObjectMapping(contentDesc).asModelObject()
-                );
+            result = new ContentDescriptorOrReference.Object(
+                new ContentDescriptorObjectMapping(contentDesc).asModelObject()
+            );
         }
         return result;
     }

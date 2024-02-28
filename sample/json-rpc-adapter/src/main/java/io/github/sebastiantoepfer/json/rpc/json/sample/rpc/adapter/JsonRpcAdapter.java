@@ -70,16 +70,22 @@ public final class JsonRpcAdapter {
                 "sum",
                 List.of(
                     new ContentDescriptorOrReference.Object(
-                        new ContentDescriptorObject("first", new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA))
-                            .withRequired(true)
+                        new ContentDescriptorObject(
+                            "first",
+                            new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA)
+                        ).withRequired(true)
                     ),
                     new ContentDescriptorOrReference.Object(
-                        new ContentDescriptorObject("second", new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA))
-                            .withRequired(true)
+                        new ContentDescriptorObject(
+                            "second",
+                            new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA)
+                        ).withRequired(true)
                     ),
                     new ContentDescriptorOrReference.Object(
-                        new ContentDescriptorObject("third", new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA))
-                            .withRequired(true)
+                        new ContentDescriptorObject(
+                            "third",
+                            new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA)
+                        ).withRequired(true)
                     )
                 )
             ),
@@ -95,21 +101,20 @@ public final class JsonRpcAdapter {
     }
 
     private DescribableJsonRpcMethod notifyHello() {
-        return new DescribableJsonRpcMethod(
-            new MethodObject(
+        return new DescribableJsonRpcMethod(new MethodObject(
                 "notify_hello",
                 List.of(
                     new ContentDescriptorOrReference.Object(
-                        new ContentDescriptorObject("value", new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA))
-                            .withRequired(true)
+                        new ContentDescriptorObject(
+                            "value",
+                            new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA)
+                        ).withRequired(true)
                     )
                 )
-            ),
-            params -> {
+            ), params -> {
                 notify.hello(params.getInt("value"));
                 return JsonValue.NULL;
-            }
-        );
+            });
     }
 
     private static DescribableJsonRpcMethod subtract() {
@@ -118,12 +123,16 @@ public final class JsonRpcAdapter {
                 "subtract",
                 List.of(
                     new ContentDescriptorOrReference.Object(
-                        new ContentDescriptorObject("minuend", new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA))
-                            .withRequired(true)
+                        new ContentDescriptorObject(
+                            "minuend",
+                            new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA)
+                        ).withRequired(true)
                     ),
                     new ContentDescriptorOrReference.Object(
-                        new ContentDescriptorObject("subtrahend", new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA))
-                            .withRequired(true)
+                        new ContentDescriptorObject(
+                            "subtrahend",
+                            new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA)
+                        ).withRequired(true)
                     )
                 )
             ),
@@ -145,25 +154,29 @@ public final class JsonRpcAdapter {
     }
 
     private DescribableJsonRpcMethod notifySum() {
-        return new DescribableJsonRpcMethod(
-            new MethodObject(
+        return new DescribableJsonRpcMethod(new MethodObject(
                 "notify_sum",
                 List.of(
                     new ContentDescriptorOrReference.Object(
-                        new ContentDescriptorObject("first", new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA))
-                            .withRequired(true)
+                        new ContentDescriptorObject(
+                            "first",
+                            new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA)
+                        ).withRequired(true)
                     ),
                     new ContentDescriptorOrReference.Object(
-                        new ContentDescriptorObject("second", new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA))
-                            .withRequired(true)
+                        new ContentDescriptorObject(
+                            "second",
+                            new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA)
+                        ).withRequired(true)
                     ),
                     new ContentDescriptorOrReference.Object(
-                        new ContentDescriptorObject("third", new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA))
-                            .withRequired(true)
+                        new ContentDescriptorObject(
+                            "third",
+                            new JsonSchemaOrReference.Object(INT_TYPE_SCHEMA)
+                        ).withRequired(true)
                     )
                 )
-            ),
-            params -> {
+            ), params -> {
                 notify.hello(
                     io.github.sebastiantoepfer.json.rpc.sample.core.Math.sum(
                         params.getInt("first"),
@@ -172,7 +185,6 @@ public final class JsonRpcAdapter {
                     )
                 );
                 return JsonValue.NULL;
-            }
-        );
+            });
     }
 }

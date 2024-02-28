@@ -63,16 +63,15 @@ class DiscoveryJsonRpcMethod implements JsonRpcMethod {
     }
 
     static {
-        OPENRPC_SCHEMA =
-            new JsonSchemaOrReference.Reference(
-                new ReferenceObject(
-                    loadSchemaProperties()
-                        .getProperty(
-                            "schema_url",
-                            "https://github.com/open-rpc/meta-schema/releases/download/1.14.6/open-rpc-meta-schema.json"
-                        )
-                )
-            );
+        OPENRPC_SCHEMA = new JsonSchemaOrReference.Reference(
+            new ReferenceObject(
+                loadSchemaProperties()
+                    .getProperty(
+                        "schema_url",
+                        "https://github.com/open-rpc/meta-schema/releases/download/1.14.6/open-rpc-meta-schema.json"
+                    )
+            )
+        );
     }
 
     private final InfoObject info;
@@ -101,25 +100,22 @@ class DiscoveryJsonRpcMethod implements JsonRpcMethod {
 
     @Override
     public JsonValue execute(final JsonValue params) throws JsonRpcExecutionExecption {
-        return Stream
-            .concat(
-                Stream.of(
-                    new MethodOrReference.Object(
-                        new MethodObject(methodName, List.of())
-                            .withDescription("Returns an OpenRPC schema as a description of this service")
-                            .withResult(
-                                new MethodObjectResult.Object(
-                                    new ContentDescriptorObject("OpenRPC Schema", OPENRPC_SCHEMA)
-                                )
-                            )
-                    )
-                ),
-                methods
-                    .stream()
-                    .map(DescribableJsonRpcMethod::asMethodObject)
-                    .map(MethodOrReference.Object::new)
-                    .map(MethodOrReference.class::cast)
-            )
+        return Stream.concat(
+            Stream.of(
+                new MethodOrReference.Object(
+                    new MethodObject(methodName, List.of())
+                        .withDescription("Returns an OpenRPC schema as a description of this service")
+                        .withResult(
+                            new MethodObjectResult.Object(new ContentDescriptorObject("OpenRPC Schema", OPENRPC_SCHEMA))
+                        )
+                )
+            ),
+            methods
+                .stream()
+                .map(DescribableJsonRpcMethod::asMethodObject)
+                .map(MethodOrReference.Object::new)
+                .map(MethodOrReference.class::cast)
+        )
             .collect(Collectors.collectingAndThen(Collectors.toList(), this::asOpenRpcDoucment))
             .printOn(new JsonObjectMedia());
     }

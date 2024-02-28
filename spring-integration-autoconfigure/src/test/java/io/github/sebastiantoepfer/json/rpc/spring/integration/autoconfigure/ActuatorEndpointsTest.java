@@ -48,8 +48,7 @@ class ActuatorEndpointsTest {
                         when(mock(ExposableWebEndpoint.class).getRootPath()).thenReturn("info").getMock(),
                         when(mock(ExposableWebEndpoint.class).getRootPath()).thenReturn("health").getMock()
                     )
-            )
-                .prefixes(),
+            ).prefixes(),
             containsInAnyOrder("/actuator/info", "/actuator/health")
         );
     }

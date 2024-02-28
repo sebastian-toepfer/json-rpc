@@ -36,8 +36,7 @@ class ContentDescriptorObjectMappingTest {
     void should_create_with_description() {
         assertThat(
             new ContentDescriptorObjectMapping(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("name", "name")
                     .add("schema", Json.createObjectBuilder().add("$ref", "http://localhost"))
                     .add("description", "description")
@@ -53,8 +52,7 @@ class ContentDescriptorObjectMappingTest {
     void should_create_with_summary() {
         assertThat(
             new ContentDescriptorObjectMapping(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("name", "name")
                     .add("schema", Json.createObjectBuilder().add("$ref", "http://localhost"))
                     .add("summary", "summary")
@@ -70,8 +68,7 @@ class ContentDescriptorObjectMappingTest {
     void should_create_with_required() {
         assertThat(
             new ContentDescriptorObjectMapping(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("name", "name")
                     .add("schema", Json.createObjectBuilder().add("$ref", "http://localhost"))
                     .add("required", true)
@@ -87,8 +84,7 @@ class ContentDescriptorObjectMappingTest {
     void should_create_with_not_required() {
         assertThat(
             new ContentDescriptorObjectMapping(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("name", "name")
                     .add("schema", Json.createObjectBuilder().add("$ref", "http://localhost"))
                     .add("required", false)
@@ -104,8 +100,7 @@ class ContentDescriptorObjectMappingTest {
     void should_create_with_deprecated() {
         assertThat(
             new ContentDescriptorObjectMapping(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("name", "name")
                     .add("schema", Json.createObjectBuilder().add("$ref", "http://localhost"))
                     .add("deprecated", true)
@@ -121,8 +116,7 @@ class ContentDescriptorObjectMappingTest {
     void should_create_with_not_deprecated() {
         assertThat(
             new ContentDescriptorObjectMapping(
-                Json
-                    .createObjectBuilder()
+                Json.createObjectBuilder()
                     .add("name", "name")
                     .add("schema", Json.createObjectBuilder().add("$ref", "http://localhost"))
                     .add("deprecated", false)
