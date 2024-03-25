@@ -90,7 +90,7 @@ final class MethodObjectMapping implements ModelObjectMapping<MethodObject> {
                 ),
                 new OptionalField<>(
                     "result",
-                    v -> new MethodObjectResultObjectMapping(v.asJsonObject()).asModelObject(),
+                    v -> new ContentDescriptorOrReferenceObjectMapping(v.asJsonObject()).asModelObject(),
                     (v, o) -> o.withResult(v)
                 ),
                 new OptionalField<>(
