@@ -25,10 +25,10 @@ package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
 import io.github.sebastiantoepfer.ddd.media.json.JsonObjectMedia;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescriptorObject;
+import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescriptorOrReference;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.InfoObject;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.JsonSchemaOrReference;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObject;
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObjectResult;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodOrReference;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.OpenrpcDocument;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ReferenceObject;
@@ -106,7 +106,9 @@ class DiscoveryJsonRpcMethod implements JsonRpcMethod {
                     new MethodObject(methodName, List.of())
                         .withDescription("Returns an OpenRPC schema as a description of this service")
                         .withResult(
-                            new MethodObjectResult.Object(new ContentDescriptorObject("OpenRPC Schema", OPENRPC_SCHEMA))
+                            new ContentDescriptorOrReference.Object(
+                                new ContentDescriptorObject("OpenRPC Schema", OPENRPC_SCHEMA)
+                            )
                         )
                 )
             ),

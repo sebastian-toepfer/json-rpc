@@ -31,7 +31,6 @@ import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContentDescrip
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.InfoObject;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.JsonSchemaOrReference;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObject;
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.MethodObjectResult;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ReferenceObject;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.TagObject;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.TagOrReference;
@@ -116,7 +115,7 @@ class OpenRpcServiceDiscoveryJsonRpcExecutionContextTest {
                                 .withSummary("List all pets")
                                 .withTags(List.of(new TagOrReference.Object(new TagObject("pets"))))
                                 .withResult(
-                                    new MethodObjectResult.Object(
+                                    new ContentDescriptorOrReference.Object(
                                         new ContentDescriptorObject(
                                             "pets",
                                             new JsonSchemaOrReference.Reference(
@@ -200,7 +199,7 @@ class OpenRpcServiceDiscoveryJsonRpcExecutionContextTest {
                         .withSummary("List all pets")
                         .withTags(List.of(new TagOrReference.Object(new TagObject("pets"))))
                         .withResult(
-                            new MethodObjectResult.Object(
+                            new ContentDescriptorOrReference.Object(
                                 new ContentDescriptorObject(
                                     "pets",
                                     new JsonSchemaOrReference.Reference(
