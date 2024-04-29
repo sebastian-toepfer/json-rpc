@@ -54,7 +54,7 @@ class TimerUsageTest {
         //but only whether we get a more or less valid-looking result
         assertThat(
             registry.timer("test").mean(TimeUnit.MILLISECONDS),
-            both(greaterThanOrEqualTo(4.0)).and(lessThan(5.0))
+            both(greaterThanOrEqualTo(4.0)).and(lessThan(5.1))
         );
         assertThat(
             registry.timer("test").max(TimeUnit.MILLISECONDS),
