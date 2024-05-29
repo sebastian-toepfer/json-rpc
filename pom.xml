@@ -50,7 +50,7 @@
 
         <maven.compiler.source>17</maven.compiler.source>
 
-        <ddd.version>0.6.0</ddd.version>
+        <ddd.version>0.7.0</ddd.version>
         <condition4j.version>0.1.0</condition4j.version>
         <json-schema.version>0.1.2</json-schema.version>
 
