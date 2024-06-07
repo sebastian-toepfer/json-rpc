@@ -13,7 +13,7 @@
 
     <groupId>io.github.sebastian-toepfer.json.rpc</groupId>
     <artifactId>json-rpc</artifactId>
-    <version>0.9.0-SNAPSHOT</version>
+    <version>0.8.1</version>
     <name>JSON RPC</name>
     <packaging>pom</packaging>
 
@@ -46,7 +46,7 @@
     </scm>
 
     <properties>
-        <project.build.outputTimestamp>2024-03-25T18:55:39Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2024-06-07T16:22:53Z</project.build.outputTimestamp>
 
         <maven.compiler.source>17</maven.compiler.source>
 
