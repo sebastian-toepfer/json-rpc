@@ -1,4 +1,13 @@
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=sebastian-toepfer_json-rpc&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=sebastian-toepfer_json-rpc)
+![Sonar Quality Gate](https://img.shields.io/sonar/quality_gate/sebastian-toepfer_json-rpc?server=https%3A%2F%2Fsonarcloud.io)
+![Sonar Tests](https://img.shields.io/sonar/tests/sebastian-toepfer_json-rpc?server=https%3A%2F%2Fsonarcloud.io)
+![Sonar Violations](https://img.shields.io/sonar/violations/sebastian-toepfer_json-rpc?server=https%3A%2F%2Fsonarcloud.io)
+
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/sebastian-toepfer/json-rpc/build.yml)
+
+![Maven Central Version](https://img.shields.io/maven-central/v/io.github.sebastian-toepfer.json.rpc/json-rpc)
+![GitHub Release](https://img.shields.io/github/v/release/sebastian-toepfer/json-rpc)
+![GitHub commits since latest release](https://img.shields.io/github/commits-since/sebastian-toepfer/json-rpc/latest)
+
 [![Reproducible Builds](https://img.shields.io/badge/Reproducible_Builds-ok-success?labelColor=1e5b96)](https://github.com/jvm-repo-rebuild/reproducible-central/blob/master/content/io/github/sebastian-toepfer/json/rpc/json-rpc/README.md)
 
 # What is json-rpc
