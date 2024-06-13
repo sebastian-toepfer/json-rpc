@@ -247,6 +247,13 @@
                             </goals>
                         </execution>
                     </executions>
+                    <dependencies>
+                        <dependency>
+                            <groupId>io.github.sebastian-toepfer.json-schema</groupId>
+                            <artifactId>json-schema-api</artifactId>
+                            <version>${json-schema.version}</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
 
                 <plugin>
