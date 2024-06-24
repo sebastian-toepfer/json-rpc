@@ -52,7 +52,7 @@
 
         <ddd.version>0.7.0</ddd.version>
         <condition4j.version>0.1.0</condition4j.version>
-        <json-schema.version>0.2.1</json-schema.version>
+        <json-schema.version>0.3.0</json-schema.version>
 
         <payara.version>6.2024.5</payara.version>
         <quarkus.version>3.11.1</quarkus.version>
