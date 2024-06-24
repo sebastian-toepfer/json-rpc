@@ -24,8 +24,8 @@
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc;
 
 import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcExecutionExecption;
+import io.github.sebastiantoepfer.jsonschema.JsonSchema;
 import io.github.sebastiantoepfer.jsonschema.JsonSchemas;
-import io.github.sebastiantoepfer.jsonschema.Validator;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
@@ -42,7 +42,7 @@ final class MethodParameters {
 
     private static final JsonProvider JSONP = JsonProvider.provider();
     private final List<String> parameters;
-    private final Validator validator;
+    private final JsonSchema schema;
 
     public MethodParameters(final List<MethodParamMedia> parameters) {
         this.parameters = parameters
@@ -50,7 +50,7 @@ final class MethodParameters {
             .map(MethodParamMedia::name)
             .map(n -> n.orElseThrow(() -> new IllegalArgumentException("parameter with references not supported yet!")))
             .toList();
-        validator = JsonSchemas.load(
+        schema = JsonSchemas.load(
             JSONP.createObjectBuilder()
                 .add(
                     "properties",
@@ -79,12 +79,12 @@ final class MethodParameters {
                         )
                 )
                 .build()
-        ).validator();
+        );
     }
 
     JsonObject createValidParameterObjectFrom(final JsonValue parameters) throws JsonRpcExecutionExecption {
         final JsonObject result = createAsObject(parameters);
-        if (schemaValidator().isValid(result)) {
+        if (schema.applyTo(result)) {
             return result;
         } else {
             throw new JsonRpcExecutionExecption(-1, "parameter are not valid!");
@@ -115,9 +115,5 @@ final class MethodParameters {
                     JsonObjectBuilder::build
                 )
             );
-    }
-
-    private Validator schemaValidator() {
-        return validator;
     }
 }
