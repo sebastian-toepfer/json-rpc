@@ -101,7 +101,8 @@ public final class JsonRpcAdapter {
     }
 
     private DescribableJsonRpcMethod notifyHello() {
-        return new DescribableJsonRpcMethod(new MethodObject(
+        return new DescribableJsonRpcMethod(
+            new MethodObject(
                 "notify_hello",
                 List.of(
                     new ContentDescriptorOrReference.Object(
@@ -111,10 +112,12 @@ public final class JsonRpcAdapter {
                         ).withRequired(true)
                     )
                 )
-            ), params -> {
+            ),
+            params -> {
                 notify.hello(params.getInt("value"));
                 return JsonValue.NULL;
-            });
+            }
+        );
     }
 
     private static DescribableJsonRpcMethod subtract() {
@@ -147,14 +150,14 @@ public final class JsonRpcAdapter {
     }
 
     private DescribableJsonRpcMethod getData() {
-        return new DescribableJsonRpcMethod(
-            new MethodObject("get_data", List.of()),
-            params -> JSONP.createArrayBuilder().add(notify.name()).add(notify.currentValue()).build()
+        return new DescribableJsonRpcMethod(new MethodObject("get_data", List.of()), params ->
+            JSONP.createArrayBuilder().add(notify.name()).add(notify.currentValue()).build()
         );
     }
 
     private DescribableJsonRpcMethod notifySum() {
-        return new DescribableJsonRpcMethod(new MethodObject(
+        return new DescribableJsonRpcMethod(
+            new MethodObject(
                 "notify_sum",
                 List.of(
                     new ContentDescriptorOrReference.Object(
@@ -176,7 +179,8 @@ public final class JsonRpcAdapter {
                         ).withRequired(true)
                     )
                 )
-            ), params -> {
+            ),
+            params -> {
                 notify.hello(
                     io.github.sebastiantoepfer.json.rpc.sample.core.Math.sum(
                         params.getInt("first"),
@@ -185,6 +189,7 @@ public final class JsonRpcAdapter {
                     )
                 );
                 return JsonValue.NULL;
-            });
+            }
+        );
     }
 }
