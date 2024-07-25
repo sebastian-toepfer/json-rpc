@@ -89,8 +89,8 @@ public final class OpenRPCSpec {
                 .map(method -> new DescribableJsonRpcMethod(method, function))
                 .map(context::withMethod)
                 .map(ctx -> new OpenRPCSpec(spec, ctx))
-                .orElseThrow(
-                    () -> new IllegalArgumentException(String.format("method \"%s\"not found in spec!", methodName))
+                .orElseThrow(() ->
+                    new IllegalArgumentException(String.format("method \"%s\"not found in spec!", methodName))
                 );
         }
     }

@@ -41,13 +41,11 @@ class ActuatorEndpointsTest {
         webEndpointProperties.setBasePath("/actuator");
 
         assertThat(
-            new ActuatorEndpoints(
-                webEndpointProperties,
-                () ->
-                    Set.of(
-                        when(mock(ExposableWebEndpoint.class).getRootPath()).thenReturn("info").getMock(),
-                        when(mock(ExposableWebEndpoint.class).getRootPath()).thenReturn("health").getMock()
-                    )
+            new ActuatorEndpoints(webEndpointProperties, () ->
+                Set.of(
+                    when(mock(ExposableWebEndpoint.class).getRootPath()).thenReturn("info").getMock(),
+                    when(mock(ExposableWebEndpoint.class).getRootPath()).thenReturn("health").getMock()
+                )
             ).prefixes(),
             containsInAnyOrder("/actuator/info", "/actuator/health")
         );

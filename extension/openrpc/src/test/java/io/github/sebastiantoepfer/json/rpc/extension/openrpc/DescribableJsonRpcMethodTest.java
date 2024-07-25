@@ -48,12 +48,12 @@ class DescribableJsonRpcMethodTest {
 
     @Test
     void should_know_his_name() {
-        final JsonRpcMethod jsonRpcMethod = new DescribableJsonRpcMethod(new MethodObject(
-                "list_pets",
-                List.of()
-            ), params -> {
+        final JsonRpcMethod jsonRpcMethod = new DescribableJsonRpcMethod(
+            new MethodObject("list_pets", List.of()),
+            params -> {
                 throw new UnsupportedOperationException("Not supported yet.");
-            });
+            }
+        );
 
         //pitest :(
         assertThat(jsonRpcMethod.name(), is("list_pets"));

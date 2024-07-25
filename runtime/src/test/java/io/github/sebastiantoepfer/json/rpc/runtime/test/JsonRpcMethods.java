@@ -31,10 +31,8 @@ import java.util.List;
 public final class JsonRpcMethods {
 
     public static DefaultJsonRpcMethod subtract() {
-        return new DefaultJsonRpcMethod(
-            "subtract",
-            List.of("minuend", "subtrahend"),
-            params -> Json.createValue(params.getInt("minuend") - params.getInt("subtrahend"))
+        return new DefaultJsonRpcMethod("subtract", List.of("minuend", "subtrahend"), params ->
+            Json.createValue(params.getInt("minuend") - params.getInt("subtrahend"))
         );
     }
 

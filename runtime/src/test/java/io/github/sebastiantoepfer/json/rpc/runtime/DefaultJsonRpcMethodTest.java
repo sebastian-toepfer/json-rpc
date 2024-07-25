@@ -57,10 +57,8 @@ class DefaultJsonRpcMethodTest {
 
     @Test
     void should_know_his_name() {
-        final DefaultJsonRpcMethod method = new DefaultJsonRpcMethod(
-            "test",
-            List.of(),
-            params -> Json.createValue("hello")
+        final DefaultJsonRpcMethod method = new DefaultJsonRpcMethod("test", List.of(), params ->
+            Json.createValue("hello")
         );
 
         assertThat(method.name(), is("test"));

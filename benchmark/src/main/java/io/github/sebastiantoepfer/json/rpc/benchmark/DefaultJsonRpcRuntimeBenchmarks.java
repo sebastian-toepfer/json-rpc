@@ -57,10 +57,8 @@ public class DefaultJsonRpcRuntimeBenchmarks {
             runtime = new DefaultJsonRpcRuntime(
                 new DefaultJsonRpcExecutionContext()
                     .withMethod(
-                        new DefaultJsonRpcMethod(
-                            "subtract",
-                            List.of("minuend", "subtrahend"),
-                            params -> provider.createValue(params.getInt("minuend") - params.getInt("subtrahend"))
+                        new DefaultJsonRpcMethod("subtract", List.of("minuend", "subtrahend"), params ->
+                            provider.createValue(params.getInt("minuend") - params.getInt("subtrahend"))
                         )
                     )
             );
