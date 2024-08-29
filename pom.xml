@@ -238,7 +238,7 @@
                 <plugin>
                     <groupId>io.github.sebastian-toepfer.json.rpc</groupId>
                     <artifactId>json-printable-maven-plugin</artifactId>
-                    <version>1.0.0</version>
+                    <version>1.0.1</version>
                     <executions>
                         <execution>
                             <id>generate</id>
