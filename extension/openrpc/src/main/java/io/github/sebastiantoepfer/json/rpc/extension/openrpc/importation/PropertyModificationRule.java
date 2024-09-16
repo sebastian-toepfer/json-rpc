@@ -23,28 +23,6 @@
  */
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc.importation;
 
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.JsonSchemaOrReference;
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ReferenceObject;
-import io.github.sebastiantoepfer.jsonschema.JsonSchemas;
-import jakarta.json.JsonObject;
-import java.util.Objects;
-
-class JsonSchemaOrReferenceObjectMapping implements ModelObjectMapping<JsonSchemaOrReference> {
-
-    private final JsonObject jsonObject;
-
-    JsonSchemaOrReferenceObjectMapping(final JsonObject jsonObject) {
-        this.jsonObject = Objects.requireNonNull(jsonObject);
-    }
-
-    @Override
-    public JsonSchemaOrReference asModelObject() {
-        final JsonSchemaOrReference result;
-        if (jsonObject.containsKey("$ref")) {
-            result = new JsonSchemaOrReference.Reference(new ReferenceObject(jsonObject.getString("$ref")));
-        } else {
-            result = new JsonSchemaOrReference.Object(JsonSchemas.load(jsonObject));
-        }
-        return result;
-    }
+public interface PropertyModificationRule<T, R> {
+    R apply(R value, T propertyValueSource);
 }

@@ -23,26 +23,32 @@
  */
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc.importation;
 
+import io.github.sebastiantoepfer.ddd.common.Printable;
 import jakarta.json.JsonObject;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.Function;
 
-final class JsonObjectModelMapping<T> {
+final class JsonObjectModelMapping<T extends Printable> implements ModelObjectMapping<T> {
 
+    private final JsonObject json;
     private final Function<JsonObject, T> ctor;
-    private final Collection<OptionalField<?, T>> optionalFields;
+    private final Collection<PropertyModificationRule<JsonObject, T>> optionalFields;
 
     public JsonObjectModelMapping(
+        final JsonObject json,
         final Function<JsonObject, T> ctor,
-        final Collection<OptionalField<?, T>> optionalFields
+        final Collection<PropertyModificationRule<JsonObject, T>> optionalFields
     ) {
+        this.json = Objects.requireNonNull(json);
         this.ctor = ctor;
         this.optionalFields = optionalFields;
     }
 
-    public T asModelObject(final JsonObject json) {
+    @Override
+    public T asModelObject() {
         return optionalFields
             .stream()
-            .reduce(ctor.apply(json), (result, oField) -> oField.update(result, json), (l, r) -> null);
+            .reduce(ctor.apply(json), (result, oField) -> oField.apply(result, json), (l, r) -> null);
     }
 }

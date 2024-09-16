@@ -32,6 +32,7 @@ import io.github.sebastiantoepfer.ddd.media.core.HashMapMedia;
 import jakarta.json.Json;
 import jakarta.json.JsonValue;
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 class MethodObjectMappingTest {
@@ -39,9 +40,10 @@ class MethodObjectMappingTest {
     @Test
     void should_create_with_name() {
         assertThat(
-            new MethodObjectMapping(
-                Json.createObjectBuilder().add("name", "name").add("params", JsonValue.EMPTY_JSON_ARRAY).build()
-            )
+            new JsonMappings()
+                .method(
+                    Json.createObjectBuilder().add("name", "name").add("params", JsonValue.EMPTY_JSON_ARRAY).build()
+                )
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             hasEntry("name", "name")
@@ -51,13 +53,14 @@ class MethodObjectMappingTest {
     @Test
     void should_create_with_description() {
         assertThat(
-            new MethodObjectMapping(
-                Json.createObjectBuilder()
-                    .add("name", "name")
-                    .add("params", JsonValue.EMPTY_JSON_ARRAY)
-                    .add("description", "description")
-                    .build()
-            )
+            new JsonMappings()
+                .method(
+                    Json.createObjectBuilder()
+                        .add("name", "name")
+                        .add("params", JsonValue.EMPTY_JSON_ARRAY)
+                        .add("description", "description")
+                        .build()
+                )
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             hasEntry("description", "description")
@@ -67,13 +70,14 @@ class MethodObjectMappingTest {
     @Test
     void should_create_with_summary() {
         assertThat(
-            new MethodObjectMapping(
-                Json.createObjectBuilder()
-                    .add("name", "name")
-                    .add("params", JsonValue.EMPTY_JSON_ARRAY)
-                    .add("summary", "summary")
-                    .build()
-            )
+            new JsonMappings()
+                .method(
+                    Json.createObjectBuilder()
+                        .add("name", "name")
+                        .add("params", JsonValue.EMPTY_JSON_ARRAY)
+                        .add("summary", "summary")
+                        .build()
+                )
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             hasEntry("summary", "summary")
@@ -83,13 +87,14 @@ class MethodObjectMappingTest {
     @Test
     void should_create_with_deprecated() {
         assertThat(
-            new MethodObjectMapping(
-                Json.createObjectBuilder()
-                    .add("name", "name")
-                    .add("params", JsonValue.EMPTY_JSON_ARRAY)
-                    .add("deprecated", true)
-                    .build()
-            )
+            new JsonMappings()
+                .method(
+                    Json.createObjectBuilder()
+                        .add("name", "name")
+                        .add("params", JsonValue.EMPTY_JSON_ARRAY)
+                        .add("deprecated", true)
+                        .build()
+                )
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             hasEntry("deprecated", true)
@@ -99,13 +104,14 @@ class MethodObjectMappingTest {
     @Test
     void should_create_with_non_deprecated() {
         assertThat(
-            new MethodObjectMapping(
-                Json.createObjectBuilder()
-                    .add("name", "name")
-                    .add("params", JsonValue.EMPTY_JSON_ARRAY)
-                    .add("deprecated", false)
-                    .build()
-            )
+            new JsonMappings()
+                .method(
+                    Json.createObjectBuilder()
+                        .add("name", "name")
+                        .add("params", JsonValue.EMPTY_JSON_ARRAY)
+                        .add("deprecated", false)
+                        .build()
+                )
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             hasEntry("deprecated", false)
@@ -115,16 +121,17 @@ class MethodObjectMappingTest {
     @Test
     void should_create_with_servers() {
         assertThat(
-            new MethodObjectMapping(
-                Json.createObjectBuilder()
-                    .add("name", "name")
-                    .add("params", JsonValue.EMPTY_JSON_ARRAY)
-                    .add(
-                        "servers",
-                        Json.createArrayBuilder().add(Json.createObjectBuilder().add("url", "file:///test"))
-                    )
-                    .build()
-            )
+            new JsonMappings()
+                .method(
+                    Json.createObjectBuilder()
+                        .add("name", "name")
+                        .add("params", JsonValue.EMPTY_JSON_ARRAY)
+                        .add(
+                            "servers",
+                            Json.createArrayBuilder().add(Json.createObjectBuilder().add("url", "file:///test"))
+                        )
+                        .build()
+                )
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             (Matcher) hasEntry(is("servers"), contains(hasEntry("url", "file:/test")))
@@ -134,13 +141,14 @@ class MethodObjectMappingTest {
     @Test
     void should_create_with_tags() {
         assertThat(
-            new MethodObjectMapping(
-                Json.createObjectBuilder()
-                    .add("name", "name")
-                    .add("params", JsonValue.EMPTY_JSON_ARRAY)
-                    .add("tags", Json.createArrayBuilder().add(Json.createObjectBuilder().add("$ref", "tag")))
-                    .build()
-            )
+            new JsonMappings()
+                .method(
+                    Json.createObjectBuilder()
+                        .add("name", "name")
+                        .add("params", JsonValue.EMPTY_JSON_ARRAY)
+                        .add("tags", Json.createArrayBuilder().add(Json.createObjectBuilder().add("$ref", "tag")))
+                        .build()
+                )
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             (Matcher) hasEntry(is("tags"), contains(hasEntry("$ref", "tag")))
@@ -150,13 +158,14 @@ class MethodObjectMappingTest {
     @Test
     void should_create_with_paramStructure() {
         assertThat(
-            new MethodObjectMapping(
-                Json.createObjectBuilder()
-                    .add("name", "name")
-                    .add("params", JsonValue.EMPTY_JSON_ARRAY)
-                    .add("paramStructure", "either")
-                    .build()
-            )
+            new JsonMappings()
+                .method(
+                    Json.createObjectBuilder()
+                        .add("name", "name")
+                        .add("params", JsonValue.EMPTY_JSON_ARRAY)
+                        .add("paramStructure", "either")
+                        .build()
+                )
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             hasEntry(is("paramStructure"), is("either"))
@@ -166,13 +175,14 @@ class MethodObjectMappingTest {
     @Test
     void should_create_with_result() {
         assertThat(
-            new MethodObjectMapping(
-                Json.createObjectBuilder()
-                    .add("name", "name")
-                    .add("params", JsonValue.EMPTY_JSON_ARRAY)
-                    .add("result", Json.createObjectBuilder().add("$ref", "test"))
-                    .build()
-            )
+            new JsonMappings()
+                .method(
+                    Json.createObjectBuilder()
+                        .add("name", "name")
+                        .add("params", JsonValue.EMPTY_JSON_ARRAY)
+                        .add("result", Json.createObjectBuilder().add("$ref", "test"))
+                        .build()
+                )
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             (Matcher) hasEntry(is("result"), hasEntry("$ref", "test"))
@@ -182,13 +192,14 @@ class MethodObjectMappingTest {
     @Test
     void should_create_with_errors() {
         assertThat(
-            new MethodObjectMapping(
-                Json.createObjectBuilder()
-                    .add("name", "name")
-                    .add("params", JsonValue.EMPTY_JSON_ARRAY)
-                    .add("errors", Json.createArrayBuilder().add(Json.createObjectBuilder().add("$ref", "test")))
-                    .build()
-            )
+            new JsonMappings()
+                .method(
+                    Json.createObjectBuilder()
+                        .add("name", "name")
+                        .add("params", JsonValue.EMPTY_JSON_ARRAY)
+                        .add("errors", Json.createArrayBuilder().add(Json.createObjectBuilder().add("$ref", "test")))
+                        .build()
+                )
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             (Matcher) hasEntry(is("errors"), contains(hasEntry("$ref", "test")))
@@ -196,15 +207,16 @@ class MethodObjectMappingTest {
     }
 
     @Test
-    void should_create_with_links() {
+    void should_create_with_linkreference() {
         assertThat(
-            new MethodObjectMapping(
-                Json.createObjectBuilder()
-                    .add("name", "name")
-                    .add("params", JsonValue.EMPTY_JSON_ARRAY)
-                    .add("links", Json.createArrayBuilder().add(Json.createObjectBuilder().add("$ref", "test")))
-                    .build()
-            )
+            new JsonMappings()
+                .method(
+                    Json.createObjectBuilder()
+                        .add("name", "name")
+                        .add("params", JsonValue.EMPTY_JSON_ARRAY)
+                        .add("links", Json.createArrayBuilder().add(Json.createObjectBuilder().add("$ref", "test")))
+                        .build()
+                )
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             (Matcher) hasEntry(is("links"), contains(hasEntry("$ref", "test")))
@@ -212,15 +224,33 @@ class MethodObjectMappingTest {
     }
 
     @Test
+    void should_create_with_link() {
+        assertThat(
+            new JsonMappings()
+                .method(
+                    Json.createObjectBuilder()
+                        .add("name", "name")
+                        .add("params", JsonValue.EMPTY_JSON_ARRAY)
+                        .add("links", Json.createArrayBuilder().add(Json.createObjectBuilder().add("name", "test")))
+                        .build()
+                )
+                .asModelObject()
+                .printOn(new HashMapMedia()),
+            (Matcher) Matchers.hasKey(is("links"))
+        );
+    }
+
+    @Test
     void should_create_with_examples() {
         assertThat(
-            new MethodObjectMapping(
-                Json.createObjectBuilder()
-                    .add("name", "name")
-                    .add("params", JsonValue.EMPTY_JSON_ARRAY)
-                    .add("examples", Json.createArrayBuilder().add(Json.createObjectBuilder().add("$ref", "test")))
-                    .build()
-            )
+            new JsonMappings()
+                .method(
+                    Json.createObjectBuilder()
+                        .add("name", "name")
+                        .add("params", JsonValue.EMPTY_JSON_ARRAY)
+                        .add("examples", Json.createArrayBuilder().add(Json.createObjectBuilder().add("$ref", "test")))
+                        .build()
+                )
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             (Matcher) hasEntry(is("examples"), contains(hasEntry("$ref", "test")))
@@ -230,13 +260,14 @@ class MethodObjectMappingTest {
     @Test
     void should_create_with_externalDocs() {
         assertThat(
-            new MethodObjectMapping(
-                Json.createObjectBuilder()
-                    .add("name", "name")
-                    .add("params", JsonValue.EMPTY_JSON_ARRAY)
-                    .add("externalDocs", Json.createObjectBuilder().add("url", "http://www.qwant.de"))
-                    .build()
-            )
+            new JsonMappings()
+                .method(
+                    Json.createObjectBuilder()
+                        .add("name", "name")
+                        .add("params", JsonValue.EMPTY_JSON_ARRAY)
+                        .add("externalDocs", Json.createObjectBuilder().add("url", "http://www.qwant.de"))
+                        .build()
+                )
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             (Matcher) hasEntry(is("externalDocs"), hasEntry("url", "http://www.qwant.de"))

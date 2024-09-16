@@ -35,7 +35,8 @@ class LicenseObjectMappingTest {
     @Test
     void should_create_with_name() {
         assertThat(
-            new LicenseObjectMapping(Json.createObjectBuilder().add("name", "name").build())
+            new JsonMappings()
+                .licence(Json.createObjectBuilder().add("name", "name").build())
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             hasEntry("name", "name")
@@ -45,7 +46,8 @@ class LicenseObjectMappingTest {
     @Test
     void should_create_with_url() {
         assertThat(
-            new LicenseObjectMapping(Json.createObjectBuilder().add("url", "url").build())
+            new JsonMappings()
+                .licence(Json.createObjectBuilder().add("url", "url").build())
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             hasEntry("url", "url")

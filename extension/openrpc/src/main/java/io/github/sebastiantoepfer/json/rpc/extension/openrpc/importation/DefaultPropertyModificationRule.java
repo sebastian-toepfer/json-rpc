@@ -23,30 +23,22 @@
  */
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc.importation;
 
-import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ContactObject;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonString;
-import java.util.List;
+import java.util.Objects;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
-class ContactObjectMapping implements ModelObjectMapping<ContactObject> {
+public final class DefaultPropertyModificationRule<T, U, R> implements PropertyModificationRule<T, R> {
 
-    private final JsonObject json;
-    private final JsonObjectModelMapping<ContactObject> mapping;
+    private final Function<T, U> mapping;
+    private final BiFunction<U, R, R> writer;
 
-    ContactObjectMapping(final JsonObject json) {
-        this.json = json;
-        this.mapping = new JsonObjectModelMapping<>(
-            v -> new ContactObject(),
-            List.of(
-                new OptionalField<>("name", v -> JsonString.class.cast(v).getString(), (v, o) -> o.withName(v)),
-                new OptionalField<>("url", v -> JsonString.class.cast(v).getString(), (v, o) -> o.withUrl(v)),
-                new OptionalField<>("email", v -> JsonString.class.cast(v).getString(), (v, o) -> o.withEmail(v))
-            )
-        );
+    public DefaultPropertyModificationRule(final Function<T, U> mapping, final BiFunction<U, R, R> writer) {
+        this.mapping = Objects.requireNonNull(mapping);
+        this.writer = Objects.requireNonNull(writer);
     }
 
     @Override
-    public ContactObject asModelObject() {
-        return mapping.asModelObject(json);
+    public R apply(final R value, final T propertyValueSource) {
+        return mapping.andThen(v -> writer.apply(v, value)).apply(propertyValueSource);
     }
 }

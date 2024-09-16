@@ -35,7 +35,8 @@ class ContactObjectMappingTest {
     @Test
     void should_create_with_name() {
         assertThat(
-            new ContactObjectMapping(Json.createObjectBuilder().add("name", "name").build())
+            new JsonMappings()
+                .contact(Json.createObjectBuilder().add("name", "name").build())
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             hasEntry("name", "name")
@@ -45,7 +46,8 @@ class ContactObjectMappingTest {
     @Test
     void should_create_with_url() {
         assertThat(
-            new ContactObjectMapping(Json.createObjectBuilder().add("url", "url").build())
+            new JsonMappings()
+                .contact(Json.createObjectBuilder().add("url", "url").build())
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             hasEntry("url", "url")
@@ -55,7 +57,8 @@ class ContactObjectMappingTest {
     @Test
     void should_create_with_email() {
         assertThat(
-            new ContactObjectMapping(Json.createObjectBuilder().add("email", "email").build())
+            new JsonMappings()
+                .contact(Json.createObjectBuilder().add("email", "email").build())
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             hasEntry("email", "email")

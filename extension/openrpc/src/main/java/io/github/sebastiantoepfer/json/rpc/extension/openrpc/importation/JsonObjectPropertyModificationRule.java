@@ -25,23 +25,44 @@ package io.github.sebastiantoepfer.json.rpc.extension.openrpc.importation;
 
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
+import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
-final class OptionalField<T, R> {
+final class JsonObjectPropertyModificationRule<T extends JsonValue, R>
+    implements PropertyModificationRule<JsonObject, R> {
 
-    private final String name;
-    private final Function<JsonValue, T> mapping;
-    private final BiFunction<T, R, R> setter;
+    private final String jsonPropertyName;
+    private final Function<JsonValue, Optional<T>> jsonValueMapping;
+    private final PropertyModificationRule<T, R> setter;
 
-    public OptionalField(final String name, final Function<JsonValue, T> mapping, final BiFunction<T, R, R> setter) {
-        this.name = name;
-        this.mapping = mapping;
+    public JsonObjectPropertyModificationRule(
+        final String jsonPropertyName,
+        final PropertyModificationRule<T, R> setter
+    ) {
+        this(jsonPropertyName, j -> Optional.of((T) j), setter);
+    }
+
+    public JsonObjectPropertyModificationRule(
+        final String jsonPropertyName,
+        final Function<JsonValue, Optional<T>> jsonValueMapping,
+        final PropertyModificationRule<T, R> setter
+    ) {
+        this.jsonPropertyName = jsonPropertyName;
+        this.jsonValueMapping = jsonValueMapping;
         this.setter = setter;
     }
 
-    public R update(final R value, final JsonObject json) {
-        return Optional.ofNullable(json.get(name)).map(mapping).map(v -> setter.apply(v, value)).orElse(value);
+    @Override
+    public R apply(final R value, final JsonObject propertyValueSource) {
+        return propertyValueSource
+            .entrySet()
+            .stream()
+            .filter(e -> e.getKey().equals(jsonPropertyName))
+            .map(Map.Entry::getValue)
+            .findFirst()
+            .flatMap(jsonValueMapping)
+            .map(v -> setter.apply(value, v))
+            .orElse(value);
     }
 }

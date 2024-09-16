@@ -23,6 +23,8 @@
  */
 package io.github.sebastiantoepfer.json.rpc.extension.openrpc.importation;
 
-interface ModelObjectMapping<T> {
+import io.github.sebastiantoepfer.ddd.common.Printable;
+
+public interface ModelObjectMapping<T extends Printable> {
     T asModelObject();
 }

@@ -35,13 +35,14 @@ class ContentDescriptorObjectMappingTest {
     @Test
     void should_create_with_description() {
         assertThat(
-            new ContentDescriptorObjectMapping(
-                Json.createObjectBuilder()
-                    .add("name", "name")
-                    .add("schema", Json.createObjectBuilder().add("$ref", "http://localhost"))
-                    .add("description", "description")
-                    .build()
-            )
+            new JsonMappings()
+                .contentDescriptor(
+                    Json.createObjectBuilder()
+                        .add("name", "name")
+                        .add("schema", Json.createObjectBuilder().add("$ref", "http://localhost"))
+                        .add("description", "description")
+                        .build()
+                )
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             hasEntry("description", "description")
@@ -51,13 +52,14 @@ class ContentDescriptorObjectMappingTest {
     @Test
     void should_create_with_summary() {
         assertThat(
-            new ContentDescriptorObjectMapping(
-                Json.createObjectBuilder()
-                    .add("name", "name")
-                    .add("schema", Json.createObjectBuilder().add("$ref", "http://localhost"))
-                    .add("summary", "summary")
-                    .build()
-            )
+            new JsonMappings()
+                .contentDescriptor(
+                    Json.createObjectBuilder()
+                        .add("name", "name")
+                        .add("schema", Json.createObjectBuilder().add("$ref", "http://localhost"))
+                        .add("summary", "summary")
+                        .build()
+                )
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             hasEntry("summary", "summary")
@@ -67,13 +69,14 @@ class ContentDescriptorObjectMappingTest {
     @Test
     void should_create_with_required() {
         assertThat(
-            new ContentDescriptorObjectMapping(
-                Json.createObjectBuilder()
-                    .add("name", "name")
-                    .add("schema", Json.createObjectBuilder().add("$ref", "http://localhost"))
-                    .add("required", true)
-                    .build()
-            )
+            new JsonMappings()
+                .contentDescriptor(
+                    Json.createObjectBuilder()
+                        .add("name", "name")
+                        .add("schema", Json.createObjectBuilder().add("$ref", "http://localhost"))
+                        .add("required", true)
+                        .build()
+                )
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             hasEntry("required", true)
@@ -83,13 +86,14 @@ class ContentDescriptorObjectMappingTest {
     @Test
     void should_create_with_not_required() {
         assertThat(
-            new ContentDescriptorObjectMapping(
-                Json.createObjectBuilder()
-                    .add("name", "name")
-                    .add("schema", Json.createObjectBuilder().add("$ref", "http://localhost"))
-                    .add("required", false)
-                    .build()
-            )
+            new JsonMappings()
+                .contentDescriptor(
+                    Json.createObjectBuilder()
+                        .add("name", "name")
+                        .add("schema", Json.createObjectBuilder().add("$ref", "http://localhost"))
+                        .add("required", false)
+                        .build()
+                )
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             hasEntry("required", false)
@@ -99,13 +103,14 @@ class ContentDescriptorObjectMappingTest {
     @Test
     void should_create_with_deprecated() {
         assertThat(
-            new ContentDescriptorObjectMapping(
-                Json.createObjectBuilder()
-                    .add("name", "name")
-                    .add("schema", Json.createObjectBuilder().add("$ref", "http://localhost"))
-                    .add("deprecated", true)
-                    .build()
-            )
+            new JsonMappings()
+                .contentDescriptor(
+                    Json.createObjectBuilder()
+                        .add("name", "name")
+                        .add("schema", Json.createObjectBuilder().add("$ref", "http://localhost"))
+                        .add("deprecated", true)
+                        .build()
+                )
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             hasEntry("deprecated", true)
@@ -115,13 +120,14 @@ class ContentDescriptorObjectMappingTest {
     @Test
     void should_create_with_not_deprecated() {
         assertThat(
-            new ContentDescriptorObjectMapping(
-                Json.createObjectBuilder()
-                    .add("name", "name")
-                    .add("schema", Json.createObjectBuilder().add("$ref", "http://localhost"))
-                    .add("deprecated", false)
-                    .build()
-            )
+            new JsonMappings()
+                .contentDescriptor(
+                    Json.createObjectBuilder()
+                        .add("name", "name")
+                        .add("schema", Json.createObjectBuilder().add("$ref", "http://localhost"))
+                        .add("deprecated", false)
+                        .build()
+                )
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             hasEntry("deprecated", false)

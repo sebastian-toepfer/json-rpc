@@ -35,7 +35,8 @@ class ServerObjectMappingTest {
     @Test
     void should_create_with_url() {
         assertThat(
-            new ServerObjectMapping(Json.createObjectBuilder().add("url", "http://localhost").build())
+            new JsonMappings()
+                .server(Json.createObjectBuilder().add("url", "http://localhost").build())
                 .asModelObject()
                 .printOn(new HashMapMedia()),
             hasEntry("url", "http://localhost")
