@@ -28,11 +28,11 @@
 
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-resteasy-reactive</artifactId>
+            <artifactId>quarkus-rest</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-resteasy-reactive-jsonb</artifactId>
+            <artifactId>quarkus-rest-jsonb</artifactId>
         </dependency>
 
         <dependency>
@@ -76,7 +76,8 @@
             </activation>
 
             <properties>
-                <quarkus.package.type>uber-jar</quarkus.package.type>
+                <quarkus.package.jar.enabled>true</quarkus.package.jar.enabled>
+                <quarkus.package.jar.type>uber-jar</quarkus.package.jar.type>
             </properties>
 
             <build>
@@ -120,7 +121,8 @@
             </activation>
 
             <properties>
-                <quarkus.package.type>native</quarkus.package.type>
+                <quarkus.package.jar.enabled>false</quarkus.package.jar.enabled>
+                <quarkus.native.enabled>true</quarkus.native.enabled>
             </properties>
 
             <build>
@@ -153,7 +155,8 @@
             <id>container-native</id>
 
             <properties>
-                <quarkus.package.type>native</quarkus.package.type>
+                <quarkus.package.jar.enabled>false</quarkus.package.jar.enabled>
+                <quarkus.native.enabled>true</quarkus.native.enabled>
                 <quarkus.container-image.build>true</quarkus.container-image.build>
             </properties>
 
