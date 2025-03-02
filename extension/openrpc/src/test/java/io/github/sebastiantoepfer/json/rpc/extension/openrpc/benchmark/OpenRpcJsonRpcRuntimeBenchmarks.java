@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.github.sebastiantoepfer.json.rpc.benchmark;
+package io.github.sebastiantoepfer.json.rpc.extension.openrpc.benchmark;
 
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.DescribableJsonRpcMethod;
 import io.github.sebastiantoepfer.json.rpc.extension.openrpc.OpenRpcServiceDiscoveryJsonRpcExecutionContext;

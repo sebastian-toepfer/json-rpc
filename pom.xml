@@ -232,6 +232,14 @@
         </dependencies>
     </dependencyManagement>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
     <build>
         <pluginManagement>
             <plugins>
@@ -414,6 +422,12 @@
                         </execution>
                     </executions>
                 </plugin>
+
+                <plugin>
+                    <groupId>pw.krejci</groupId>
+                    <artifactId>jmh-maven-plugin</artifactId>
+                    <version>0.2.2</version>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -429,7 +443,6 @@
                 <module>tck</module>
                 <module>sample</module>
                 <module>jmeter</module>
-                <module>benchmark</module>
             </modules>
         </profile>
 
@@ -453,7 +466,6 @@
                 <module>tck</module>
                 <module>sample</module>
                 <module>jmeter</module>
-                <module>benchmark</module>
             </modules>
         </profile>
 
@@ -464,7 +476,6 @@
                 <module>tck</module>
                 <module>sample</module>
                 <module>jmeter</module>
-                <module>benchmark</module>
             </modules>
         </profile>
 
@@ -475,7 +486,6 @@
                 <module>tck</module>
                 <module>sample</module>
                 <module>jmeter</module>
-                <module>benchmark</module>
             </modules>
         </profile>
     </profiles>
