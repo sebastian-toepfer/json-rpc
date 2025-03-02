@@ -57,6 +57,7 @@ jobs:
         comment-on-alert: true
         github-token: ${{ secrets.GITHUB_TOKEN }}
         fail-on-alert: true
+        summary-always: true
 
     - name: update benchmark-data
       if: ${{ github.ref == 'refs/heads/main' }}
