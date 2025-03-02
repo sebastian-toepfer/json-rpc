@@ -34,8 +34,7 @@ jobs:
 
     - name: run benchmark
       run: |
-        mvn -DskipTests=true -Pfull --also-make --projects benchmark clean package
-        java -jar benchmark/target/benchmarks.jar -rf json
+        mvn -DskipTests=true -Djmh.rf=json -Djmh.rff=target/jmh-result.json jmh:benchmark
 
     - name: download previous benchmark data
       uses: actions/cache@v4
@@ -43,19 +42,24 @@ jobs:
         path: ./cache
         key: ${{ runner.os }}-benchmark
 
+    - name: merge benchmark results
+      run: |
+        find . -type f -name "jmh-result.json" | xargs jq -s 'reduce .[] as $x ([]; . + $x)' > target/jmh-result.json
+
     - name: store benchmark result
       uses: benchmark-action/github-action-benchmark@v1
       with:
         name: jmh Benchmark
         tool: 'jmh'
-        output-file-path: jmh-result.json
+        output-file-path: ./target/jmh-result.json
         external-data-json-path: ./cache/benchmark-data.json
         alert-threshold: '200%'
         comment-on-alert: true
         github-token: ${{ secrets.GITHUB_TOKEN }}
         fail-on-alert: true
+        summary-always: true
 
     - name: update benchmark-data
       if: ${{ github.ref == 'refs/heads/main' }}
       run: |
-        cp jmh-result.json ./cache/benchmark-data.json
+        cp target/jmh-result.json ./cache/benchmark-data.json
