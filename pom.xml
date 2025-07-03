@@ -55,7 +55,7 @@
         <json-schema.version>0.3.0</json-schema.version>
 
         <payara.version>6.2025.6</payara.version>
-        <quarkus.version>3.24.1</quarkus.version>
+        <quarkus.version>3.24.2</quarkus.version>
         <spring.boot.version>3.5.3</spring.boot.version>
         <jmh.version>1.37</jmh.version>
     </properties>
