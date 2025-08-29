@@ -44,13 +44,13 @@ class RpcResourceTest extends JerseyTest {
     @Override
     protected Application configure() {
         return new ResourceConfig(RpcResource.class).register(
-            new AbstractBinder() {
-                @Override
-                protected void configure() {
-                    bind(new DefaultJsonRpcRuntime(new DefaultJsonRpcExecutionContext())).to(JsonRpcRuntime.class);
+                new AbstractBinder() {
+                    @Override
+                    protected void configure() {
+                        bind(new DefaultJsonRpcRuntime(new DefaultJsonRpcExecutionContext())).to(JsonRpcRuntime.class);
+                    }
                 }
-            }
-        );
+            );
     }
 
     @Test

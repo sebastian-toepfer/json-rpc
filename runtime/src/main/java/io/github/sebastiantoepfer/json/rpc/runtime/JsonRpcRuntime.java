@@ -30,11 +30,11 @@ import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 
 public interface JsonRpcRuntime {
-    default JsonRpcExecutor createExecutorFor(String string) {
+    default JsonRpcExecutor createExecutorFor(final String string) {
         return createExecutorFor(new StringReader(string));
     }
 
-    default JsonRpcExecutor createExecutorFor(InputStream stream) {
+    default JsonRpcExecutor createExecutorFor(final InputStream stream) {
         return createExecutorFor(new InputStreamReader(stream, StandardCharsets.UTF_8));
     }
 

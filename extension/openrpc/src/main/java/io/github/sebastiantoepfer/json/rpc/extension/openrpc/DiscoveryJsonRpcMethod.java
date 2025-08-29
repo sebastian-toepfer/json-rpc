@@ -53,8 +53,9 @@ class DiscoveryJsonRpcMethod implements JsonRpcMethod {
         final Properties result = new Properties();
         try {
             result.load(
-                OpenRpcServiceDiscoveryJsonRpcExecutionContext.class.getClassLoader()
-                    .getResourceAsStream("schema_url.properties")
+                OpenRpcServiceDiscoveryJsonRpcExecutionContext.class.getClassLoader().getResourceAsStream(
+                    "schema_url.properties"
+                )
             );
         } catch (IOException ignore) {
             LOG.log(Level.FINE, null, ignore);
@@ -65,11 +66,10 @@ class DiscoveryJsonRpcMethod implements JsonRpcMethod {
     static {
         OPENRPC_SCHEMA = new JsonSchemaOrReference.Reference(
             new ReferenceObject(
-                loadSchemaProperties()
-                    .getProperty(
-                        "schema_url",
-                        "https://github.com/open-rpc/meta-schema/releases/download/1.14.6/open-rpc-meta-schema.json"
-                    )
+                loadSchemaProperties().getProperty(
+                    "schema_url",
+                    "https://github.com/open-rpc/meta-schema/releases/download/1.14.6/open-rpc-meta-schema.json"
+                )
             )
         );
     }

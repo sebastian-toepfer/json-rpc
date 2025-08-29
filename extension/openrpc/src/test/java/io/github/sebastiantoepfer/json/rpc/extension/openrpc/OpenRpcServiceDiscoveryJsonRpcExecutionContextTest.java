@@ -59,26 +59,27 @@ class OpenRpcServiceDiscoveryJsonRpcExecutionContextTest {
                             .add("info", Json.createObjectBuilder().add("title", "test app").add("version", "1.0.0"))
                             .add(
                                 "methods",
-                                Json.createArrayBuilder()
-                                    .add(
-                                        Json.createObjectBuilder()
-                                            .add("name", "rpc.discover")
-                                            .add(
-                                                "description",
-                                                "Returns an OpenRPC schema as a description of this service"
-                                            )
-                                            .add("params", JsonValue.EMPTY_JSON_ARRAY)
-                                            .add(
-                                                "result",
-                                                Json.createObjectBuilder()
-                                                    .add("name", "OpenRPC Schema")
-                                                    .add(
-                                                        "schema",
-                                                        Json.createObjectBuilder()
-                                                            .add("$ref", System.getProperty("openrpc.schema.url"))
+                                Json.createArrayBuilder().add(
+                                    Json.createObjectBuilder()
+                                        .add("name", "rpc.discover")
+                                        .add(
+                                            "description",
+                                            "Returns an OpenRPC schema as a description of this service"
+                                        )
+                                        .add("params", JsonValue.EMPTY_JSON_ARRAY)
+                                        .add(
+                                            "result",
+                                            Json.createObjectBuilder()
+                                                .add("name", "OpenRPC Schema")
+                                                .add(
+                                                    "schema",
+                                                    Json.createObjectBuilder().add(
+                                                        "$ref",
+                                                        System.getProperty("openrpc.schema.url")
                                                     )
-                                            )
-                                    )
+                                                )
+                                        )
+                                )
                             )
                             .add("openrpc", "1.3.2")
                     )
@@ -153,14 +154,13 @@ class OpenRpcServiceDiscoveryJsonRpcExecutionContextTest {
                             .add("tags", Json.createArrayBuilder().add(Json.createObjectBuilder().add("name", "pets")))
                             .add(
                                 "params",
-                                Json.createArrayBuilder()
-                                    .add(
-                                        Json.createObjectBuilder()
-                                            .add("name", "limit")
-                                            .add("description", "How many items to return at one time (max 100)")
-                                            .add("required", false)
-                                            .add("schema", Json.createObjectBuilder().add("type", "integer"))
-                                    )
+                                Json.createArrayBuilder().add(
+                                    Json.createObjectBuilder()
+                                        .add("name", "limit")
+                                        .add("description", "How many items to return at one time (max 100)")
+                                        .add("required", false)
+                                        .add("schema", Json.createObjectBuilder().add("type", "integer"))
+                                )
                             )
                             .add(
                                 "result",

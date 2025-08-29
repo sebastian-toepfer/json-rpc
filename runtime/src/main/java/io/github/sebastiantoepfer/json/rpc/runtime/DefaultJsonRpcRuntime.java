@@ -59,12 +59,11 @@ public final class DefaultJsonRpcRuntime implements JsonRpcRuntime {
     private JsonRpcExecutor createExecutorFor(final JsonParser parser) {
         LOG.entering(DefaultJsonRpcRuntime.class.getName(), "createExecutorFor", parser);
         final JsonParser.Event event = parser.next();
-        final JsonRpcExecutor result =
-            switch (event) {
-                case START_ARRAY -> createBatchJsonRpcExecutor(parser.getArray());
-                case START_OBJECT -> createMethodJsonJsonRpcExecutor(parser.getObject());
-                default -> ErrorJsonRpcExecutor.invalidRequest();
-            };
+        final JsonRpcExecutor result = switch (event) {
+            case START_ARRAY -> createBatchJsonRpcExecutor(parser.getArray());
+            case START_OBJECT -> createMethodJsonJsonRpcExecutor(parser.getObject());
+            default -> ErrorJsonRpcExecutor.invalidRequest();
+        };
         LOG.exiting(DefaultJsonRpcRuntime.class.getName(), "createExecutorFor", result);
         return result;
     }

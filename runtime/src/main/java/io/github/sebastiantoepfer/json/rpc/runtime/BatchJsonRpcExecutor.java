@@ -96,7 +96,10 @@ final class BatchJsonRpcExecutor implements JsonRpcExecutor {
         @Override
         public void writeTo(final JsonGenerator generator) {
             generator.writeStartArray();
-            calls.stream().map(JsonRpcExecutor::execute).forEach(response -> response.writeTo(generator));
+            calls
+                .stream()
+                .map(JsonRpcExecutor::execute)
+                .forEach(response -> response.writeTo(generator));
             generator.writeEnd();
         }
     }

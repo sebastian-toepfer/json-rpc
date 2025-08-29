@@ -29,8 +29,10 @@ import java.util.stream.Stream;
 public interface JsonRpcExecutionContext<T extends JsonRpcMethod> {
     JsonRpcExecutionContext<T> withMethod(T method);
 
-    default Optional<JsonRpcMethod> findMethodWithName(String name) {
-        return methods().filter(m -> m.hasName(name)).findFirst();
+    default Optional<JsonRpcMethod> findMethodWithName(final String name) {
+        return methods()
+            .filter(m -> m.hasName(name))
+            .findFirst();
     }
 
     Stream<JsonRpcMethod> methods();
