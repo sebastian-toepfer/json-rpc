@@ -14,3 +14,6 @@ updates:
     interval: daily
     time: "01:00"
   target-branch: main
+  ignore:
+    - dependency-name: "fish.payara.maven.plugins:payara-micro-maven-plugin"
+      versions: "[2.5.1,)"
