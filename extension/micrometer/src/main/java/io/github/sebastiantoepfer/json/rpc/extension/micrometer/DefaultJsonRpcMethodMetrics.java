@@ -27,7 +27,7 @@ import io.github.sebastiantoepfer.json.rpc.runtime.JsonRpcMethod;
 import io.micrometer.core.instrument.MeterRegistry;
 
 public enum DefaultJsonRpcMethodMetrics implements JsonRpcMethodMetric {
-    CALLTIME() {
+    CALLTIME {
         @Override
         public JsonRpcMethod observe(final MeterRegistry registry, final JsonRpcMethod methodToObserve) {
             return new TimedJsonRpcMethod(registry.timer(methodToObserve.name().concat(".calltime")), methodToObserve);

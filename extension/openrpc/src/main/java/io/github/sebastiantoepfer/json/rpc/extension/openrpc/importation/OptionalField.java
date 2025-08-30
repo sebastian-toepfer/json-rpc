@@ -42,6 +42,9 @@ final class OptionalField<T, R> {
     }
 
     public R update(final R value, final JsonObject json) {
-        return Optional.ofNullable(json.get(name)).map(mapping).map(v -> setter.apply(v, value)).orElse(value);
+        return Optional.ofNullable(json.get(name))
+            .map(mapping)
+            .map(v -> setter.apply(v, value))
+            .orElse(value);
     }
 }
