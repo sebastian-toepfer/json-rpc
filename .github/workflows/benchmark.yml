@@ -26,7 +26,7 @@ jobs:
         distribution: zulu
 
     - name: cache maven packages
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
@@ -37,7 +37,7 @@ jobs:
         mvn -DskipTests=true -Djmh.rf=json -Djmh.rff=target/jmh-result.json jmh:benchmark
 
     - name: download previous benchmark data
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ./cache
         key: ${{ runner.os }}-benchmark
