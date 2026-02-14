@@ -32,7 +32,7 @@ import org.springframework.context.annotation.Primary;
 @Primary
 class CompositeEndpoints implements MvcUrlPrefixes {
 
-    private Collection<MvcUrlPrefixes> prefixes;
+    private final Collection<MvcUrlPrefixes> prefixes;
 
     public CompositeEndpoints(final Collection<MvcUrlPrefixes> prefixes) {
         this.prefixes = Set.copyOf(prefixes);
