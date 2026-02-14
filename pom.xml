@@ -54,7 +54,7 @@
         <condition4j.version>0.1.0</condition4j.version>
         <json-schema.version>0.3.0</json-schema.version>
 
-        <payara.version>6.2025.10</payara.version>
+        <payara.version>7.2026.1</payara.version>
         <quarkus.version>3.31.3</quarkus.version>
         <spring.boot.version>3.5.7</spring.boot.version>
         <jmh.version>1.37</jmh.version>
@@ -300,6 +300,13 @@
                                     <option>
                                         <key>-Djdk.util.zip.disableZip64ExtraFieldValidation</key>
                                         <value>true</value>
+                                    </option>
+                                    <!--
+                                        see: https://github.com/payara/Payara/issues/7141
+                                    -->
+                                    <option>
+                                        <key>-Djakarta.security.jacc.PolicyFactory.provider</key>
+                                        <value>org.glassfish.exousia.modules.def.DefaultPolicyFactory</value>
                                     </option>
                                 </javaCommandLineOptions>
                             </configuration>
