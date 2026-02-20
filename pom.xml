@@ -54,7 +54,7 @@
         <condition4j.version>0.1.0</condition4j.version>
         <json-schema.version>0.3.0</json-schema.version>
 
-        <payara.version>7.2026.1</payara.version>
+        <payara.version>7.2026.2</payara.version>
         <quarkus.version>3.31.4</quarkus.version>
         <spring.boot.version>4.0.3</spring.boot.version>
         <jmh.version>1.37</jmh.version>
