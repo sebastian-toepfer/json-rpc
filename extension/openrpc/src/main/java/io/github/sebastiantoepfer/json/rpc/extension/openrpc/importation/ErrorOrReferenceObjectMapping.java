@@ -29,7 +29,7 @@ import io.github.sebastiantoepfer.json.rpc.extension.openrpc.spec.ReferenceObjec
 import jakarta.json.JsonObject;
 import java.util.Objects;
 
-class ErrorOrReferenceObjectMapping implements ModelObjectMapping<ErrorOrReference> {
+final class ErrorOrReferenceObjectMapping implements ModelObjectMapping<ErrorOrReference> {
 
     private final JsonObject json;
 

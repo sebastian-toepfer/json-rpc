@@ -159,7 +159,7 @@ final class MethodJsonRpcExecutor implements JsonRpcExecutor {
             return result;
         }
 
-        private class MethodResultJsonRpcResponse implements JsonRpcResponse {
+        private final class MethodResultJsonRpcResponse implements JsonRpcResponse {
 
             private final JsonValue methodExecutionResult;
 
@@ -185,7 +185,7 @@ final class MethodJsonRpcExecutor implements JsonRpcExecutor {
             }
         }
 
-        private class SingleMethodJsonRpcResponse implements JsonRpcResponse {
+        private final class SingleMethodJsonRpcResponse implements JsonRpcResponse {
 
             private final JsonRpcResponse response;
 

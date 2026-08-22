@@ -29,7 +29,7 @@ import io.github.sebastiantoepfer.jsonschema.JsonSchemas;
 import jakarta.json.JsonObject;
 import java.util.Objects;
 
-class JsonSchemaOrReferenceObjectMapping implements ModelObjectMapping<JsonSchemaOrReference> {
+final class JsonSchemaOrReferenceObjectMapping implements ModelObjectMapping<JsonSchemaOrReference> {
 
     private final JsonObject jsonObject;
 

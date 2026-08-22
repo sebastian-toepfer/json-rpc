@@ -30,7 +30,7 @@ import jakarta.json.JsonValue;
 import java.util.List;
 import java.util.Objects;
 
-class ContentDescriptorObjectMapping implements ModelObjectMapping<ContentDescriptorObject> {
+final class ContentDescriptorObjectMapping implements ModelObjectMapping<ContentDescriptorObject> {
 
     private final JsonObject json;
     private final JsonObjectModelMapping<ContentDescriptorObject> mapping;
