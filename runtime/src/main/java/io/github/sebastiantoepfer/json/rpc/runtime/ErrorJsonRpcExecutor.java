@@ -55,7 +55,7 @@ final class ErrorJsonRpcExecutor implements JsonRpcExecutor {
         return response;
     }
 
-    public static class ErrorResponse implements JsonRpcResponse {
+    public static final class ErrorResponse implements JsonRpcResponse {
 
         private static final Logger LOG = Logger.getLogger(ErrorResponse.class.getName());
 

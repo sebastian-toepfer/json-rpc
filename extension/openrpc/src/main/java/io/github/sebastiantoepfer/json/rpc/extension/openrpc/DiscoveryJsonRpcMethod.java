@@ -44,7 +44,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class DiscoveryJsonRpcMethod implements JsonRpcMethod {
+final class DiscoveryJsonRpcMethod implements JsonRpcMethod {
 
     private static final Logger LOG = Logger.getLogger(DiscoveryJsonRpcMethod.class.getName());
     private static final JsonSchemaOrReference.Reference OPENRPC_SCHEMA;

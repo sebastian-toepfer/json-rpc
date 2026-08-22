@@ -30,7 +30,7 @@ import jakarta.json.JsonObject;
 import java.util.List;
 import java.util.Objects;
 
-class ExamplePairingOrReferenceObjectMapping implements ModelObjectMapping<ExamplePairingOrReference> {
+final class ExamplePairingOrReferenceObjectMapping implements ModelObjectMapping<ExamplePairingOrReference> {
 
     private final JsonObject json;
 
