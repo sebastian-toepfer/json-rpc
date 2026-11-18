@@ -11,7 +11,7 @@ on:
 jobs:
   benchmark:
     name: run jmh benchmark
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
 
     permissions:
       pull-requests: write
